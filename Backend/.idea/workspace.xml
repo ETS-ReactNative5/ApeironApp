@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1nA2Tc4h2cFsAUJbjSDL4wYXnYL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations" />
+    <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Service\Implementations" />
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Service\IServices" />
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Repository" />
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Controller" />
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Config" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.apeironapp.apeironapp.DTO" />
+      <recent name="com.apeironapp.apeironapp.Model" />
+      <recent name="com.apeironapp.apeironapp.Service.Implementations" />
+      <recent name="com.isaproject.isaproject.Integration" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.ApeironprojectApplication">
+    <configuration name="ApeironprojectApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.apeironapp.apeironapp.ApeironprojectApplication" />
+      <module name="apeironapp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.apeironapp.apeironapp.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IsaprojectApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.isaproject.isaproject.IsaprojectApplication" />
+      <module name="apeironapp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.isaproject.isaproject.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IsaprojectApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="apeironapp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.isaproject.isaproject.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.isaproject.isaproject" />
+      <option name="MAIN_CLASS_NAME" value="com.isaproject.isaproject.IsaprojectApplicationTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestStudent1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="apeironapp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.isaproject.isaproject.Integration.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.isaproject.isaproject.Integration" />
+      <option name="MAIN_CLASS_NAME" value="com.isaproject.isaproject.Integration.TestStudent1" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestsStudent1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="apeironapp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.isaproject.isaproject.Unit.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.isaproject.isaproject.Unit" />
+      <option name="MAIN_CLASS_NAME" value="com.isaproject.isaproject.Unit.TestsStudent1" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ApeironprojectApplication" />
+        <item itemvalue="Application.IsaprojectApplication" />
+        <item itemvalue="JUnit.TestStudent1" />
+        <item itemvalue="JUnit.TestsStudent1" />
+        <item itemvalue="JUnit.IsaprojectApplicationTests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="" />
+      <created>1610818589927</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1610818589927</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>
