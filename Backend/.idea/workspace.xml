@@ -5,7 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Authentification/TokenUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Authentification/RestAuthenticationEntryPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Authentification/RestAuthenticationEntryPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Authentification/TokenAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Authentification/TokenAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/TokenUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/AddressDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/AddressDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/PersonUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/PersonUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/IServices/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/IServices/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/CustomUserDetailsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,22 +55,24 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\DTO" />
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Authentification" />
       <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Service\Implementations" />
       <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Service\IServices" />
       <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Repository" />
-      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Controller" />
-      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Config" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.apeironapp.apeironapp.DTO" />
-      <recent name="com.apeironapp.apeironapp.Model" />
+      <recent name="com.apeironapp.apeironapp.Repository" />
       <recent name="com.apeironapp.apeironapp.Service.Implementations" />
-      <recent name="com.isaproject.isaproject.Integration" />
+      <recent name="com.apeironapp.apeironapp.DTO" />
+      <recent name="com.apeironapp.apeironapp.Service.IServices" />
+      <recent name="com.apeironapp.apeironapp.Model" />
     </key>
   </component>
   <component name="RunManager" selected="Application.ApeironprojectApplication">

@@ -3,23 +3,23 @@ package com.apeironapp.apeironapp.Service.IServices;
 import java.util.List;
 import java.util.UUID;
 
+import com.apeironapp.apeironapp.DTO.PersonUserDTO;
+import com.apeironapp.apeironapp.DTO.UserRequestDTO;
+import com.apeironapp.apeironapp.Model.PersonUser;
+import com.apeironapp.apeironapp.Model.RegisteredUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import quince_it.security.entities.User;
 
 
 public interface UserService extends UserDetailsService {
 
-	void changePassword(String oldPassword, String newPassword);
-	
-    List<User> findAll();
-    
-    List<User> findAllIntermediate();
-    
-    List<User> findAllEndEntity();
-    
-	UUID getLoggedUserId();
-	
-	User findById(UUID id);
+    PersonUser findById(Integer id);
+    PersonUser findByEmail(String email);
+    //PersonUser createPatient(UserRequestDTO entityDTO);
+    List<PersonUser> findAll ();
+    RegisteredUser save(PersonUserDTO userRequest);
+    void delete(PersonUser userRequest);
+   // PersonUser updateProfile(PersonUserDTO userRequest, Integer id);
+    //PersonUser update(PersonUser userRequest);
 	
 }
