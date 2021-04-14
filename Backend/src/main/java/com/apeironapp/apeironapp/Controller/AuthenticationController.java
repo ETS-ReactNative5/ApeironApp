@@ -87,17 +87,6 @@ public class AuthenticationController {
 
 
 
-	@GetMapping("/authority")
-	@PreAuthorize("hasAnyRole('PATIENT', 'SUPPLIER', 'SYSTEM_ADMIN', 'DERMATOLOGIST', 'PHARMACY_ADMIN', 'PHARMACIST')")
-	ResponseEntity<PersonUser> getMyAccount()
-	{
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		PersonUser user = (PersonUser)currentUser.getPrincipal();
-		PersonUser userWithId = userService.findById(user.getId());
-		return userWithId == null ?
-				new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-				ResponseEntity.ok(userWithId);
-	}
 
 	static class PasswordChanger {
 		public String oldPassword;
@@ -114,8 +103,8 @@ public class AuthenticationController {
 		}
 
 		PersonUser user = this.userService.save(userRequest);
-		//HttpHeaders headers = new HttpHeaders();
-		//headers.setLocation(ucBuilder.path("/api/user/{userId}").buildAndExpand(user.getId()).toUri());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(ucBuilder.path("/api/auth/{userId}").buildAndExpand(user.getId()).toUri());
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 
