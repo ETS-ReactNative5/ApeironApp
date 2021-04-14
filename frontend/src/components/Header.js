@@ -38,13 +38,16 @@ class Header extends Component {
                             <li hidden={!this.hasRole("ROLE_DERMATHOLOGIST") && !this.hasRole("ROLE_PHARMACIST")}>
                                 <Link to="/deliveries">Deliveries</Link>
                             </li>
+                            <li >
+                                <Link to="/additem">Add a new item</Link>
+                            </li>
 
                             <li className="drop-down">
                                 <a href="#">Our products</a>
                                 <ul>
 
                                     <li className="drop-down">
-                                        <a href="/tshirts">T-Shirts</a>
+                                        <Link to="/tshirts"  hidden={this.hasRole("*")}>T-Shirts</Link>
                                         <ul>
                                             <li>
                                                 <Link to="/tshirts-women">Women</Link>
@@ -61,7 +64,7 @@ class Header extends Component {
                                     <li>
                                        
                                         <li className="drop-down">
-                                        <a href="/hoodies">Hoodies</a>
+                                        <Link to="/hoodies"  hidden={this.hasRole("*")}>Hoodies</Link>
                                         <ul>
                                             <li>
                                                 <Link to="/hoodies-women">Women</Link>

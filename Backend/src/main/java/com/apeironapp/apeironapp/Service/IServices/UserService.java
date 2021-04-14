@@ -11,15 +11,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 
-public interface UserService extends UserDetailsService {
+public interface UserService {
 
-    PersonUser findById(Integer id);
+
     PersonUser findByEmail(String email);
-    //PersonUser createPatient(UserRequestDTO entityDTO);
     List<PersonUser> findAll ();
     RegisteredUser save(PersonUserDTO userRequest);
-    void delete(PersonUser userRequest);
-   // PersonUser updateProfile(PersonUserDTO userRequest, Integer id);
-    //PersonUser update(PersonUser userRequest);
 	
 }

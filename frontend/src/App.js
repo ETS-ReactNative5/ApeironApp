@@ -4,6 +4,10 @@ import HomePage from "./pages/HomePage";
 import { HashRouter as Router, Link, Switch, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import TShirts from "./pages/TShirts";
+import Hoodies from "./pages/Hoodies";
+import TShirtsWomen from "./pages/TShirts-women";
+import AddItem from "./pages/AddItem";
 
 function App() {
   return (
@@ -12,6 +16,10 @@ function App() {
 				<Link exact to="/" path="/" component={HomePage} />
 				<Link exact to="/login" path="/login" component={LoginPage} />
 				<Link exact to="/registration" path="/registration" component={RegisterPage} />
+				<Link exact to="/tshirts" path="/tshirts" component={TShirts} />
+				<Link exact to="/hoodies" path="/hoodies" component={Hoodies} />
+				<Link exact to="/tshirts-women" path="/tshirts-women" component={TShirtsWomen} />
+				<Link exact to="/additem" path="/additem" component={AddItem} />
         </Switch>
 		</Router>
  

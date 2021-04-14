@@ -83,25 +83,10 @@ public class UserServiceImpl implements UserService {
 		return u;
 	}
 
-	@Override
-	public PersonUser findById(Integer id) throws AccessDeniedException {
-		//PersonUser u = personUserRepository.findById(id).orElseGet(null);
-		return null;
-	}
 
 	public List<PersonUser> findAll() throws AccessDeniedException {
 		List<PersonUser> result = personUserRepository.findAll();
 		return result;
 	}
 
-	@Override
-	public void delete(PersonUser userRequest) {
-
-	}
-
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return null;
-	}
 }
