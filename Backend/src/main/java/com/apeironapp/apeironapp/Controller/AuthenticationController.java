@@ -47,12 +47,10 @@ public class AuthenticationController {
 	public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
 																	HttpServletResponse response) {
 
-		System.out.println(authenticationRequest.getEmail() + authenticationRequest.getPassword() );
 
 		UsernamePasswordAuthenticationToken u = new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
 				authenticationRequest.getPassword());
 
-		System.out.println(u);
 		Authentication authentication = authenticationManager.authenticate(u);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
