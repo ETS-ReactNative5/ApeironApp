@@ -18,11 +18,15 @@ class EndEntityCreateModal extends Component {
 		selectedColor: "",
 		selectedDate: new Date(),
 		quantity: "",
+		chain: "",
+		list: [],
+		selectedItem: "",
+		orders: [],
 	};
 	componentDidMount() {
-
 	}
 
+	
 	handleQuantityChange = (event) => {
 		this.setState({ quantity: event.target.value });
 	};
@@ -113,6 +117,16 @@ class EndEntityCreateModal extends Component {
 		this.setState({ showedPurposes: !this.state.showedPurposes });
 	};
 
+	handleAddChange = () => {
+		let reservation = {
+			colour: this.props.selectedColor,
+			size: this.props.selectedSize,
+			date: this.state.selectedDate
+		};
+
+		this.state.orders.push(reservation);
+	}
+
 	render() {
 		return (
 			<Modal
@@ -132,13 +146,14 @@ class EndEntityCreateModal extends Component {
 							aria-haspopup="true"
 							aria-expanded="false"
 							style={{ marginTop: "0.5rem", width: "29em" }}
-							onChange={(e) => this.props.handleColorChange(e)}
 							value={this.props.selectedColor}
-						>
+							onChange={(e) => this.props.handleColorChange(e)}
+						>	
 							<option style={{ marginLeft: "12rem" }} value="">
 								Choose the color{" "}
 							</option>
 							{this.props.showedColors.map((chain) => (
+								
 								<option key={chain.color} value={chain.color}>
 									{chain.color}
 								</option>
@@ -153,17 +168,22 @@ class EndEntityCreateModal extends Component {
 							style={{ marginTop: "0.5rem", width: "29em" }}
 							onChange={(e) => this.props.handleSizeChange(e)}
 							value={this.props.selectedSize}
+							
 						>
 							<option style={{ marginLeft: "12rem" }} value="">
 								Choose the size{" "}
 							</option>
-							{this.props.showedCSize.map((chain) => (
-								<option key={chain.size} value={chain.size}>
-									{chain.size}
+							{this.props.showedSizes.map((c) => (
+								<>
+								{c.map((a) => (
+								<option key={a.size} value={a.size}>
+									{a.size}
 								</option>
+								))}</>
 							))}
 						</select>
 					</div>
+				
 					<div className="control-group">
 						<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 							<label>Insert quantity of items:</label>
@@ -190,10 +210,29 @@ class EndEntityCreateModal extends Component {
 							onChange={(date) => this.handleDateChange(date)}
 							selected={this.state.selectedDate}
 						/>
+
+						
+					</div>
+
+					<div>
+					<Button className="mt-3" onClick={this.handleAddChange}>
+							Add to chart
+						</Button>
+					</div>
+						
+
+				    <div style={{ marginTop: "2rem" }}>
+					<table class="table table-striped">
+							<tr><th>Color</th><th>Size</th><th>Quantity</th><th>Due date</th></tr>
+							{this.state.orders.map((c) => (
+							<tr><td>{c.color}</td><td>{c.size}</td><td></td><td>{c.date}</td></tr>
+							))}
+							</table>
+
 					</div>
 
 					<div style={{ marginTop: "2rem", marginLeft: "10rem" }}>
-						<Button className="mt-3" onClick={this.handleEndEntityChange}>
+						<Button className="mt-3" onClick={this.handleReserveChange}>
 							{this.props.buttonName}
 						</Button>
 					</div>

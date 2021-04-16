@@ -31,7 +31,9 @@ class TShirtsWomen extends Component {
 		selectedColor: "",
 		showedColors: [],
 		colors: [],
-
+		selectedSize: "",
+		showedSizes: [],
+		sizes: [],
 
 
 	};
@@ -104,19 +106,32 @@ class TShirtsWomen extends Component {
 	};
 
 	handleColorChange = (e) => {
+		
+		let u = [];
 		this.setState({ selectedColor: e.target.value }, () => {
 			console.log(this.state);
 		});
+		this.state.colors.forEach((chain) => {
+			if (chain.color === e.target.value) {
+				u.push(chain.sizes);
+			}
+		});
+
+
+		this.state.sizes = u;
+		this.setState({ sizes: u });
+		this.setState({ showedSizes: u });
 		this.changeEndEntityChain(e.target.value);
 	};
 
 	changeEndEntityChain = (e) => {
+		alert(this.state.sizes)
 		if (e === "") {
 			this.setState({ showedColors: this.state.colors });
 		} else {
 			let u = [];
 			this.state.colors.forEach((chain) => {
-				if (chain.name !== e) {
+				if (chain.color !== e) {
 					u.push(chain);
 				}
 			});
@@ -124,6 +139,29 @@ class TShirtsWomen extends Component {
 			this.setState({ showedColors: u });
 		}
 	};
+
+	handleSizeChange = (e) => {
+		this.setState({ selectedSize: e.target.value }, () => {
+			console.log(this.state);
+		});
+		this.changeEndEntitySizeChain(e.target.value);
+	};
+
+	changeEndEntitySizeChain = (e) => {
+		if (e === "") {
+			this.setState({ showedSizes: this.state.sizes });
+		} else {
+			let u = [];
+			this.state.sizes.forEach((chain) => {
+				if (chain.size !== e) {
+					u.push(chain);
+				}
+			});
+
+			this.setState({ showedSizes: u });
+		}
+	};
+
 	render() {
 		if (this.state.redirect) return <Redirect push to={this.state.redirectUrl} />;
 
@@ -266,9 +304,12 @@ class TShirtsWomen extends Component {
 					show={this.state.showOrderModal}
 					onCloseModal={this.handleOrderModalClose}
 					handleColorChange={this.handleColorChange}
+					handleSizeChange={this.handleSizeChange}
 					shirt={this.state.shirt}
 					showedColors={this.state.colors}
 					selectedColor = {this.state.selectedColor}
+					showedSizes={this.state.sizes}
+					selectedSize = {this.state.selectedSize}
 				/>
 			</React.Fragment>
 		);
