@@ -22,11 +22,12 @@ class EndEntityCreateModal extends Component {
 		list: [],
 		selectedItem: "",
 		orders: [],
+
 	};
 	componentDidMount() {
 	}
 
-	
+
 	handleQuantityChange = (event) => {
 		this.setState({ quantity: event.target.value });
 	};
@@ -118,14 +119,56 @@ class EndEntityCreateModal extends Component {
 	};
 
 	handleAddChange = () => {
+		alert( this.props.shirt.id)
+		let u = this.state.orders;
 		let reservation = {
-			colour: this.props.selectedColor,
+			color: this.props.selectedColor,
 			size: this.props.selectedSize,
-			date: this.state.selectedDate
+			date: this.state.selectedDate,
+			quantity: this.state.quantity,
+			itemId: this.props.shirt.id,
 		};
 
-		this.state.orders.push(reservation);
+		u.push(reservation);
+		this.setState({ orders: u });
+
 	}
+
+	handleReserveChange = () => {
+		let newOrderDTO = {
+			items: this.state.orders,
+			dueDate: this.state.selectedDate
+
+		};
+
+
+		Axios.post(BASE_URL + "/api/reservations/add", newOrderDTO, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 409) {
+				this.setState({
+					errorHeader: "Resource conflict!",
+					errorMessage: "Email already exist.",
+					hiddenErrorAlert: false,
+				});
+			} else if (res.status === 500) {
+				this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
+			} else {
+				console.log("Success");
+				this.setState({ openModal: true });
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	}
+
+	handleRemoveChange = (e, c) => {
+
+		let u = this.state.orders;
+		u.pop(c);
+		this.setState({orders: u})
+	} 
 
 	render() {
 		return (
@@ -148,12 +191,12 @@ class EndEntityCreateModal extends Component {
 							style={{ marginTop: "0.5rem", width: "29em" }}
 							value={this.props.selectedColor}
 							onChange={(e) => this.props.handleColorChange(e)}
-						>	
+						>
 							<option style={{ marginLeft: "12rem" }} value="">
 								Choose the color{" "}
 							</option>
 							{this.props.showedColors.map((chain) => (
-								
+
 								<option key={chain.color} value={chain.color}>
 									{chain.color}
 								</option>
@@ -168,22 +211,22 @@ class EndEntityCreateModal extends Component {
 							style={{ marginTop: "0.5rem", width: "29em" }}
 							onChange={(e) => this.props.handleSizeChange(e)}
 							value={this.props.selectedSize}
-							
+
 						>
 							<option style={{ marginLeft: "12rem" }} value="">
 								Choose the size{" "}
 							</option>
 							{this.props.showedSizes.map((c) => (
 								<>
-								{c.map((a) => (
-								<option key={a.size} value={a.size}>
-									{a.size}
-								</option>
-								))}</>
+									{c.map((a) => (
+										<option key={a.size} value={a.size}>
+											{a.size}
+										</option>
+									))}</>
 							))}
 						</select>
 					</div>
-				
+
 					<div className="control-group">
 						<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 							<label>Insert quantity of items:</label>
@@ -211,23 +254,27 @@ class EndEntityCreateModal extends Component {
 							selected={this.state.selectedDate}
 						/>
 
-						
+
+
 					</div>
 
 					<div>
-					<Button className="mt-3" onClick={this.handleAddChange}>
+						<Button className="mt-3" onClick={this.handleAddChange}>
 							Add to chart
 						</Button>
 					</div>
-						
 
-				    <div style={{ marginTop: "2rem" }}>
-					<table class="table table-striped">
-							<tr><th>Color</th><th>Size</th><th>Quantity</th><th>Due date</th></tr>
+
+					<div style={{ marginTop: "2rem" }}>
+						<table class="table table-striped">
+							<tr><th>Color</th><th>Size</th><th>Quantity</th><th>Due date</th><th>Remove</th></tr>
 							{this.state.orders.map((c) => (
-							<tr><td>{c.color}</td><td>{c.size}</td><td></td><td>{c.date}</td></tr>
+								<tr><td>{c.color}</td><td>{c.size}</td><td>{c.quantity}</td><td>{c.date.sDate}</td>
+									<td><Button className="mt-3" onClick={(e) => this.handleRemoveChange(e,c)}>
+										Remove
+						</Button></td></tr>
 							))}
-							</table>
+						</table>
 
 					</div>
 

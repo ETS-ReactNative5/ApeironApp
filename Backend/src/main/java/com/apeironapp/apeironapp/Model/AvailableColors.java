@@ -29,7 +29,7 @@ public class AvailableColors {
     @OneToMany(mappedBy = "availableColors", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<AvailableSize> availableSizes = new HashSet<AvailableSize>();
 
-    @JsonBackReference
+    @JsonBackReference(value="item-colors")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false, unique = false)
     private Item item;
