@@ -22,7 +22,7 @@ public class Pictures {
     @Column(name = "picture", nullable = true)
     private String picture;
 
-    @JsonBackReference
+    @JsonBackReference(value="item-pictures")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false, unique = false)
     private Item item;

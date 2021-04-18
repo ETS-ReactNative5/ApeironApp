@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/AvailableColors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/AvailableColors.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Pictures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Pictures.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/components/Order.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Order.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TShirts-women.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TShirts-women.js" afterDir="false" />
     </list>
@@ -35,7 +40,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../ISA/ISA_project/Backend" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">

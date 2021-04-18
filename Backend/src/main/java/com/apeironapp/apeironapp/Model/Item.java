@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
@@ -33,18 +34,24 @@ public class Item {
     @Column(name = "gender", nullable = true)
     private String gender;
 
-    @JsonManagedReference
+    @JsonManagedReference(value="item-pictures")
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Pictures> pictures = new HashSet<Pictures>();
 
-    @JsonManagedReference
+    @JsonManagedReference(value="item-colors")
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<AvailableColors> availableColors = new HashSet<AvailableColors>();
 
 
-    @ManyToMany(mappedBy = "items")
+   /*@ManyToMany(mappedBy = "items")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private Set<Order> orders = new HashSet<Order>();
+    private Set<Order> orders = new HashSet<Order>();*/
+
+   @JsonManagedReference(value="item-iteminorder")
+   @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   private Set<ItemInOrder> itemInOrders = new HashSet<ItemInOrder>();
+
 
     public Item() {
     }
@@ -105,11 +112,5 @@ public class Item {
         this.availableColors = availableColors;
     }
 
-    public Set<Order> getOrders() {
-        return orders;
-    }
 
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
 }

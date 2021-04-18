@@ -125,7 +125,6 @@ class TShirtsWomen extends Component {
 	};
 
 	changeEndEntityChain = (e) => {
-		alert(this.state.sizes)
 		if (e === "") {
 			this.setState({ showedColors: this.state.colors });
 		} else {
