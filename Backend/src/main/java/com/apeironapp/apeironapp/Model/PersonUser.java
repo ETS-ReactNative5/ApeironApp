@@ -122,6 +122,15 @@ public class PersonUser implements UserDetails, Serializable {
         return true;
     }
 
-
+    @Override
+    public String toString() {
+        return "PersonUser{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", lastPasswordResetDate=" + lastPasswordResetDate +
+                ", authorities=" + authorities +
+                '}';
+    }
 }
 

@@ -53,6 +53,12 @@ public class UserServiceImpl implements UserService {
 	private AuthorityRepository authorityRepository;
 
 	@Override
+	public PersonUser findById(Integer id) {
+		return personUserRepository.findById(id).get();
+	}
+
+
+	@Override
 	public PersonUser findByEmail(String email) throws UsernameNotFoundException {
 		PersonUser u = personUserRepository.findByEmail(email);
 		return u;
@@ -83,6 +89,45 @@ public class UserServiceImpl implements UserService {
 		return u;
 	}
 
+	public PersonUserDTO getUserDTO() {
+
+		PersonUser user = getLoggedUser();
+
+		PersonUserDTO userDTO = new PersonUserDTO();
+		userDTO.setEmail(user.getEmail());
+		userDTO.setId(user.getId());
+		return userDTO;
+	}
+
+	public PersonUser getLoggedUser() {
+
+		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+		String email = currentUser.getName();
+		return personUserRepository.findByEmail(email);
+
+	}
+	/*public RegisteredUser update(PersonUserDTO userDTO) {
+		PersonUser user = getLoggedUser();
+		RegisteredUser registeredUser = findByIdRegistered(user.getId());
+		registeredUser.setName(userDTO.getFirstname());
+		registeredUser.setEmail(userDTO.getEmail());
+
+
+		return personUserRepository.save(registeredUser);
+	}*/
+
+	/*public User changePassword(String oldPassword, String newPassword) {
+
+		User user = getLoggedUser();
+
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), oldPassword));
+
+		if(newPassword.isEmpty())
+			throw new IllegalArgumentException("Invalid new password");
+
+		user.setPassword(passwordEncoder.encode(newPassword));
+		return userRepository.save(user);
+	}*/
 
 	public List<PersonUser> findAll() throws AccessDeniedException {
 		List<PersonUser> result = personUserRepository.findAll();

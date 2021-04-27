@@ -46,6 +46,7 @@ public class ReservationService implements IReservationService {
 
         Set<ItemInOrder> items = new HashSet<ItemInOrder>();
         for(ItemInOrderDTO item: newOrderDTO.getItems()) {
+            order.setItemId(item.getItemId());
             ItemInOrder itemInOrder = itemInOrderService.save(item);
             items.add(itemInOrder);
         }
@@ -61,5 +62,10 @@ public class ReservationService implements IReservationService {
     @Override
     public Order findById(Integer id) {
         return reservationRepository.findById(id).get();
+    }
+
+    @Override
+    public void delete(Order order) {
+        reservationRepository.delete(order);
     }
 }

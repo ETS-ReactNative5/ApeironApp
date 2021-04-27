@@ -22,6 +22,7 @@ class EndEntityCreateModal extends Component {
 		list: [],
 		selectedItem: "",
 		orders: [],
+	
 
 	};
 	componentDidMount() {
@@ -33,6 +34,7 @@ class EndEntityCreateModal extends Component {
 	};
 	handleDateChange = (date) => {
 		this.setState({ selectedDate: date });
+		
 	};
 	componentWillMount = () => {
 		this.selectedCheckboxes = new Set();
@@ -119,7 +121,6 @@ class EndEntityCreateModal extends Component {
 	};
 
 	handleAddChange = () => {
-		alert( this.props.shirt.id)
 		let u = this.state.orders;
 		let reservation = {
 			color: this.props.selectedColor,
@@ -132,6 +133,21 @@ class EndEntityCreateModal extends Component {
 		u.push(reservation);
 		this.setState({ orders: u });
 
+		let t = [];
+		this.state.orders.forEach((a) => {
+			let reservation = {
+				color: a.color,
+				size: a.size,
+				date: this.state.selectedDate,
+				quantity: a.quantity,
+				itemId: a.itemId,
+			};
+			t.push(reservation)
+		});
+		this.state.orders = [];
+		this.setState({ orders: t });
+
+
 	}
 
 	handleReserveChange = () => {
@@ -143,23 +159,23 @@ class EndEntityCreateModal extends Component {
 
 
 		Axios.post(BASE_URL + "/api/reservations/add", newOrderDTO, { validateStatus: () => true })
-		.then((res) => {
-			if (res.status === 409) {
-				this.setState({
-					errorHeader: "Resource conflict!",
-					errorMessage: "Email already exist.",
-					hiddenErrorAlert: false,
-				});
-			} else if (res.status === 500) {
-				this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
-			} else {
-				console.log("Success");
-				this.setState({ openModal: true });
-			}
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+			.then((res) => {
+				if (res.status === 409) {
+					this.setState({
+						errorHeader: "Resource conflict!",
+						errorMessage: "Email already exist.",
+						hiddenErrorAlert: false,
+					});
+				} else if (res.status === 500) {
+					this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
+				} else {
+					console.log("Success");
+					this.setState({ openModal: true });
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 
 	}
 
@@ -167,8 +183,8 @@ class EndEntityCreateModal extends Component {
 
 		let u = this.state.orders;
 		u.pop(c);
-		this.setState({orders: u})
-	} 
+		this.setState({ orders: u })
+	}
 
 	render() {
 		return (
@@ -253,9 +269,6 @@ class EndEntityCreateModal extends Component {
 							onChange={(date) => this.handleDateChange(date)}
 							selected={this.state.selectedDate}
 						/>
-
-
-
 					</div>
 
 					<div>
@@ -264,13 +277,12 @@ class EndEntityCreateModal extends Component {
 						</Button>
 					</div>
 
-
 					<div style={{ marginTop: "2rem" }}>
 						<table class="table table-striped">
 							<tr><th>Color</th><th>Size</th><th>Quantity</th><th>Due date</th><th>Remove</th></tr>
 							{this.state.orders.map((c) => (
-								<tr><td>{c.color}</td><td>{c.size}</td><td>{c.quantity}</td><td>{c.date.sDate}</td>
-									<td><Button className="mt-3" onClick={(e) => this.handleRemoveChange(e,c)}>
+								<tr><td>{c.color}</td><td>{c.size}</td><td>{c.quantity}</td><td>{new Date(c.date).toLocaleDateString()}</td>
+									<td><Button className="mt-3" onClick={(e) => this.handleRemoveChange(e, c)}>
 										Remove
 						</Button></td></tr>
 							))}

@@ -6,29 +6,70 @@ import Axios from "axios";
 import ModalDialog from "../components/ModalDialog";
 import { Redirect } from "react-router-dom";
 import HeadingAlert from "../components/HeadingAlert";
-
+import ImageUploader from 'react-images-upload';
 
 class RegisterPage extends Component {
-    state = {
-        types: ["Hoodie", "T-Shirt", "Hat"],
-        colors: ["Blue", "Green", "Yellow"],
-        sizes: ["XS", "S", "M", "L", "XL"],
-        showedTypes: ["Hoodie", "T-Shirt", "Hat"],
-        errorHeader: "",
-        errorMessage: "",
-        hiddenErrorAlert: true,
-        name: "",
-        price: "",
-        nameError: "none",
-        typeError: "none",
-        priceError: "none",
-        selectedType: "",
-        openModal: false,
-        quantity: [],
-        size: [],
-        q: "",
-        s: "",
-        gender: "",
+    constructor(props) {
+        super(props);
+         this.state = { pictures: [],
+            types: ["Hoodie", "T-Shirt", "Hat"],
+            colors: ["Blue", "Green", "Yellow"],
+            sizes: ["XS", "S", "M", "L", "XL"],
+            showedTypes: ["Hoodie", "T-Shirt", "Hat"],
+            errorHeader: "",
+            errorMessage: "",
+            hiddenErrorAlert: true,
+            name: "",
+            price: "",
+            nameError: "none",
+            typeError: "none",
+            priceError: "none",
+            selectedType: "",
+            openModal: false,
+            quantity: [],
+            size: [],
+            q: "",
+            s: "",
+            gender: "",
+            hat: false, };
+         this.onDrop = this.onDrop.bind(this);
+        
+    
+    }
+ 
+    onDrop(picture) {
+        this.setState({
+            pictures: this.state.pictures.concat(picture),
+        });
+    }
+
+    upload(pictures) {
+        let formData = new FormData();
+    
+        formData.append("pictures", pictures);
+    
+        Axios.post(BASE_URL + "/api/items/upload", formData, { validateStatus: () => true })
+        .then((res) => {
+            if (res.status === 409) {
+                this.setState({
+                    errorHeader: "Resource conflict!",
+                    errorMessage: "Email already exist.",
+                    hiddenErrorAlert: false,
+                });
+            } else if (res.status === 500) {
+                this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
+            } else {
+                console.log("Success");
+                this.setState({ openModal: true });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
+
+    toggleCertificatePurposeVisibility = () => {
+        this.setState({ showedPurposes: !this.state.showedPurposes });
     };
 
     handleQuantityChange = (event, obj) => {
@@ -82,7 +123,7 @@ class RegisterPage extends Component {
     handleSizeChange = (event, obj, o) => {
         let u = this.state.size;
         let l = false;
-       
+
 
         if (u.length === 0) {
             let b = obj + "," + o + "," + event.target.value;
@@ -92,14 +133,14 @@ class RegisterPage extends Component {
             u.forEach((item) => {
                 let a = item.split(",")
 
-                if (a[0] === obj && a[1] === o ) {
+                if (a[0] === obj && a[1] === o) {
                     l = true;
                 }
             });
 
             if (l === false) {
 
-                let b =  obj + "," + o + "," + event.target.value;
+                let b = obj + "," + o + "," + event.target.value;
                 u.push(b)
 
             }
@@ -136,9 +177,6 @@ class RegisterPage extends Component {
     };
 
 
-    toggleCertificatePurposeVisibility = () => {
-        this.setState({ showedPurposes: !this.state.showedPurposes });
-    };
     validateForm = (itemDTO) => {
         this.setState({
             nameError: "none",
@@ -163,6 +201,11 @@ class RegisterPage extends Component {
         if (e.target.value === "") {
             this.setState({ selectedType: "", showedTypes: this.state.types });
         } else {
+            if (e.target.value === "Hat") {
+                this.setState({ hat: true });
+            } else {
+                this.setState({ hat: false });
+            }
             this.state.types.forEach((chain) => {
                 if (chain === e.target.value) {
                     console.log(chain);
@@ -187,21 +230,32 @@ class RegisterPage extends Component {
         this.setState({ type: u });
     };
     handleSignUp = () => {
-
-        let itemDTO = {
-            type: this.state.selectedType,
-            price: this.state.price,
-            name: this.state.name,
-            colors: this.state.quantity,
-            sizes: this.state.size,
-            gender: this.state.gender
-        };
+        let itemDTO = "";
+        if (this.state.hat) {
+            itemDTO = {
+                type: this.state.selectedType,
+                price: this.state.price,
+                name: this.state.name,
+                colors: this.state.quantity,
+                sizes: this.state.size,
+                gender: "Hat"
+            }
+        } else {
+            itemDTO = {
+                type: this.state.selectedType,
+                price: this.state.price,
+                name: this.state.name,
+                colors: this.state.quantity,
+                sizes: this.state.size,
+                gender: this.state.gender
+            };
+        }
         console.log(itemDTO);
 
         if (this.validateForm(itemDTO)) {
 
             console.log(itemDTO);
-            Axios.post(BASE_URL + "/api/items/add", itemDTO, { validateStatus: () => true })
+            Axios.post(BASE_URL + "/api/items/add", itemDTO, this.state.pictures, { validateStatus: () => true })
                 .then((res) => {
                     if (res.status === 409) {
                         this.setState({
@@ -233,9 +287,9 @@ class RegisterPage extends Component {
     };
 
     handleGenderChange(event) {
-        
-        this.setState({ gender: event.target.value});
-      }
+
+        this.setState({ gender: event.target.value });
+    }
 
     render() {
         if (this.state.redirect) return <Redirect push to="/" />;
@@ -261,6 +315,18 @@ class RegisterPage extends Component {
                             <br />
                             <form id="contactForm" name="sentMessage" novalidate="novalidate">
                                 <div className="control-group">
+                                    <div><ImageUploader
+                                        withIcon={true}
+                                        buttonText='Choose images'
+                                        onChange={this.onDrop}
+                                        imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                        maxFileSize={5242880}
+                                        withPreview = {true}
+                                    />
+                                    <button
+              className="btn btn-success btn-sm"
+              onClick={this.upload}
+            ></button></div>
                                     <div>
                                         <select
                                             class="btn btn-secondary dropdown-toggle"
@@ -299,10 +365,10 @@ class RegisterPage extends Component {
                                         Item name must be entered.
 									</div>
                                 </div>
-                                <div>
-                                    <p><input type="radio" value="Male" name="gender"   onChange={(e) => this.handleGenderChange(e)} /> Male</p>
-                                    <p><input type="radio" value="Female" name="gender"   onChange={(e) => this.handleGenderChange(e)} /> Female</p>
-                                    <p><input type="radio" value="Other" name="gender"   onChange={(e) => this.handleGenderChange(e)} /> Other </p>
+                                <div className={this.state.hat ? 'collapse' : ''}>
+                                    <p><input type="radio" value="Male" name="gender" onChange={(e) => this.handleGenderChange(e)} /> Male</p>
+                                    <p><input type="radio" value="Female" name="gender" onChange={(e) => this.handleGenderChange(e)} /> Female</p>
+                                    <p><input type="radio" value="Other" name="gender" onChange={(e) => this.handleGenderChange(e)} /> Other </p>
                                 </div>
                                 <div className="control-group">
                                     <div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
@@ -419,9 +485,12 @@ class RegisterPage extends Component {
                     header="Success"
                     text="You have successfully added new item."
                 />
+
             </React.Fragment>
+
+
         );
     }
 }
-
 export default RegisterPage;
+

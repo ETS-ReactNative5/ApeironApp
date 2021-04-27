@@ -1,6 +1,7 @@
 package com.apeironapp.apeironapp.Authentification;
 
 
+import com.apeironapp.apeironapp.Model.PersonUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -95,7 +96,7 @@ public class TokenUtils {
 
     // Funkcija za validaciju JWT tokena
     public Boolean validateToken(String token, UserDetails userDetails) {
-        User user = (User) userDetails;
+        PersonUser user = (PersonUser) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getIssuedAtDateFromToken(token);
 

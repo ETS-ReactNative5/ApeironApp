@@ -1,6 +1,8 @@
 package com.apeironapp.apeironapp.DTO;
 
 
+import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 public class NewItemDTO {
@@ -15,7 +17,17 @@ public class NewItemDTO {
 
     private List<String> sizes;
 
+    private Collection<File> pictures;
+
     private String gender;
+
+    public Collection<File> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(Collection<File> pictures) {
+        this.pictures = pictures;
+    }
 
     public String getGender() {
         return gender;

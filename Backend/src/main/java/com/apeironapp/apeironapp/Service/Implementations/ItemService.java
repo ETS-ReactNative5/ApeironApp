@@ -43,6 +43,7 @@ public class ItemService implements IItemService {
         item.setGender(newItemDTO.getGender());
 
 
+
         Item item1 = itemRepository.save(item);
 
         AvailableColors availableColors1 = new AvailableColors();
