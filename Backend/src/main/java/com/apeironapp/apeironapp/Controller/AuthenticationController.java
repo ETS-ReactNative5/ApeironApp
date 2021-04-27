@@ -1,7 +1,5 @@
 package com.apeironapp.apeironapp.Controller;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,6 +7,7 @@ import com.apeironapp.apeironapp.Authentification.JwtAuthenticationRequest;
 import com.apeironapp.apeironapp.Authentification.TokenUtils;
 import com.apeironapp.apeironapp.DTO.PersonUserDTO;
 import com.apeironapp.apeironapp.Exception.ResourceConflictException;
+import com.apeironapp.apeironapp.Model.Authority;
 import com.apeironapp.apeironapp.Model.PersonUser;
 import com.apeironapp.apeironapp.Model.UserTokenState;
 import com.apeironapp.apeironapp.Service.IServices.UserService;
@@ -46,26 +45,33 @@ public class AuthenticationController {
 	@PostMapping("/login")
 	public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
 																	HttpServletResponse response) {
+		List<String> roles = new ArrayList<String>();
+		String jwt;
+		int expiresIn;
+		try {
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
+							authenticationRequest.getPassword()));
 
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		UsernamePasswordAuthenticationToken u = new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
-				authenticationRequest.getPassword());
+			PersonUser user = (PersonUser) authentication.getPrincipal();
+			jwt = tokenUtils.generateToken(user.getUsername());
+			expiresIn = tokenUtils.getExpiredIn();
+			user.getAuthorities().forEach((a) -> roles.add(a.getAuthority()));
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-		Authentication authentication = authenticationManager.authenticate(u);
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		PersonUser user = (PersonUser) authentication.getPrincipal();
-		String jwt = tokenUtils.generateToken(user.getUsername());
-		int expiresIn = tokenUtils.getExpiredIn();
-		return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, (long) expiresIn, roles), HttpStatus.OK);
 	}
 
 
 
 
 	// U slucaju isteka vazenja JWT tokena, endpoint koji se poziva da se token osvezi
-	@PostMapping(value = "/refresh")
+/*	@PostMapping(value = "/refresh")
 	public ResponseEntity<UserTokenState> refreshAuthenticationToken(HttpServletRequest request) {
 
 		String token = tokenUtils.getToken(request);
@@ -76,12 +82,12 @@ public class AuthenticationController {
 			String refreshedToken = tokenUtils.refreshToken(token);
 			int expiresIn = tokenUtils.getExpiredIn();
 
-			return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn));
+			return ResponseEntity.ok(new UserTokenState(refreshedToken, Long.parseLong(expiresIn.));
 		} else {
 			UserTokenState userTokenState = new UserTokenState();
 			return ResponseEntity.badRequest().body(userTokenState);
 		}
-	}
+	}*/
 
 
 

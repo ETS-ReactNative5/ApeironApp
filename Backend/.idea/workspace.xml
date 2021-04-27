@@ -6,13 +6,33 @@
   <component name="ChangeListManager">
     <list default="true" id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Config/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/AvailableColors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/AvailableColors.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Authentification/TokenUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Authentification/TokenUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ItemsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ItemsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ReservationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ReservationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/ItemInOrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/ItemInOrderDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/NewItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/NewItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/PersonUserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/PersonUserDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/PersonUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/PersonUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Pictures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Pictures.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/UserTokenState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/UserTokenState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/IServices/IReservationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/IServices/IReservationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/IServices/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/IServices/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/ItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/ItemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/ReservationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/ReservationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Header.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/components/Order.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Order.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TShirts-women.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TShirts-women.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/AddItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/AddItem.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +51,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1nA2Tc4h2cFsAUJbjSDL4wYXnYL" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />

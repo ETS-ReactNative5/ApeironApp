@@ -19,13 +19,50 @@ public class Pictures {
     @Column(name="id", unique=true, nullable=false)
     private Integer id;
 
+    @Column(name = "name", nullable = true)
+    private String name;
+
     @Column(name = "picture", nullable = true)
-    private String picture;
+    private byte[] picByte;
+
 
     @JsonBackReference(value="item-pictures")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false, unique = false)
     private Item item;
 
+    public Pictures() {
+    }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public byte[] getPicByte() {
+        return picByte;
+    }
+
+    public void setPicByte(byte[] picByte) {
+        this.picByte = picByte;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
 }

@@ -2,6 +2,8 @@ package com.apeironapp.apeironapp.DTO;
 
 public class PersonUserDTO {
 
+    private Integer id;
+
     private String email;
 
     private String password;
@@ -25,6 +27,13 @@ public class PersonUserDTO {
         this.address = address;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;

@@ -30,14 +30,25 @@ public class Order {
             inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"))
     private Set<ItemInOrder> items = new HashSet<ItemInOrder>();
 
-    @Column(name = "dateOfReservation", nullable = true)
-    private LocalDate dateOfReservation;
-
     @Column(name = "dueDate", nullable = true)
     private LocalDate dueDate;
 
+    @Column(name = "dateOfReservation", nullable = true)
+    private LocalDate dateOfReservation;
+
+    @Column(name = "itemId", nullable = true)
+    private Integer itemId;
+
 
     public Order() {
+    }
+
+    public Integer getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Integer itemId) {
+        this.itemId = itemId;
     }
 
     public Integer getId() {
