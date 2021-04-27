@@ -17,15 +17,15 @@ public class NewItemDTO {
 
     private List<String> sizes;
 
-    private Collection<File> pictures;
+    private List<String> pictures;
 
     private String gender;
 
-    public Collection<File> getPictures() {
+    public List<String> getPictures() {
         return pictures;
     }
 
-    public void setPictures(Collection<File> pictures) {
+    public void setPictures(List<String> pictures) {
         this.pictures = pictures;
     }
 

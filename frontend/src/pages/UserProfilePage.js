@@ -138,7 +138,7 @@ class UserProfilePage extends Component {
 	};
 
 	handlePhoneNumberChange = (event) => {
-		this.setState({ phoneNumber: event.target.value });
+		this.setState({ phonenumber: event.target.value });
 	};
 
 	validateForm = (userDTO) => {
@@ -152,8 +152,8 @@ class UserProfilePage extends Component {
 			addressNotFoundError: "none",
 		});
 
-		const regexPhone = /^([+]?[0-9]{3,6}[-]?[\/]?[0-9]{3,5}[-]?[\/]?[0-9]*)$/;
-		console.log(regexPhone.test(userDTO.phoneNumber));
+		//const regexPhone = /^([+]?[0-9]{3,6}[-]?[\/]?[0-9]{3,5}[-]?[\/]?[0-9]*)$/;
+		//console.log(regexPhone.test(userDTO.phoneNumber));
 		if (userDTO.name === "") {
 			this.setState({ nameError: "initial" });
 			return false;
@@ -166,9 +166,7 @@ class UserProfilePage extends Component {
 		} else if (userDTO.phoneNumber === "") {
 			this.setState({ phoneError: "initial" });
 			return false;
-		} else if (regexPhone.test(userDTO.phoneNumber) === false) {
-			this.setState({ phoneValidateError: "initial" });
-			return false;
+	
 		}
 		return true;
 	};
@@ -293,7 +291,7 @@ class UserProfilePage extends Component {
 			this.setState({ newPasswordRetypeNotSameError: "initial" });
 		} else {
 			let passwordChangeDTO = { oldPassword, newPassword };
-			Axios.post(BASE_URL + "/auth/change-password", passwordChangeDTO, {
+			Axios.post(BASE_URL + "/api/users/changePassword", passwordChangeDTO, {
 				validateStatus: () => true,
 				headers: { Authorization: getAuthHeader() },
 			})
@@ -460,9 +458,9 @@ class UserProfilePage extends Component {
 									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 									
 										<input
-											placeholder="Phone number"
 											readOnly={this.state.hiddenEditInfo}
 											className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
+											placeholder="Phone number"
 											type="text"
 											onChange={this.handlePhoneNumberChange}
 											value={this.state.phonenumber}
@@ -471,10 +469,8 @@ class UserProfilePage extends Component {
 									<div className="text-danger" style={{ display: this.state.phoneError }}>
 										Phone number must be entered.
 									</div>
-									<div className="text-danger" style={{ display: this.state.phoneValidateError }}>
-										Incorect phone number.
-									</div>
 								</div>
+								
 								<div className="form-group text-center" hidden={this.state.hiddenEditInfo}>
 									<button
 										style={{ background: "#1977cc", marginTop: "15px" }}

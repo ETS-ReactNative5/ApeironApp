@@ -11,7 +11,8 @@ import ImageUploader from 'react-images-upload';
 class RegisterPage extends Component {
     constructor(props) {
         super(props);
-         this.state = { pictures: [],
+        this.state = {
+            pictures: [],
             types: ["Hoodie", "T-Shirt", "Hat"],
             colors: ["Blue", "Green", "Yellow"],
             sizes: ["XS", "S", "M", "L", "XL"],
@@ -31,42 +32,44 @@ class RegisterPage extends Component {
             q: "",
             s: "",
             gender: "",
-            hat: false, };
-         this.onDrop = this.onDrop.bind(this);
-        
-    
+            hat: false,
+        };
+        this.onDrop = this.onDrop.bind(this);
+
     }
- 
+
     onDrop(picture) {
         this.setState({
             pictures: this.state.pictures.concat(picture),
+            //pictures: picture
         });
+        
     }
 
-    upload(pictures) {
-        let formData = new FormData();
-    
-        formData.append("pictures", pictures);
-    
-        Axios.post(BASE_URL + "/api/items/upload", formData, { validateStatus: () => true })
-        .then((res) => {
-            if (res.status === 409) {
-                this.setState({
-                    errorHeader: "Resource conflict!",
-                    errorMessage: "Email already exist.",
-                    hiddenErrorAlert: false,
-                });
-            } else if (res.status === 500) {
-                this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
-            } else {
-                console.log("Success");
-                this.setState({ openModal: true });
-            }
-        })
-        .catch((err) => {
-            console.log(err);
+    test(pic){
+       
+       alert('skjfksd')
+        this.setState({
+          fileUploadOngoing: true
         });
-    }
+    
+        const fileInput = document.querySelector("#fileInput");
+        const formData = new FormData();
+    
+        formData.append("file", pic);
+        formData.append("test", "StringValueTest");
+    
+        const options = {
+          method: "POST",
+          body: formData
+      
+        };
+        fetch(BASE_URL + "/api/items/upload", options);
+      }
+
+
+  
+ 
 
     toggleCertificatePurposeVisibility = () => {
         this.setState({ showedPurposes: !this.state.showedPurposes });
@@ -231,6 +234,13 @@ class RegisterPage extends Component {
     };
     handleSignUp = () => {
         let itemDTO = "";
+        let pics = []
+
+        this.state.pictures.forEach((p)=>{
+            console.log(p.name)
+            pics.push(p.name)
+
+        });
         if (this.state.hat) {
             itemDTO = {
                 type: this.state.selectedType,
@@ -253,6 +263,16 @@ class RegisterPage extends Component {
         console.log(itemDTO);
 
         if (this.validateForm(itemDTO)) {
+
+            console.log(this.state.pictures)
+            /*this.state.pictures.forEach((pic) => {
+                this.test(pic);
+            });
+    
+            this.setState({
+                pictures: []
+                
+            });*/
 
             console.log(itemDTO);
             Axios.post(BASE_URL + "/api/items/add", itemDTO, this.state.pictures, { validateStatus: () => true })
@@ -320,13 +340,9 @@ class RegisterPage extends Component {
                                         buttonText='Choose images'
                                         onChange={this.onDrop}
                                         imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                                        maxFileSize={5242880}
-                                        withPreview = {true}
+                                        withPreview={true}
                                     />
-                                    <button
-              className="btn btn-success btn-sm"
-              onClick={this.upload}
-            ></button></div>
+                                        </div>
                                     <div>
                                         <select
                                             class="btn btn-secondary dropdown-toggle"

@@ -22,10 +22,6 @@ public class Pictures {
     @Column(name = "name", nullable = true)
     private String name;
 
-    @Column(name = "picture", nullable = true)
-    private byte[] picByte;
-
-
     @JsonBackReference(value="item-pictures")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false, unique = false)
@@ -50,13 +46,7 @@ public class Pictures {
         this.name = name;
     }
 
-    public byte[] getPicByte() {
-        return picByte;
-    }
 
-    public void setPicByte(byte[] picByte) {
-        this.picByte = picByte;
-    }
 
     public Item getItem() {
         return item;

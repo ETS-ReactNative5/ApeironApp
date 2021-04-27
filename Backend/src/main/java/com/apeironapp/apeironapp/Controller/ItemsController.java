@@ -8,6 +8,7 @@ import com.apeironapp.apeironapp.Model.Pictures;
 import com.apeironapp.apeironapp.Service.Implementations.CustomUserDetailsService;
 import com.apeironapp.apeironapp.Service.Implementations.ItemService;
 import com.apeironapp.apeironapp.Service.Implementations.PicturesService;
+import com.google.zxing.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +50,16 @@ public class ItemsController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity.BodyBuilder uplaodImage(@RequestParam("pictures") List<MultipartFile> file) throws IOException {
+    //@PreAuthorize("hasRole('PATIENT')")
+    ResponseEntity<String> hello(@RequestParam("file") MultipartFile file) throws IOException {
 
-        for(MultipartFile multipartFile: file) {
-            NewPictureDTO img = new NewPictureDTO(multipartFile.getOriginalFilename(), multipartFile.getBytes(), 1);
-            picturesService.save(img);
-        }
-        return ResponseEntity.status(HttpStatus.OK);
+                System.out.println("sgvsrgserg"+file);
+                BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+                File destination = new File("src/main/resources/images/" + file.getOriginalFilename());
+                ImageIO.write(src, "png", destination);
+
+
+        return new ResponseEntity<>("Image is successfully added!", HttpStatus.CREATED);
     }
 
 

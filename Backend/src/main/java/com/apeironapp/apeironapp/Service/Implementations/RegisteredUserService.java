@@ -10,9 +10,12 @@ import com.apeironapp.apeironapp.Repository.UserRepository;
 import com.apeironapp.apeironapp.Service.IServices.IRegisteredUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +27,12 @@ public class RegisteredUserService implements IRegisteredUserService {
     @Autowired
     private RegisteredUserRepository registeredUserRepository;
 
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Override
     public RegisteredUser findById(Integer id) {
@@ -87,9 +96,9 @@ public class RegisteredUserService implements IRegisteredUserService {
 
 
 
-    /*public User changePassword(String oldPassword, String newPassword) {
+    public RegisteredUser changePassword(String oldPassword, String newPassword) {
 
-        User user = getLoggedUser();
+        RegisteredUser user = getLoggedUser();
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), oldPassword));
 
@@ -97,8 +106,8 @@ public class RegisteredUserService implements IRegisteredUserService {
             throw new IllegalArgumentException("Invalid new password");
 
         user.setPassword(passwordEncoder.encode(newPassword));
-        return userRepository.save(user);
-    }*/
+        return registeredUserRepository.save(user);
+    }
 
     public RegisteredUser getLoggedUser() {
 
