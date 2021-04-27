@@ -2,6 +2,7 @@ package com.apeironapp.apeironapp.Controller;
 
 import java.util.List;
 
+import com.apeironapp.apeironapp.DTO.PasswordChanger;
 import com.apeironapp.apeironapp.DTO.PersonUserDTO;
 import com.apeironapp.apeironapp.DTO.UserDTO;
 import com.apeironapp.apeironapp.Model.PersonUser;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/users")
+
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
 	@Autowired
@@ -61,11 +64,11 @@ public class UserController {
 		}
 	}
 
-	/*@PostMapping("/changePassword")
-	@PreAuthorize("hasRole('MANAGER')")
+	@PostMapping("/changePassword")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> changePasswordUser(@RequestBody PasswordChanger passwordChanger) {
 		try {
-			userService.changePassword(passwordChanger.getOldPassword(), passwordChanger.getNewPassword());
+			registeredUserService.changePassword(passwordChanger.getOldPassword(), passwordChanger.getNewPassword());
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -73,7 +76,7 @@ public class UserController {
 		catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}*/
+	}
 	
 	 
 

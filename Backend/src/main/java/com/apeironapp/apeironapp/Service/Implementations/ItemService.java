@@ -3,9 +3,11 @@ package com.apeironapp.apeironapp.Service.Implementations;
 import com.apeironapp.apeironapp.DTO.NewAvailableColorsDTO;
 import com.apeironapp.apeironapp.DTO.NewAvailableSizesDTO;
 import com.apeironapp.apeironapp.DTO.NewItemDTO;
+import com.apeironapp.apeironapp.DTO.NewPictureDTO;
 import com.apeironapp.apeironapp.Model.AvailableColors;
 import com.apeironapp.apeironapp.Model.AvailableSize;
 import com.apeironapp.apeironapp.Model.Item;
+import com.apeironapp.apeironapp.Model.Pictures;
 import com.apeironapp.apeironapp.Repository.ItemRepository;
 import com.apeironapp.apeironapp.Service.IServices.IAuthorityService;
 import com.apeironapp.apeironapp.Service.IServices.IItemService;
@@ -13,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ItemService implements IItemService {
@@ -29,6 +33,10 @@ public class ItemService implements IItemService {
     @Autowired
     private AvailableSizesService availableSizesService;
 
+
+    @Autowired
+    private PicturesService picturesService;
+
     @Override
     public List<Item> findAll() {
         return itemRepository.findAll();
@@ -42,7 +50,18 @@ public class ItemService implements IItemService {
         item.setType(newItemDTO.getType());
         item.setGender(newItemDTO.getGender());
 
+        Set<Pictures> pictures = new HashSet<Pictures>();
 
+        for(String s: newItemDTO.getPictures()) {
+
+            NewPictureDTO newPictureDTO = new NewPictureDTO();
+            newPictureDTO.setItemId(item.getId());
+            newPictureDTO.setName(s);
+            Pictures picture = picturesService.save(newPictureDTO);
+            pictures.add(picture);
+
+        }
+        item.setPictures(pictures);
 
         Item item1 = itemRepository.save(item);
 

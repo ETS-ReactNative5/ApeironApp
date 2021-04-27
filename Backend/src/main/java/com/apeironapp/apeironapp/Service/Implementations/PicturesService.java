@@ -31,7 +31,6 @@ public class PicturesService implements IPicturesService {
         Pictures pictures = new Pictures();
         Item item = itemService.findById(newPictureDTO.getItemId());
         pictures.setItem(item);
-        pictures.setPicByte(newPictureDTO.getPicByte());
         pictures.setName(newPictureDTO.getName());
 
         return picturesRepository.save(pictures);
