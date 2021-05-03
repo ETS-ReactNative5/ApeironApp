@@ -32,14 +32,18 @@ class Header extends Component {
                             <li className="active">
                                 <Link to="/">Home</Link>
                             </li>
-                            <li>
-                                <Link to="/myReservations">My reservations</Link>
+                            <li hidden={!this.hasRole("ROLE_USER")}>
+                                <Link to="/myReservations">My orders</Link>
                             </li>
                             <li hidden={!this.hasRole("ROLE_DERMATHOLOGIST") && !this.hasRole("ROLE_PHARMACIST")}>
                                 <Link to="/deliveries">Deliveries</Link>
                             </li>
                             <li >
                                 <Link to="/additem">Add a new item</Link>
+                            </li>
+
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
+                                <Link to="/allOrders">All orders</Link>
                             </li>
  <li>
                                 <Link to="/userChangeProfile">My profile</Link>
@@ -49,7 +53,7 @@ class Header extends Component {
                                 <ul>
 
                                     <li className="drop-down">
-                                        <Link to="/tshirts"  hidden={this.hasRole("*")}>T-Shirts</Link>
+                                        <Link to="/tshirts" >T-Shirts</Link>
                                         <ul>
                                             <li>
                                                 <Link to="/tshirts-women">Women</Link>
@@ -66,7 +70,7 @@ class Header extends Component {
                                     <li>
                                        
                                         <li className="drop-down">
-                                        <Link to="/hoodies"  hidden={this.hasRole("*")}>Hoodies</Link>
+                                        <Link to="/hoodies">Hoodies</Link>
                                         <ul>
                                             <li>
                                                 <Link to="/hoodies-women">Women</Link>

@@ -5,6 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import getAuthHeader from "../GetHeader";
 import Axios from "axios";
 import { BASE_URL } from "../constants.js";
+var Carousel = require('react-responsive-carousel').Carousel;
+
 
 class EndEntityCreateModal extends Component {
 	state = {

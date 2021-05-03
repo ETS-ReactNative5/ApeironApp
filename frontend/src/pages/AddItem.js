@@ -248,7 +248,8 @@ class RegisterPage extends Component {
                 name: this.state.name,
                 colors: this.state.quantity,
                 sizes: this.state.size,
-                gender: "Hat"
+                gender: "Hat",
+                pictures: pics
             }
         } else {
             itemDTO = {
@@ -257,7 +258,8 @@ class RegisterPage extends Component {
                 name: this.state.name,
                 colors: this.state.quantity,
                 sizes: this.state.size,
-                gender: this.state.gender
+                gender: this.state.gender,
+                pictures: pics
             };
         }
         console.log(itemDTO);
@@ -265,14 +267,14 @@ class RegisterPage extends Component {
         if (this.validateForm(itemDTO)) {
 
             console.log(this.state.pictures)
-            /*this.state.pictures.forEach((pic) => {
+            this.state.pictures.forEach((pic) => {
                 this.test(pic);
             });
     
             this.setState({
                 pictures: []
                 
-            });*/
+            });
 
             console.log(itemDTO);
             Axios.post(BASE_URL + "/api/items/add", itemDTO, this.state.pictures, { validateStatus: () => true })

@@ -9,6 +9,7 @@ import com.apeironapp.apeironapp.Service.Implementations.CustomUserDetailsServic
 import com.apeironapp.apeironapp.Service.Implementations.ItemService;
 import com.apeironapp.apeironapp.Service.Implementations.PicturesService;
 import com.google.zxing.NotFoundException;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,8 +25,11 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/items", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,10 +67,10 @@ public class ItemsController {
     }
 
 
-    @GetMapping("/tshirt-women")
+    @GetMapping(value = "/tshirt-women")
     // @PreAuthorize("hasRole('PHARMACIST')")
     public ResponseEntity<List<ItemDTO>> tshirtWomen() {
-
+        BufferedImage img = null;
         List<Item> itemList = itemService.findAll();
         List<ItemDTO> womenTShirt = new ArrayList<ItemDTO>();
         for(Item item: itemList){
@@ -77,6 +81,21 @@ public class ItemsController {
                 itemDTO.setName(item.getName());
                 itemDTO.setPrice(item.getPrice());
                 itemDTO.setType(item.getType());
+
+                Set<BufferedImage> list = new HashSet<BufferedImage>();
+                for(Pictures pictures: item.getPictures()) {
+                    File destination = new File("src/main/resources/images/" + pictures.getName());
+                    try {
+                        img = ImageIO.read(destination);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    list.add(img);
+                }
+
+                System.out.println("AAAAAAAAAAAAAAAAAAaa");
+                //itemDTO.setFiles(list);
+                //System.out.println("BBBBBBBBBBBBBBBB" + itemDTO.getFiles());
 
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
