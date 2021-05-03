@@ -11,7 +11,6 @@ public class NewPictureDTO {
 
     private byte[] picByte;
 
-
     private Integer itemId;
 
     public NewPictureDTO() {

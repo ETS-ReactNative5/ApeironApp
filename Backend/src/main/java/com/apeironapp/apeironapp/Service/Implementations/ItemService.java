@@ -51,10 +51,11 @@ public class ItemService implements IItemService {
         item.setGender(newItemDTO.getGender());
 
         Set<Pictures> pictures = new HashSet<Pictures>();
-
+        item = itemRepository.save(item);
         for(String s: newItemDTO.getPictures()) {
 
             NewPictureDTO newPictureDTO = new NewPictureDTO();
+            System.out.println("faesf" + item.getId());
             newPictureDTO.setItemId(item.getId());
             newPictureDTO.setName(s);
             Pictures picture = picturesService.save(newPictureDTO);

@@ -2,6 +2,7 @@ package com.apeironapp.apeironapp.Model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Pictures {
     @Column(name = "name", nullable = true)
     private String name;
 
+    @JsonIgnore
     @JsonBackReference(value="item-pictures")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false, unique = false)

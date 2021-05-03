@@ -5,11 +5,13 @@ import com.apeironapp.apeironapp.DTO.*;
 import com.apeironapp.apeironapp.Model.*;
 import com.apeironapp.apeironapp.Service.Implementations.ItemInOrderService;
 import com.apeironapp.apeironapp.Service.Implementations.ItemService;
+import com.apeironapp.apeironapp.Service.Implementations.RegisteredUserService;
 import com.apeironapp.apeironapp.Service.Implementations.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -28,6 +30,9 @@ public class ReservationController {
 
 
     @Autowired
+    private RegisteredUserService registeredUserService;
+
+    @Autowired
     private ItemService itemService;
 
     @PostMapping("/add")
@@ -43,7 +48,7 @@ public class ReservationController {
 
 
     @GetMapping("/all")
-    // @PreAuthorize("hasRole('PHARMACIST')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<ReservationDTO>> all() {
 
         List<Order> orders = reservationService.findAll();
@@ -89,6 +94,55 @@ public class ReservationController {
                     ResponseEntity.ok(reservationDTOS);
         }
 
+    @GetMapping("/allUser")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<List<ReservationDTO>> allUser() {
+
+
+        List<Order> orders = reservationService.findAll();
+        List<ReservationDTO> reservationDTOS = new ArrayList<ReservationDTO>();
+
+        RegisteredUser registeredUser = registeredUserService.getLoggedUser();
+        for (Order order : orders) {
+            if(order.getRegisteredUser().getId()==registeredUser.getId()) {
+                ReservationDTO reservationDTO = new ReservationDTO();
+                reservationDTO.setReservationId(order.getId());
+                reservationDTO.setDateOfReservation(order.getDateOfReservation());
+                reservationDTO.setDueDate(order.getDueDate());
+                Set<ItemInOrderDTO> itemInOrderDTOSet = new HashSet<ItemInOrderDTO>();
+
+                for (ItemInOrder item : order.getItems()) {
+                    ItemInOrderDTO item1 = new ItemInOrderDTO();
+                    reservationDTO.setItemId(item.getId());
+                    reservationDTO.setItemGender(item.getItem().getGender());
+                    reservationDTO.setItemName(item.getItem().getName());
+                    reservationDTO.setItemType(item.getItem().getType());
+                    item1.setColor(item.getColor());
+                    item1.setItemId(item.getId());
+                    item1.setQuantity(item.getQuantity());
+                    item1.setSize(item.getSize());
+                    itemInOrderDTOSet.add(item1);
+
+
+                }
+                reservationDTO.setItemInOrderDTOSet(itemInOrderDTOSet);
+
+                if (reservationDTOS.contains(reservationDTO)) {
+                    break;
+                } else {
+                    reservationDTOS.add(reservationDTO);
+                }
+
+            }
+
+
+        }
+
+
+        return reservationDTOS == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(reservationDTOS);
+    }
 
 
     @GetMapping("/remove/{id}")

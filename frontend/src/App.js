@@ -14,6 +14,7 @@ import AddItem from "./pages/AddItem";
 import Hats from "./pages/Hats";
 import MyOrders from "./pages/MyOrders";
 import UserProfilePage from "./pages/UserProfilePage";
+import AllOrders from "./pages/AllOrders";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
 				<Link exact to="/hats" path="/hats" component={Hats} />
 				<Link exact to="/myReservations" path="/myReservations" component={MyOrders} />
 				<Link exact to="/userChangeProfile" path="/userChangeProfile" component={UserProfilePage} />
+				<Link exact to="/allOrders" path="/allOrders" component={AllOrders} />
         </Switch>
 		</Router>
  

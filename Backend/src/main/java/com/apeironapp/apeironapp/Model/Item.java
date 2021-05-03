@@ -1,9 +1,6 @@
 package com.apeironapp.apeironapp.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.parameters.P;
 
@@ -34,6 +31,7 @@ public class Item {
     @Column(name = "gender", nullable = true)
     private String gender;
 
+    @JsonIgnore
     @JsonManagedReference(value="item-pictures")
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Pictures> pictures = new HashSet<Pictures>();
@@ -54,6 +52,14 @@ public class Item {
 
 
     public Item() {
+    }
+
+    public Set<ItemInOrder> getItemInOrders() {
+        return itemInOrders;
+    }
+
+    public void setItemInOrders(Set<ItemInOrder> itemInOrders) {
+        this.itemInOrders = itemInOrders;
     }
 
     public String getGender() {

@@ -1,6 +1,10 @@
 package com.apeironapp.apeironapp.DTO;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class ItemDTO {
 
@@ -14,10 +18,19 @@ public class ItemDTO {
 
     private List<NewAvailableColorsDTO> colors;
 
+    private Set<BufferedImage> files;
 
     private String gender;
 
     public ItemDTO() {
+    }
+
+    public Set<BufferedImage> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Set<BufferedImage> files) {
+        this.files = files;
     }
 
     public String getType() {

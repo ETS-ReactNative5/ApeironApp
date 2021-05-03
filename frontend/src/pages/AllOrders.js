@@ -7,17 +7,18 @@ import PharmacyLogo from "../static/naslovna-duks.png";
 import "../App.js";
 import { Redirect } from "react-router-dom";
 import Order from "../components/Order";
-import getAuthHeader from "../GetHeader";
 
-class MyOrders extends Component {
+class AllOrders extends Component {
     state = {
         reservations: [],
+
+
 
     };
 
 
     componentDidMount() {
-        Axios.get(BASE_URL + "/api/reservations/allUser", {headers: { Authorization: getAuthHeader() }})
+        Axios.get(BASE_URL + "/api/reservations/all")
             .then((res) => {
                 this.setState({ reservations: res.data });
                 console.log(res.data);
@@ -128,5 +129,5 @@ class MyOrders extends Component {
     }
 }
 
-export default MyOrders;
+export default AllOrders;
 
