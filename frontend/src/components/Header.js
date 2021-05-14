@@ -50,8 +50,8 @@ class Header extends Component {
                             </li>
                             <li hidden={!this.hasRole("ROLE_ADMIN")}>
                                 <Link to="/allOrders">All orders</Link>
-                            </li>
- <li>
+                            </li >
+                            <li hidden={!this.hasRole("ROLE_USER")}>
                                 <Link to="/userChangeProfile">My profile</Link>
                             </li>
                             <li className="drop-down">
@@ -74,29 +74,29 @@ class Header extends Component {
 
                                     </li>
                                     <li>
-                                       
+
                                         <li className="drop-down">
-                                        <Link to="/hoodies">Hoodies</Link>
-                                        <ul>
-                                            <li>
-                                                <Link to="/hoodies-women">Women</Link>
+                                            <Link to="/hoodies">Hoodies</Link>
+                                            <ul>
+                                                <li>
+                                                    <Link to="/hoodies-women">Women</Link>
 
-                                            </li>
-                                            <li>
-                                                <Link to="/hoodies-men">Men</Link>
-                                            </li>
+                                                </li>
+                                                <li>
+                                                    <Link to="/hoodies-men">Men</Link>
+                                                </li>
 
 
-                                        </ul>
+                                            </ul>
 
-                                    </li>
+                                        </li>
                                     </li>
                                     <li>
-                                       
-                                      
-                                    <Link to="/hats">Hats</Link>
-                                        
-                                 
+
+
+                                        <Link to="/hats">Hats</Link>
+
+
                                     </li>
 
                                 </ul>

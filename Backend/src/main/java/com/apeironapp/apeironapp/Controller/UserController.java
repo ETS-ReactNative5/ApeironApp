@@ -2,6 +2,7 @@ package com.apeironapp.apeironapp.Controller;
 
 import java.util.List;
 
+import com.apeironapp.apeironapp.DTO.MessageDTO;
 import com.apeironapp.apeironapp.DTO.PasswordChanger;
 import com.apeironapp.apeironapp.DTO.PersonUserDTO;
 import com.apeironapp.apeironapp.DTO.UserDTO;
@@ -9,8 +10,11 @@ import com.apeironapp.apeironapp.Model.PersonUser;
 import com.apeironapp.apeironapp.Service.Implementations.RegisteredUserService;
 import com.apeironapp.apeironapp.Service.Implementations.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,12 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
+
+	@Autowired
+	private Environment environment;
+
+	@Autowired
+	JavaMailSenderImpl mailSender;
 
 	@Autowired
 	private UserServiceImpl userService;
@@ -77,7 +87,26 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
+	@PostMapping("/sendMessage")
+	public ResponseEntity<?> sendMEssage(@RequestBody MessageDTO messageDTO) {
+
+
+			System.out.println(messageDTO);
+			SimpleMailMessage mail = new SimpleMailMessage();
+			mail.setTo("apeiron830@gmail.com");
+			mail.setSubject("Contact message!");
+			mail.setFrom(environment.getProperty(messageDTO.getEmail()));
+			//mail.setFrom("pharmacyisa@gmail.com");
+			mail.setText("You have a message from : "
+					+ messageDTO.getFirstName() + " " + messageDTO.getSurname() + " :" + messageDTO.getMessage() + "." +
+					" \n Phone number is "+ messageDTO.getPhoneNumber()+".");
+
+			mailSender.send(mail);
+
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+	}
 	 
 
 	

@@ -83,10 +83,10 @@ class TShirtsWomen extends Component {
 		this.setState({ formShowed: !this.state.formShowed });
 	};
 
-	hangleDelete = (id) => {
+	handleDelete = (e,id) => {
 		Axios.get(BASE_URL + "/api/items/delete/" + id)
 			.then((res) => {
-				
+				window.location.reload();
 				console.log(res.data);
 			})
 			.catch((err) => {
@@ -243,7 +243,7 @@ class TShirtsWomen extends Component {
 
 
 
-										<div hidden={!this.hasRole("ROLE_USER")}>  <button
+										<div hidden={!this.hasRole("ROLE_ADMIN")}>  <button
 											style={{
 												background: "#1977cc",
 												marginTop: "15px",
@@ -264,7 +264,7 @@ class TShirtsWomen extends Component {
 												marginLeft: "40%",
 												width: "20%",
 											}}
-											onClick={this.handleDelete(pharmacy.id)}
+											onClick={(e)=>this.handleDelete(e,pharmacy.id)}
 											className="btn btn-primary btn-xl"
 											id="sendMessageButton"
 											type="button"

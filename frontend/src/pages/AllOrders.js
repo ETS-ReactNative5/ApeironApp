@@ -8,6 +8,7 @@ import "../App.js";
 import { Redirect } from "react-router-dom";
 import Order from "../components/Order";
 
+import getAuthHeader from "../GetHeader";
 class AllOrders extends Component {
     state = {
         reservations: [],
@@ -16,9 +17,24 @@ class AllOrders extends Component {
 
     };
 
+    hasRole = (reqRole) => {
+        let roles = JSON.parse(localStorage.getItem("keyRole"));
+      
+        if (roles === null) return false;
+
+        if (reqRole === "*") return true;
+
+        for (let role of roles) {
+            if (role === reqRole) return true;
+        }
+        return false;
+    };
 
     componentDidMount() {
-        Axios.get(BASE_URL + "/api/reservations/all")
+        if (!this.hasRole("ROLE_USER")) {
+            this.setState({ redirect: true });
+        } else {
+        Axios.get(BASE_URL + "/api/reservations/allUser")
             .then((res) => {
                 this.setState({ reservations: res.data });
                 console.log(res.data);
@@ -26,6 +42,21 @@ class AllOrders extends Component {
             .catch((err) => {
                 console.log(err);
             });
+        }
+
+        if (!this.hasRole("ROLE_ADMIN")) {
+            this.setState({ redirect: true });
+        } else {
+        Axios.get(BASE_URL + "/api/reservations/all", { validateStatus: () => true, headers: { Authorization: getAuthHeader() }})
+            .then((res) => {
+                this.setState({ reservations: res.data });
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+
 
     };
 
@@ -47,7 +78,7 @@ class AllOrders extends Component {
   
 
     render() {
-        if (this.state.redirect) return <Redirect push to={this.state.redirectUrl} />;
+        
 
         return (
             <React.Fragment>
@@ -101,7 +132,7 @@ class AllOrders extends Component {
 
                                         </div>
 
-                                        <div>  <button
+                                        <div  hidden={!this.hasRole("ROLE_USER")}>  <button
                                             style={{
                                                 background: "#1977cc",
                                                 marginTop: "15px",
@@ -114,6 +145,36 @@ class AllOrders extends Component {
                                             type="button"
                                         >
                                             Remove
+									</button></div>
+
+                                    <div  hidden={!this.hasRole("ROLE_ADMIN")}>  <button
+                                            style={{
+                                                background: "#1977cc",
+                                                marginTop: "15px",
+                                                marginLeft: "40%",
+                                                width: "20%",
+                                            }}
+                                            onClick={(e) => this.handleRemove(e, reservation)}
+                                            className="btn btn-primary btn-xl"
+                                            id="sendMessageButton"
+                                            type="button"
+                                        >
+                                            Decline
+									</button></div>
+
+                                    <div  hidden={!this.hasRole("ROLE_ADMIN")}>  <button
+                                            style={{
+                                                background: "#1977cc",
+                                                marginTop: "15px",
+                                                marginLeft: "40%",
+                                                width: "20%",
+                                            }}
+                                            onClick={(e) => this.handleRemove(e, reservation)}
+                                            className="btn btn-primary btn-xl"
+                                            id="sendMessageButton"
+                                            type="button"
+                                        >
+                                            Order sent
 									</button></div>
 
                                     </td>

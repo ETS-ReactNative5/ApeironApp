@@ -22,6 +22,9 @@ class Contact extends Component {
 		password: "",
 		firstname: "",
 		surname: "",
+		emaill: "",
+		phone: "",
+		message: "",
 		address: "",
 		phoneNumber: "",
 		nameError: "none",
@@ -39,7 +42,7 @@ class Contact extends Component {
 		failHeader: "",
 		failMessage: "",
 		addressNotFoundError: "none",
-        aboutUs: ""
+		aboutUs: ""
 	};
 
 	constructor(props) {
@@ -96,8 +99,8 @@ class Contact extends Component {
 							email: res.data.contactEmail,
 							phonenumber: res.data.phoneNumber,
 							address: res.data.address,
-                            aboutUs: res.data.aboutUs,
-						
+							aboutUs: res.data.aboutUs,
+
 						});
 
 					} else {
@@ -114,11 +117,31 @@ class Contact extends Component {
 		this.setState({ email: event.target.value });
 	};
 
+	handleFirstNameChange = (event) => {
+		this.setState({ firstName: event.target.value });
+	};
+
+	handleSurnameChange = (event) => {
+		this.setState({ surname: event.target.value });
+	};
+
+	handleEmaillChange = (event) => {
+		this.setState({ emaill: event.target.value });
+	};
+
+	handlePhoneChange = (event) => {
+		this.setState({ phone: event.target.value });
+	};
+
+	handleMessageChange = (event) => {
+		this.setState({ message: event.target.value });
+	};
+
 	handlePhoneNumberChange = (event) => {
 		this.setState({ phonenumber: event.target.value });
 	};
 
-    handleAboutUsChange = (event) => {
+	handleAboutUsChange = (event) => {
 		this.setState({ aboutUs: event.target.value });
 	};
 
@@ -139,7 +162,7 @@ class Contact extends Component {
 		} else if (userDTO.phoneNumber === "") {
 			this.setState({ phoneError: "initial" });
 			return false;
-	
+
 		}
 		return true;
 	};
@@ -155,7 +178,7 @@ class Contact extends Component {
 	};
 
 	handleChangeInfo = () => {
-		
+
 		this.setState({
 			hiddenSuccessAlert: true,
 			successHeader: "",
@@ -192,8 +215,8 @@ class Contact extends Component {
 				let userDTO = {
 					address: { street, country, city, latitude, longitude },
 					phoneNumber: this.state.phonenumber,
-                    contactEmail: this.state.email,
-                    aboutUs: this.state.aboutUs,
+					contactEmail: this.state.email,
+					aboutUs: this.state.aboutUs,
 
 				};
 				console.log(userDTO);
@@ -230,6 +253,35 @@ class Contact extends Component {
 			});
 	};
 
+	handleSend = () => {
+		let messageDTO = {
+			firstName: this.state.firstName,
+			surname: this.state.surname,
+			email: this.state.emaill,
+			phoneNumber: this.state.phone,
+			message: this.state.message
+		}
+
+		Axios.post(BASE_URL + "/api/users/sendMessage",messageDTO, {
+            validateStatus: () => true,
+           
+        })
+            .then((res) => {
+               
+                if (res.status === 400) {
+                    this.setState({ hiddenFailAlert: false, failHeader: "Bad request", failMessage: "Invalid argument." });
+                } else if (res.status === 500) {
+                    this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
+                } else if (res.status === 204) {
+                    console.log("Success");
+                   
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+	};
 
 	handleEditInfoClick = () => {
 		this.setState({ hiddenEditInfo: false });
@@ -276,9 +328,9 @@ class Contact extends Component {
 						<div className="col shadow p-3 bg-white rounded">
 							<h5 className=" text-center text-uppercase">Contact Information</h5>
 							<form id="contactForm" name="sentMessage">
-                            <div className="control-group">
+								<div className="control-group">
 									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-									
+
 										<input
 											readOnly={this.state.hiddenEditInfo}
 											className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
@@ -288,12 +340,12 @@ class Contact extends Component {
 											value={this.state.email}
 										/>
 									</div>
-									
+
 								</div>
-								
+
 								<div className="control-group">
 									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-									
+
 										<input
 											readOnly={this.state.hiddenEditInfo}
 											className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
@@ -326,7 +378,7 @@ class Contact extends Component {
 								</div>
 								<div className="control-group">
 									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-									
+
 										<input
 											readOnly={this.state.hiddenEditInfo}
 											className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
@@ -341,9 +393,9 @@ class Contact extends Component {
 									</div>
 								</div>
 
-                                <div className="control-group">
+								<div className="control-group">
 									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-									
+
 										<input
 											readOnly={this.state.hiddenEditInfo}
 											className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
@@ -353,9 +405,9 @@ class Contact extends Component {
 											value={this.state.aboutUs}
 										/>
 									</div>
-									
+
 								</div>
-								
+
 								<div className="form-group text-center" hidden={this.state.hiddenEditInfo}>
 									<button
 										style={{ background: "#1977cc", marginTop: "15px" }}
@@ -369,7 +421,7 @@ class Contact extends Component {
 								</div>
 								<br />
 
-								<div className="form-group">
+								<div className="form-group" hidden={!this.hasRole("ROLE_ADMIN")}>
 									<div className="form-group controls mb-0 pb-2">
 										<div className="form-row justify-content-center">
 											<div className="form-col" hidden={!this.state.hiddenEditInfo}>
@@ -383,7 +435,7 @@ class Contact extends Component {
 												</button>
 											</div>
 
-										
+
 										</div>
 									</div>
 								</div>
@@ -391,9 +443,107 @@ class Contact extends Component {
 						</div>
 
 					</div>
+
+
+
+
+
+					<div className="row mt-5" >
+						<div className="col shadow p-3 bg-white rounded">
+							<h5 className=" text-center text-uppercase">Contact us</h5>
+							<form id="contactForm" name="sentMessage">
+								<div className="control-group">
+									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+
+										<input
+											className="form-control"
+											placeholder="First name"
+											type="text"
+											onChange={this.handleFirstNameChange}
+											value={this.state.firstName}
+										/>
+									</div>
+
+								</div>
+
+								<div className="control-group">
+									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+
+										<input
+											className="form-control"
+											placeholder="Last name"
+											type="text"
+											onChange={this.handleSurnameChange}
+											value={this.state.surname}
+										/>
+									</div>
+
+								</div>
+
+								<div className="control-group">
+									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+
+										<input
+											className="form-control"
+											placeholder="Email"
+											type="text"
+											onChange={this.handleEmaillChange}
+											value={this.state.emaill}
+										/>
+									</div>
+
+								</div>
+
+								<div className="control-group">
+									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+
+										<input
+											className="form-control"
+											placeholder="Phone number"
+											type="text"
+											onChange={this.handlePhoneChange}
+											value={this.state.phone}
+										/>
+									</div>
+
+								</div>
+
+								<div className="control-group">
+									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+
+										<input
+											className="form-control"
+											placeholder="Message"
+											type="text"
+											onChange={this.handleMessageChange}
+											value={this.state.message}
+										/>
+									</div>
+
+								</div>
+								
+
+								<div className="form-group text-center" >
+									<button
+										style={{ background: "#1977cc", marginTop: "15px" }}
+										onClick={this.handleSend}
+										className="btn btn-primary btn-xl"
+										id="sendMessageButton"
+										type="button"
+									>
+										Send
+									</button>
+								</div>
+								<br />
+
+								
+							</form>
+						</div>
+
+					</div>
 				</div>
-			
-				
+
+
 			</React.Fragment>
 		);
 	}
