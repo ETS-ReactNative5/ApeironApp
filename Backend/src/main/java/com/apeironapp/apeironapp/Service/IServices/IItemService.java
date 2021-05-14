@@ -12,4 +12,5 @@ public interface IItemService {
     List<Item> findAll ();
     Item save(NewItemDTO newItemDTO);
     Item findById(Integer id);
+    void delete(Integer id);
 }

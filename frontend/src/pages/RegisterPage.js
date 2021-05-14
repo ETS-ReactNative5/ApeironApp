@@ -170,7 +170,7 @@ class RegisterPage extends Component {
 						this.setState({ addressNotFoundError: "initial" });
 					} else {
 						console.log(userDTO);
-						Axios.post(BASE_URL + "/api/auth/signup", userDTO, { validateStatus: () => true })
+						Axios.post(BASE_URL + "/api/admin/signup", userDTO, { validateStatus: () => true })
 							.then((res) => {
 								if (res.status === 409) {
 									this.setState({

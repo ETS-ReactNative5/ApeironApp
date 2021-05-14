@@ -35,13 +35,19 @@ class Header extends Component {
                             <li hidden={!this.hasRole("ROLE_USER")}>
                                 <Link to="/myReservations">My orders</Link>
                             </li>
+
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
+                                <Link to="/contact">Contact information</Link>
+                            </li>
                             <li hidden={!this.hasRole("ROLE_DERMATHOLOGIST") && !this.hasRole("ROLE_PHARMACIST")}>
                                 <Link to="/deliveries">Deliveries</Link>
                             </li>
-                            <li >
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
                                 <Link to="/additem">Add a new item</Link>
                             </li>
-
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
+                                <Link to="/change">Change available colors</Link>
+                            </li>
                             <li hidden={!this.hasRole("ROLE_ADMIN")}>
                                 <Link to="/allOrders">All orders</Link>
                             </li>

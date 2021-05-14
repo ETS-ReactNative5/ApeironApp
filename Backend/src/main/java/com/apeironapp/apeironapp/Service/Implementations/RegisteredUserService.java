@@ -23,10 +23,8 @@ import java.util.List;
 @Service
 public class RegisteredUserService implements IRegisteredUserService {
 
-
     @Autowired
     private RegisteredUserRepository registeredUserRepository;
-
 
     @Autowired
     private PasswordEncoder passwordEncoder;

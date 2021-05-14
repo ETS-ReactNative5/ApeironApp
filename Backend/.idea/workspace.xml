@@ -7,25 +7,20 @@
     <list default="true" id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ItemsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ItemsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ReservationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ReservationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/ItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/ItemDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/NewPictureDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/NewPictureDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Pictures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Pictures.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/NewItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/NewItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/IServices/IItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/IServices/IItemService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/ItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/ItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/4d4beeb7-e80f-4241-8313-cf1f9f48f36c.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/CB1A7F08-7CDB-41AC-9D94-59650E5C8333.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/a2f427e5-f80e-41bf-bd4f-82cf11f133a3.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/examsPassed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/examsRemaining.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/sveZenske2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/RegisteredUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/RegisteredUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Header.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/components/Order.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Order.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/pages/AddItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/AddItem.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/MyOrders.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/MyOrders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/RegisterPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/RegisterPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TShirts-women.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TShirts-women.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

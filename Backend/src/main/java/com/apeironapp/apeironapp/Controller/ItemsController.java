@@ -1,35 +1,37 @@
 package com.apeironapp.apeironapp.Controller;
 
-import com.apeironapp.apeironapp.DTO.*;
-import com.apeironapp.apeironapp.Model.AvailableColors;
-import com.apeironapp.apeironapp.Model.AvailableSize;
-import com.apeironapp.apeironapp.Model.Item;
-import com.apeironapp.apeironapp.Model.Pictures;
-import com.apeironapp.apeironapp.Service.Implementations.CustomUserDetailsService;
-import com.apeironapp.apeironapp.Service.Implementations.ItemService;
-import com.apeironapp.apeironapp.Service.Implementations.PicturesService;
-import com.google.zxing.NotFoundException;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.imageio.ImageIO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.apeironapp.apeironapp.DTO.ItemDTO;
+import com.apeironapp.apeironapp.DTO.NewAvailableColorsDTO;
+import com.apeironapp.apeironapp.DTO.NewAvailableSizesDTO;
+import com.apeironapp.apeironapp.DTO.NewItemDTO;
+import com.apeironapp.apeironapp.Model.AvailableColors;
+import com.apeironapp.apeironapp.Model.AvailableSize;
+import com.apeironapp.apeironapp.Model.Item;
+import com.apeironapp.apeironapp.Model.Pictures;
+import com.apeironapp.apeironapp.Service.Implementations.ItemService;
+import com.apeironapp.apeironapp.Service.Implementations.PicturesService;
 
 @RestController
 @RequestMapping(value = "/api/items", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,29 +45,27 @@ public class ItemsController {
     private ItemService itemService;
 
     @PostMapping("/add")
-    // @PreAuthorize("hasRole('PHARMACIST')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> addItem(@RequestBody NewItemDTO newItemDTO) {
 
+        System.out.println("dzgd" + newItemDTO.getQuantityDTO());
         Item item = itemService.save(newItemDTO);
 
-        return item == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                new ResponseEntity<>("Item is successfully added!", HttpStatus.CREATED);
+        return item == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>("Item is successfully added!", HttpStatus.CREATED);
     }
 
     @PostMapping("/upload")
-    //@PreAuthorize("hasRole('PATIENT')")
+        // @PreAuthorize("hasRole('PATIENT')")
     ResponseEntity<String> hello(@RequestParam("file") MultipartFile file) throws IOException {
 
-                System.out.println("sgvsrgserg"+file);
-                BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
-                File destination = new File("src/main/resources/images/" + file.getOriginalFilename());
-                ImageIO.write(src, "png", destination);
-
+        System.out.println("sgvsrgserg" + file);
+        BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+        File destination = new File("src/main/resources/images/" + file.getOriginalFilename());
+        ImageIO.write(src, "png", destination);
 
         return new ResponseEntity<>("Image is successfully added!", HttpStatus.CREATED);
     }
-
 
     @GetMapping(value = "/tshirt-women")
     // @PreAuthorize("hasRole('PHARMACIST')")
@@ -73,8 +73,8 @@ public class ItemsController {
         BufferedImage img = null;
         List<Item> itemList = itemService.findAll();
         List<ItemDTO> womenTShirt = new ArrayList<ItemDTO>();
-        for(Item item: itemList){
-            if(item.getGender().equals("Female") && item.getType().equals("T-Shirt")){
+        for (Item item : itemList) {
+            if (item.getGender().equals("Female") && item.getType().equals("T-Shirt")) {
                 ItemDTO itemDTO = new ItemDTO();
                 itemDTO.setId(item.getId());
                 itemDTO.setGender(item.getGender());
@@ -82,34 +82,38 @@ public class ItemsController {
                 itemDTO.setPrice(item.getPrice());
                 itemDTO.setType(item.getType());
 
-                Set<BufferedImage> list = new HashSet<BufferedImage>();
-                for(Pictures pictures: item.getPictures()) {
+                Set<String> list = new HashSet<String>();
+                for (Pictures pictures : item.getPictures()) {
                     File destination = new File("src/main/resources/images/" + pictures.getName());
                     try {
                         img = ImageIO.read(destination);
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        ImageIO.write(img, "PNG", out);
+                        byte[] bytes = out.toByteArray();
+                        String base64bytes = Base64.getEncoder().encodeToString(bytes);
+                        String src = "data:image/png;base64," + base64bytes;
+                        list.add(src);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    list.add(img);
+
                 }
 
                 System.out.println("AAAAAAAAAAAAAAAAAAaa");
-                //itemDTO.setFiles(list);
-                //System.out.println("BBBBBBBBBBBBBBBB" + itemDTO.getFiles());
+                itemDTO.setFiles(list);
+                // System.out.println("BBBBBBBBBBBBBBBB" + itemDTO.getFiles());
 
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
-                for(AvailableColors availableColors: item.getAvailableColors()) {
+                for (AvailableColors availableColors : item.getAvailableColors()) {
                     NewAvailableColorsDTO newAvailableColorsDTO = new NewAvailableColorsDTO();
                     newAvailableColorsDTO.setColor(availableColors.getColor());
                     newAvailableColorsDTO.setQuantity(availableColors.getQuantity());
 
-
-
                     List<NewAvailableSizesDTO> newAvailableSizesDTOS = new ArrayList<NewAvailableSizesDTO>();
 
-
-                    for(AvailableSize availableSize: availableColors.getAvailableSizes()){
+                    for (AvailableSize availableSize : availableColors.getAvailableSizes()) {
                         NewAvailableSizesDTO newAvailableSizesDTO = new NewAvailableSizesDTO();
                         newAvailableSizesDTO.setSize(availableSize.getSize());
                         newAvailableSizesDTO.setQuantity(availableSize.getQuantity());
@@ -125,10 +129,21 @@ public class ItemsController {
             }
         }
 
-        return womenTShirt == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                ResponseEntity.ok(womenTShirt);
+        return womenTShirt == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(womenTShirt);
     }
+
+
+
+    @GetMapping(value = "/delete/{id}")
+    // @PreAuthorize("hasRole('PHARMACIST')")
+    public ResponseEntity<String> deleteItem(@PathVariable Integer id) {
+
+        itemService.delete(id);
+
+        return ResponseEntity.ok("Success");
+    }
+
+
 
     @GetMapping("/tshirt-men")
     // @PreAuthorize("hasRole('PHARMACIST')")
@@ -136,8 +151,8 @@ public class ItemsController {
 
         List<Item> itemList = itemService.findAll();
         List<ItemDTO> menTShirt = new ArrayList<ItemDTO>();
-        for(Item item: itemList){
-            if(item.getGender().equals("Male") && item.getType().equals("T-Shirt")){
+        for (Item item : itemList) {
+            if (item.getGender().equals("Male") && item.getType().equals("T-Shirt")) {
                 ItemDTO itemDTO = new ItemDTO();
                 itemDTO.setId(item.getId());
                 itemDTO.setGender(item.getGender());
@@ -147,17 +162,14 @@ public class ItemsController {
 
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
-                for(AvailableColors availableColors: item.getAvailableColors()) {
+                for (AvailableColors availableColors : item.getAvailableColors()) {
                     NewAvailableColorsDTO newAvailableColorsDTO = new NewAvailableColorsDTO();
                     newAvailableColorsDTO.setColor(availableColors.getColor());
                     newAvailableColorsDTO.setQuantity(availableColors.getQuantity());
 
-
-
                     List<NewAvailableSizesDTO> newAvailableSizesDTOS = new ArrayList<NewAvailableSizesDTO>();
 
-
-                    for(AvailableSize availableSize: availableColors.getAvailableSizes()){
+                    for (AvailableSize availableSize : availableColors.getAvailableSizes()) {
                         NewAvailableSizesDTO newAvailableSizesDTO = new NewAvailableSizesDTO();
                         newAvailableSizesDTO.setSize(availableSize.getSize());
                         newAvailableSizesDTO.setQuantity(availableSize.getQuantity());
@@ -173,9 +185,7 @@ public class ItemsController {
             }
         }
 
-        return menTShirt == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                ResponseEntity.ok(menTShirt);
+        return menTShirt == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(menTShirt);
     }
 
     @GetMapping("/hoodies-women")
@@ -184,8 +194,8 @@ public class ItemsController {
 
         List<Item> itemList = itemService.findAll();
         List<ItemDTO> womenHoodies = new ArrayList<ItemDTO>();
-        for(Item item: itemList){
-            if(item.getGender().equals("Female") && item.getType().equals("Hoodie")){
+        for (Item item : itemList) {
+            if (item.getGender().equals("Female") && item.getType().equals("Hoodie")) {
                 ItemDTO itemDTO = new ItemDTO();
                 itemDTO.setId(item.getId());
                 itemDTO.setGender(item.getGender());
@@ -195,17 +205,14 @@ public class ItemsController {
 
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
-                for(AvailableColors availableColors: item.getAvailableColors()) {
+                for (AvailableColors availableColors : item.getAvailableColors()) {
                     NewAvailableColorsDTO newAvailableColorsDTO = new NewAvailableColorsDTO();
                     newAvailableColorsDTO.setColor(availableColors.getColor());
                     newAvailableColorsDTO.setQuantity(availableColors.getQuantity());
 
-
-
                     List<NewAvailableSizesDTO> newAvailableSizesDTOS = new ArrayList<NewAvailableSizesDTO>();
 
-
-                    for(AvailableSize availableSize: availableColors.getAvailableSizes()){
+                    for (AvailableSize availableSize : availableColors.getAvailableSizes()) {
                         NewAvailableSizesDTO newAvailableSizesDTO = new NewAvailableSizesDTO();
                         newAvailableSizesDTO.setSize(availableSize.getSize());
                         newAvailableSizesDTO.setQuantity(availableSize.getQuantity());
@@ -221,11 +228,8 @@ public class ItemsController {
             }
         }
 
-        return womenHoodies == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                ResponseEntity.ok(womenHoodies);
+        return womenHoodies == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(womenHoodies);
     }
-
 
     @GetMapping("/hoodies-men")
     // @PreAuthorize("hasRole('PHARMACIST')")
@@ -233,8 +237,8 @@ public class ItemsController {
 
         List<Item> itemList = itemService.findAll();
         List<ItemDTO> menHoodies = new ArrayList<ItemDTO>();
-        for(Item item: itemList){
-            if(item.getGender().equals("Male") && item.getType().equals("Hoodie")){
+        for (Item item : itemList) {
+            if (item.getGender().equals("Male") && item.getType().equals("Hoodie")) {
                 ItemDTO itemDTO = new ItemDTO();
                 itemDTO.setId(item.getId());
                 itemDTO.setGender(item.getGender());
@@ -244,17 +248,14 @@ public class ItemsController {
 
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
-                for(AvailableColors availableColors: item.getAvailableColors()) {
+                for (AvailableColors availableColors : item.getAvailableColors()) {
                     NewAvailableColorsDTO newAvailableColorsDTO = new NewAvailableColorsDTO();
                     newAvailableColorsDTO.setColor(availableColors.getColor());
                     newAvailableColorsDTO.setQuantity(availableColors.getQuantity());
 
-
-
                     List<NewAvailableSizesDTO> newAvailableSizesDTOS = new ArrayList<NewAvailableSizesDTO>();
 
-
-                    for(AvailableSize availableSize: availableColors.getAvailableSizes()){
+                    for (AvailableSize availableSize : availableColors.getAvailableSizes()) {
                         NewAvailableSizesDTO newAvailableSizesDTO = new NewAvailableSizesDTO();
                         newAvailableSizesDTO.setSize(availableSize.getSize());
                         newAvailableSizesDTO.setQuantity(availableSize.getQuantity());
@@ -270,11 +271,8 @@ public class ItemsController {
             }
         }
 
-        return menHoodies == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                ResponseEntity.ok(menHoodies);
+        return menHoodies == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(menHoodies);
     }
-
 
     @GetMapping("/hats")
     // @PreAuthorize("hasRole('PHARMACIST')")
@@ -282,8 +280,8 @@ public class ItemsController {
 
         List<Item> itemList = itemService.findAll();
         List<ItemDTO> menHoodies = new ArrayList<ItemDTO>();
-        for(Item item: itemList){
-            if(item.getGender().equals("Hat") && item.getType().equals("Hat")){
+        for (Item item : itemList) {
+            if (item.getGender().equals("Hat") && item.getType().equals("Hat")) {
                 ItemDTO itemDTO = new ItemDTO();
                 itemDTO.setId(item.getId());
                 itemDTO.setGender(item.getGender());
@@ -293,17 +291,14 @@ public class ItemsController {
 
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
-                for(AvailableColors availableColors: item.getAvailableColors()) {
+                for (AvailableColors availableColors : item.getAvailableColors()) {
                     NewAvailableColorsDTO newAvailableColorsDTO = new NewAvailableColorsDTO();
                     newAvailableColorsDTO.setColor(availableColors.getColor());
                     newAvailableColorsDTO.setQuantity(availableColors.getQuantity());
 
-
-
                     List<NewAvailableSizesDTO> newAvailableSizesDTOS = new ArrayList<NewAvailableSizesDTO>();
 
-
-                    for(AvailableSize availableSize: availableColors.getAvailableSizes()){
+                    for (AvailableSize availableSize : availableColors.getAvailableSizes()) {
                         NewAvailableSizesDTO newAvailableSizesDTO = new NewAvailableSizesDTO();
                         newAvailableSizesDTO.setSize(availableSize.getSize());
                         newAvailableSizesDTO.setQuantity(availableSize.getQuantity());
@@ -319,9 +314,7 @@ public class ItemsController {
             }
         }
 
-        return menHoodies == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                ResponseEntity.ok(menHoodies);
+        return menHoodies == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(menHoodies);
     }
 
 }

@@ -7,6 +7,9 @@ import ModalDialog from "../components/ModalDialog";
 import { Redirect } from "react-router-dom";
 import HeadingAlert from "../components/HeadingAlert";
 import ImageUploader from 'react-images-upload';
+import getAuthHeader from "../GetHeader";
+import { Button, Modal } from "react-bootstrap";
+
 
 class RegisterPage extends Component {
     constructor(props) {
@@ -14,7 +17,7 @@ class RegisterPage extends Component {
         this.state = {
             pictures: [],
             types: ["Hoodie", "T-Shirt", "Hat"],
-            colors: ["Blue", "Green", "Yellow"],
+            colors: [],
             sizes: ["XS", "S", "M", "L", "XL"],
             showedTypes: ["Hoodie", "T-Shirt", "Hat"],
             errorHeader: "",
@@ -33,141 +36,167 @@ class RegisterPage extends Component {
             s: "",
             gender: "",
             hat: false,
+            selectedColor: "",
+            selectedSize: "",
+            quantity: [],
+            orders: [],
+
+
         };
         this.onDrop = this.onDrop.bind(this);
 
     }
 
+    hasRole = (reqRole) => {
+        let roles = JSON.parse(localStorage.getItem("keyRole"));
+      
+        if (roles === null) return false;
+
+        if (reqRole === "*") return true;
+
+        for (let role of roles) {
+            if (role === reqRole) return true;
+        }
+        return false;
+    };
+
+    componentDidMount() {
+        if (!this.hasRole("ROLE_ADMIN")) {
+            this.setState({ redirect: true });
+        } else {
+            Axios.get(BASE_URL + "/api/admin/colors", { validateStatus: () => true, headers: { Authorization: getAuthHeader() } })
+                .then((res) => {
+                    if (res.status !== 401) {
+                        console.log(res.data)
+                        this.setState({
+                            colors: res.data,
+                        });
+
+                    } else {
+                        this.setState({ redirect: true });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }
     onDrop(picture) {
         this.setState({
             pictures: this.state.pictures.concat(picture),
             //pictures: picture
         });
-        
+
     }
 
-    test(pic){
-       
-       alert('skjfksd')
+    test(pic) {
+
         this.setState({
-          fileUploadOngoing: true
+            fileUploadOngoing: true
         });
-    
+
         const fileInput = document.querySelector("#fileInput");
         const formData = new FormData();
-    
+
         formData.append("file", pic);
         formData.append("test", "StringValueTest");
-    
+
         const options = {
-          method: "POST",
-          body: formData
-      
+            method: "POST",
+            body: formData
+
         };
         fetch(BASE_URL + "/api/items/upload", options);
-      }
+    }
+
+    handleRemoveChange = (e, c) => {
+
+		let u = this.state.orders;
+		u.pop(c);
+		this.setState({ orders: u })
+	}
+    
+    handleAddChange = () => {
+		let u = this.state.orders;
+		let reservation = {
+			color: this.state.selectedColor,
+			size: this.state.selectedSize,
+			quantity: this.state.quantity,
+		};
+
+		u.push(reservation);
+		this.setState({ orders: u });
+
+		let t = [];
+		this.state.orders.forEach((a) => {
+			let reservation = {
+				color: a.color,
+				size: a.size,
+				quantity: a.quantity,
+			};
+			t.push(reservation)
+		});
+		this.state.orders = [];
+		this.setState({ orders: t });
 
 
-  
- 
+	}
+
+
+
+    handleQuantityChange = (event) => {
+		this.setState({ quantity: event.target.value });
+	};
+    handleColorChange = (e) => {
+
+		let u = [];
+		this.setState({ selectedColor: e.target.value }, () => {
+			console.log(this.state);
+		});
+		
+		this.changeEndEntityChain(e.target.value);
+	};
+
+	changeEndEntityChain = (e) => {
+		if (e === "") {
+			this.setState({ showedColors: this.state.colors });
+		} else {
+			let u = [];
+			this.state.colors.forEach((chain) => {
+				if (chain.color !== e) {
+					u.push(chain);
+				}
+			});
+
+			this.setState({ showedColors: u });
+		}
+	};
+
+	handleSizeChange = (e) => {
+		this.setState({ selectedSize: e.target.value }, () => {
+			console.log(this.state);
+		});
+		this.changeEndEntitySizeChain(e.target.value);
+	};
+
+	changeEndEntitySizeChain = (e) => {
+		if (e === "") {
+			this.setState({ showedSizes: this.state.sizes });
+		} else {
+			let u = [];
+			this.state.sizes.forEach((chain) => {
+				if (chain.size !== e) {
+					u.push(chain);
+				}
+			});
+
+			this.setState({ showedSizes: u });
+		}
+	};
+
 
     toggleCertificatePurposeVisibility = () => {
         this.setState({ showedPurposes: !this.state.showedPurposes });
-    };
-
-    handleQuantityChange = (event, obj) => {
-        let u = this.state.quantity;
-        let l = false;
-        this.setState({ q: obj + "," + event.target.value });
-
-        if (u.length === 0) {
-            let b = obj + "," + event.target.value;
-            u.push(b)
-        }
-        else {
-            u.forEach((item) => {
-                let a = item.split(",")
-
-                if (a[0] === obj) {
-                    l = true;
-                }
-            });
-
-            if (l === false) {
-
-                let b = obj + "," + event.target.value;
-                u.push(b)
-
-            }
-
-            else {
-
-                u.forEach((item) => {
-                    let a = item.split(",")
-
-                    if (a[0] === obj) {
-                        u.pop(item)
-                        let b = obj + "," + event.target.value;
-                        u.push(b)
-                        this.setState({ quantity: u });
-                        return;
-                    }
-                });
-
-            }
-
-
-        }
-        this.setState({ quantity: u });
-
-    };
-
-
-    handleSizeChange = (event, obj, o) => {
-        let u = this.state.size;
-        let l = false;
-
-
-        if (u.length === 0) {
-            let b = obj + "," + o + "," + event.target.value;
-            u.push(b)
-        }
-        else {
-            u.forEach((item) => {
-                let a = item.split(",")
-
-                if (a[0] === obj && a[1] === o) {
-                    l = true;
-                }
-            });
-
-            if (l === false) {
-
-                let b = obj + "," + o + "," + event.target.value;
-                u.push(b)
-
-            }
-
-            else {
-
-                u.forEach((item) => {
-                    let a = item.split(",")
-
-                    if (a[0] === obj && a[1] === o) {
-                        u.pop(item)
-                        let b = obj + "," + o + "," + event.target.value;
-                        u.push(b)
-                        this.setState({ size: u });
-                        return;
-                    }
-                });
-
-            }
-
-
-        }
-        this.setState({ size: u });
-
     };
 
 
@@ -233,10 +262,14 @@ class RegisterPage extends Component {
         this.setState({ type: u });
     };
     handleSignUp = () => {
+
+        console.log("sdfgsssss" + this.state.orders);
+
         let itemDTO = "";
         let pics = []
+      
 
-        this.state.pictures.forEach((p)=>{
+        this.state.pictures.forEach((p) => {
             console.log(p.name)
             pics.push(p.name)
 
@@ -246,8 +279,7 @@ class RegisterPage extends Component {
                 type: this.state.selectedType,
                 price: this.state.price,
                 name: this.state.name,
-                colors: this.state.quantity,
-                sizes: this.state.size,
+                quantityDTO:  this.state.orders,
                 gender: "Hat",
                 pictures: pics
             }
@@ -256,8 +288,7 @@ class RegisterPage extends Component {
                 type: this.state.selectedType,
                 price: this.state.price,
                 name: this.state.name,
-                colors: this.state.quantity,
-                sizes: this.state.size,
+                quantityDTO: this.state.orders,
                 gender: this.state.gender,
                 pictures: pics
             };
@@ -270,14 +301,17 @@ class RegisterPage extends Component {
             this.state.pictures.forEach((pic) => {
                 this.test(pic);
             });
-    
+
             this.setState({
                 pictures: []
-                
+
             });
 
             console.log(itemDTO);
-            Axios.post(BASE_URL + "/api/items/add", itemDTO, this.state.pictures, { validateStatus: () => true })
+            if (!this.hasRole("ROLE_ADMIN")) {
+                this.setState({ redirect: true });
+            } else {
+            Axios.post(BASE_URL + "/api/items/add", itemDTO, this.state.pictures, { validateStatus: () => true} )
                 .then((res) => {
                     if (res.status === 409) {
                         this.setState({
@@ -296,6 +330,7 @@ class RegisterPage extends Component {
                     console.log(err);
                 });
         }
+    }
 
 
 
@@ -344,7 +379,7 @@ class RegisterPage extends Component {
                                         imgExtension={['.jpg', '.gif', '.png', '.gif']}
                                         withPreview={true}
                                     />
-                                        </div>
+                                    </div>
                                     <div>
                                         <select
                                             class="btn btn-secondary dropdown-toggle"
@@ -405,71 +440,86 @@ class RegisterPage extends Component {
 									</div>
                                 </div>
 
-                                <table className="table table-hover mt-2" style={{ cursor: "pointer" }} onClick={this.toggleCertificatePurposeVisibility}>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <h5 className="col-10">Choose item's available colors</h5>
-                                            </td>
-                                            <td>
-                                                <a>
-                                                    <i className="icofont-caret-down align-middle"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div>
+                                    <select
+                                        class="btn btn-secondary dropdown-toggle"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        style={{ marginTop: "0.5rem", width: "29em" }}
+                                        value={this.state.selectedColor}
+                                        onChange={(e) => this.handleColorChange(e)}
+                                    >
+                                        <option style={{ marginLeft: "12rem" }} value="">
+                                            Choose the color{" "}
+                                        </option>
+                                        {this.state.colors.map((chain) => (
 
-                                <div className={this.state.showedPurposes ? "" : "collapse"}>
-                                    {this.state.colors.map((obj) => (
-                                        <div key={obj} className="ml-3">
-                                            <input onChange={(e) => this.handleChange(e, obj)} id={obj} type="checkbox" />
-
-                                            <label className="ml-2" htmlFor={obj} style={{ cursor: "pointer" }}>
-                                                {obj}
-                                            </label>
-                                            <div className="control-group">
-                                                <div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-
-                                                    <input
-                                                        placeholder="Insert color quantity"
-                                                        class="form-control"
-                                                        type="text"
-                                                        id={obj}
-                                                        onChange={(e) => this.handleQuantityChange(e, obj)}
-
-                                                    />
-                                                </div>
-
-                                            </div>
-                                            <div className={this.state.showedPurposes ? "" : "collapse"}>
-                                                {this.state.sizes.map((o) => (
-                                                    <div key={o} className="ml-3">
-                                                        <input onChange={(e) => this.handleChange(e, o)} id={o} type="checkbox" />
-
-                                                        <label className="ml-2" htmlFor={o} style={{ cursor: "pointer" }}>
-                                                            {o}
-                                                        </label>
-                                                        <div className="control-group">
-                                                            <div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-
-                                                                <input
-                                                                    placeholder="Insert size quantity"
-                                                                    class="form-control"
-                                                                    type="text"
-                                                                    id={obj}
-                                                                    onChange={(e) => this.handleSizeChange(e, obj, o)}
-
-                                                                />
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
+                                            <option key={chain.color} value={chain.color}>
+                                                {chain.color}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
+                                <div>
+                                    <select
+                                        class="btn btn-secondary dropdown-toggle"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        style={{ marginTop: "0.5rem", width: "29em" }}
+                                        onChange={(e) => this.handleSizeChange(e)}
+                                        value={this.state.selectedSize}
+
+                                    >
+                                        <option style={{ marginLeft: "12rem" }} value="">
+                                            Choose the size{" "}
+                                        </option>
+                                        {this.state.sizes.map((a) => (
+                                           
+                                                    <option key={a} value={a}>
+                                                        {a}
+                                                    </option>
+                                               
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="control-group">
+                                    <div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+                                        <label>Insert quantity of item:</label>
+                                        <input
+                                            placeholder="Quantity"
+                                            class="form-control"
+                                            type="text"
+                                            id="name"
+                                            onChange={this.handleQuantityChange}
+                                            value={this.state.quantity}
+                                        />
+                                    </div>
+
+                                </div>
+
+                                
+                                <div>
+                                    <Button className="mt-3" onClick={this.handleAddChange}>
+                                        Add to chart
+						            </Button>
+                                </div>
+
+                                <div style={{ marginTop: "2rem" }}>
+                                    <table class="table table-striped">
+                                        <tr><th>Color</th><th>Size</th><th>Quantity</th><th>Remove</th></tr>
+                                        {this.state.orders.map((c) => (
+                                            <tr><td>{c.color}</td><td>{c.size}</td><td>{c.quantity}</td>
+                                                <td><Button className="mt-3" onClick={(e) => this.handleRemoveChange(e, c)}>
+                                                    Remove
+						</Button></td></tr>
+                                        ))}
+                                    </table>
+
+                                </div>
+
+
+
                                 <div className="form-group">
                                     <button
                                         style={{

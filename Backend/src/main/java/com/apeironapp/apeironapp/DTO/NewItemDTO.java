@@ -13,9 +13,7 @@ public class NewItemDTO {
 
     private String price;
 
-    private List<String> colors;
-
-    private List<String> sizes;
+    private List<QuantityDTO> quantityDTO;
 
     private List<String> pictures;
 
@@ -37,12 +35,12 @@ public class NewItemDTO {
         this.gender = gender;
     }
 
-    public List<String> getColors() {
-        return colors;
+    public List<QuantityDTO> getQuantityDTO() {
+        return quantityDTO;
     }
 
-    public void setColors(List<String> colors) {
-        this.colors = colors;
+    public void setQuantityDTO(List<QuantityDTO> quantityDTO) {
+        this.quantityDTO = quantityDTO;
     }
 
     public String getType() {
@@ -69,20 +67,11 @@ public class NewItemDTO {
         this.price = price;
     }
 
-    public List<String> getSizes() {
-        return sizes;
-    }
-
-    public void setSizes(List<String> sizes) {
-        this.sizes = sizes;
-    }
 
     @Override
     public String toString() {
         return "NewItemDTO{" +
-                "type='" + type + '\'' +
-                ", name='" + name + '\'' +
-                ", price='" + price + '\'' +
+                "quantityDTO=" + quantityDTO +
                 '}';
     }
 }

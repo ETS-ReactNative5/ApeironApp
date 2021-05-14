@@ -38,6 +38,19 @@ class TShirtsWomen extends Component {
 
 	};
 
+	hasRole = (reqRole) => {
+        let roles = JSON.parse(localStorage.getItem("keyRole"));
+
+        if (roles === null) return false;
+
+        if (reqRole === "*") return true;
+
+        for (let role of roles) {
+            if (role === reqRole) return true;
+        }
+        return false;
+    };
+
 	handleNameChange = (event) => {
 		this.setState({ name: event.target.value });
 	};
@@ -54,20 +67,32 @@ class TShirtsWomen extends Component {
 	};
 
 	componentDidMount() {
-		this.getCurrentCoords();
-		Axios.get(BASE_URL + "/api/items/tshirt-women")
-		.then((res) => {
-			this.setState({ tshirts: res.data });
-			console.log(res.data);
-		})
-		.catch((err) => {
-			console.log(err);
-		});
 		
+		Axios.get(BASE_URL + "/api/items/tshirt-women")
+			.then((res) => {
+				this.setState({ tshirts: res.data });
+				console.log(res.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
 	}
 
 	hangleFormToogle = () => {
 		this.setState({ formShowed: !this.state.formShowed });
+	};
+
+	hangleDelete = (id) => {
+		Axios.get(BASE_URL + "/api/items/delete/" + id)
+			.then((res) => {
+				
+				console.log(res.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
 	};
 
 	handleGradeFromChange = (event) => {
@@ -92,13 +117,13 @@ class TShirtsWomen extends Component {
 		this.setState({ city: event.target.value });
 	};
 
-	
+
 
 	handleClickOnPharmacy = (id) => {
 		this.setState({ shirt: id });
 		this.setState({ showOrderModal: true });
 		this.setState({ colors: id.colors });
-	
+
 	};
 
 	handleOrderModalClose = () => {
@@ -106,7 +131,7 @@ class TShirtsWomen extends Component {
 	};
 
 	handleColorChange = (e) => {
-		
+
 		let u = [];
 		this.setState({ selectedColor: e.target.value }, () => {
 			console.log(this.state);
@@ -172,64 +197,7 @@ class TShirtsWomen extends Component {
 				<div className="container" style={{ marginTop: "10%" }}>
 					<h5 className=" text-center mb-0 mt-2 text-uppercase">Women T-shirts</h5>
 
-					<div className="form-group">
-						<div className="form-group controls">
-							<div className="form-row">
-								<button className="btn btn-outline-primary btn-xl" type="button" onClick={this.hangleFormToogle}>
-									<i className="icofont-rounded-down mr-1"></i>
-									Search pharmacies
-								</button>
-								<div className={this.state.showingSearched ? "ml-2" : "ml-2 collapse"}>
-									<button type="button" className="btn btn-outline-secondary" onClick={this.handleResetSearch}>
-										<i className="icofont-close-line mr-1"></i>Reset search criteria
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<form className={this.state.formShowed ? "form-inline mt-3" : "form-inline mt-3 collapse"} width="100%" id="formCollapse">
-						<div className="form-group mb-2" width="100%">
 					
-						</div>
-						<div>
-							<button style={{ background: "#1977cc" }} onClick={this.handleSearch} className="btn btn-primary btn-xl" type="button">
-								<i className="icofont-search mr-1"></i>
-								Search
-							</button>
-						</div>
-					</form>
-
-					<div className="form-group">
-						<div className="form-group controls mb-0 pb-2">
-							<div className="form-row mt-3">
-								<div className="form-col">
-									<div className="dropdown">
-										<button
-											className="btn btn-primary dropdown-toggle"
-											type="button"
-											id="dropdownMenu2"
-											data-toggle="dropdown"
-											aria-haspopup="true"
-											aria-expanded="false"
-										>
-											Sort by
-										</button>
-										<div className="dropdown-menu" aria-labelledby="dropdownMenu2">
-											
-										</div>
-									</div>
-								</div>
-								<div className="form-col ml-3">
-									<div className={this.state.showingSorted ? "form-group" : "form-group collapse"}>
-										<button type="button" className="btn btn-outline-secondary" onClick={this.handleResetSort}>
-											<i className="icofont-close-line mr-1"></i>Reset sort criteria
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
 					<table className="table table-hover" style={{ width: "100%", marginTop: "3rem" }}>
 						<tbody>
 							{this.state.tshirts.map((pharmacy) => (
@@ -240,7 +208,7 @@ class TShirtsWomen extends Component {
 									onClick={() => this.handleClickOnPharmacy(pharmacy)}
 								>
 									<td width="130em">
-										<img className="img-fluid" src={PharmacyLogo} width="70em" />
+										<img className="img-fluid" src={pharmacy.files?.[0] ?? PharmacyLogo} width="70em" />
 									</td>
 									<td>
 										<div>
@@ -250,24 +218,24 @@ class TShirtsWomen extends Component {
 											<b>Price: </b> {pharmacy.price}
 										</div>
 										<div>
-										<b>Available colors: </b>
-										{pharmacy.colors.map((color) => (
-											<div> {color.color}
-											
+											<b>Available colors: </b>
+											{pharmacy.colors.map((color) => (
+												<div> {color.color}
+
 													{color.sizes.map((size) => (
 														<td> {size.size} available: {size.quantity}</td>
-												
-												
-														))}
-											 </div>
-													
-										
-										))}
+
+
+													))}
+												</div>
+
+
+											))}
 
 										</div>
 
 
-										
+
 										<div>
 											<b>Grade: </b> {pharmacy.id}
 											<i className="icofont-star" style={{ color: "#1977cc" }}></i>
@@ -275,21 +243,35 @@ class TShirtsWomen extends Component {
 
 
 
-										<div>  <button
-                                        style={{
-                                            background: "#1977cc",
-                                            marginTop: "15px",
-                                            marginLeft: "40%",
-                                            width: "20%",
-                                        }}
-                                        onClick={this.handleSignUp}
-                                        className="btn btn-primary btn-xl"
-                                        id="sendMessageButton"
-                                        type="button"
-                                    >
-                                        Reserve
+										<div hidden={!this.hasRole("ROLE_USER")}>  <button
+											style={{
+												background: "#1977cc",
+												marginTop: "15px",
+												marginLeft: "40%",
+												width: "20%",
+											}}
+											onClick={this.handleSignUp}
+											className="btn btn-primary btn-xl"
+											id="sendMessageButton"
+											type="button"
+										>
+											Reserve
 									</button></div>
-										
+									<div hidden={!this.hasRole("ROLE_ADMIN")}>  <button
+											style={{
+												background: "#1977cc",
+												marginTop: "15px",
+												marginLeft: "40%",
+												width: "20%",
+											}}
+											onClick={this.handleDelete(pharmacy.id)}
+											className="btn btn-primary btn-xl"
+											id="sendMessageButton"
+											type="button"
+										>
+											Delete
+									</button></div>
+
 									</td>
 								</tr>
 							))}
@@ -306,9 +288,9 @@ class TShirtsWomen extends Component {
 					handleSizeChange={this.handleSizeChange}
 					shirt={this.state.shirt}
 					showedColors={this.state.colors}
-					selectedColor = {this.state.selectedColor}
+					selectedColor={this.state.selectedColor}
 					showedSizes={this.state.sizes}
-					selectedSize = {this.state.selectedSize}
+					selectedSize={this.state.selectedSize}
 				/>
 			</React.Fragment>
 		);

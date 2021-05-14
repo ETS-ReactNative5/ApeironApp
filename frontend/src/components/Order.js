@@ -5,7 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import getAuthHeader from "../GetHeader";
 import Axios from "axios";
 import { BASE_URL } from "../constants.js";
-var Carousel = require('react-responsive-carousel').Carousel;
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 
 class EndEntityCreateModal extends Component {
@@ -24,7 +25,7 @@ class EndEntityCreateModal extends Component {
 		list: [],
 		selectedItem: "",
 		orders: [],
-	
+
 
 	};
 	componentDidMount() {
@@ -36,7 +37,7 @@ class EndEntityCreateModal extends Component {
 	};
 	handleDateChange = (date) => {
 		this.setState({ selectedDate: date });
-		
+
 	};
 	componentWillMount = () => {
 		this.selectedCheckboxes = new Set();
@@ -187,8 +188,8 @@ class EndEntityCreateModal extends Component {
 		u.pop(c);
 		this.setState({ orders: u })
 	}
-
 	render() {
+
 		return (
 			<Modal
 				show={this.props.show}
@@ -201,7 +202,17 @@ class EndEntityCreateModal extends Component {
 					<Modal.Title id="contained-modal-title-vcenter">{this.props.header}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<div>
+					<div style={{ height: '80%' }}>
+						<div>
+							<Carousel dynamicHeight={true}>
+								{this.props.shirt.files?.map(img => (<div>
+									<img src={img} />
+								</div>))}
+
+							</Carousel>
+						</div>
+
+
 						<select
 							class="btn btn-secondary dropdown-toggle"
 							aria-haspopup="true"
