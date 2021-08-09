@@ -46,7 +46,7 @@ class LoginPage extends Component {
 					if (res.status === 401) {
 						this.setState({ errorHeader: "Bad credentials!", errorMessage: "Wrong username or password.", hiddenErrorAlert: false });
 					} else if (res.status === 500) {
-						this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
+						this.setState({ errorHeader: "Bad credentials!", errorMessage: "Wrong username or password.", hiddenErrorAlert: false });
 					} else if (res.status === 302) {
 						this.setState({ openPasswordModal: true });
 					} else {

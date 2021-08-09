@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import ch.qos.logback.core.CoreConstants;
 import com.apeironapp.apeironapp.DTO.IdentifiableDTO;
 import com.apeironapp.apeironapp.DTO.PersonUserDTO;
 import com.apeironapp.apeironapp.DTO.UserDTO;
 import com.apeironapp.apeironapp.DTO.UserRequestDTO;
 import com.apeironapp.apeironapp.Exception.ResourceConflictException;
-import com.apeironapp.apeironapp.Model.Address;
-import com.apeironapp.apeironapp.Model.Authority;
-import com.apeironapp.apeironapp.Model.PersonUser;
-import com.apeironapp.apeironapp.Model.RegisteredUser;
+import com.apeironapp.apeironapp.Model.*;
+import com.apeironapp.apeironapp.Repository.CourirRepository;
 import com.apeironapp.apeironapp.Repository.UserRepository;
 import com.apeironapp.apeironapp.Service.IServices.IAuthorityService;
 import com.apeironapp.apeironapp.Service.IServices.UserService;
@@ -52,11 +51,19 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 
+	@Autowired
+	private CourirRepository courirRepository;
+
+
 	@Override
 	public PersonUser findById(Integer id) {
 		return personUserRepository.findById(id).get();
 	}
 
+	@Override
+	public Courier findByIdCourier(Integer id) {
+		return courirRepository.findById(id).get();
+	}
 
 	@Override
 	public PersonUser findByEmail(String email) throws UsernameNotFoundException {
@@ -65,6 +72,7 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	public RegisteredUser save(PersonUserDTO userRequest) {
+		System.out.println(userRequest.getAddress());
 		RegisteredUser u = new RegisteredUser();
 		u.setEmail(userRequest.getEmail());
 		// pre nego sto postavimo lozinku u atribut hesiramo je
@@ -87,6 +95,38 @@ public class UserServiceImpl implements UserService {
 
 		u = this.personUserRepository.save(u);
 		return u;
+	}
+
+	@Override
+	public Courier saveDelivery(PersonUserDTO userRequest) {
+		System.out.println(userRequest.getAddress());
+		Courier u = new Courier();
+		u.setEmail(userRequest.getEmail());
+		u.setCompany(userRequest.getCompany());
+		// pre nego sto postavimo lozinku u atribut hesiramo je
+		u.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+		Address address = new Address(userRequest.getAddress().getLatitude(), userRequest.getAddress().getLongitude(), userRequest.getAddress().getCity(), userRequest.getAddress().getStreet(), userRequest.getAddress().getCountry());
+		u.setAddress(address);
+		u.setPhoneNumber(userRequest.getPhonenumber());
+		Authority authorityUser = authService.findByname("ROLE_DELIVERY");
+		List<Authority> auth = new ArrayList<Authority>();
+		if(authorityUser==null) {
+			authorityRepository.save(new Authority("ROLE_DELIVERY"));
+			auth.add(authService.findByname("ROLE_DELIVERY"));
+		}
+		else {
+			auth.add(authorityUser);
+		}
+		u.setAuthorities(auth);
+
+		u = this.personUserRepository.save(u);
+		return u;
+	}
+
+	@Override
+	public void delete(Integer id) {
+		PersonUser personUser = findById(id);
+		personUserRepository.delete(personUser);
 	}
 
 	public PersonUserDTO getUserDTO() {
@@ -131,6 +171,13 @@ public class UserServiceImpl implements UserService {
 
 	public List<PersonUser> findAll() throws AccessDeniedException {
 		List<PersonUser> result = personUserRepository.findAll();
+		return result;
+	}
+
+	@Override
+	public List<Courier> findAllDelivery() {
+		List<Courier> result = courirRepository.findAll();
+
 		return result;
 	}
 

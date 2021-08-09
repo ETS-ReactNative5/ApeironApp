@@ -23,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
@@ -101,15 +102,34 @@ public class AuthenticationController {
 	@PostMapping("/signup")
 	public ResponseEntity<PersonUser> addUser(@RequestBody PersonUserDTO userRequest, UriComponentsBuilder ucBuilder) {
 
+		System.out.println(userRequest.getAddress());
 		PersonUser existUser = this.userService.findByEmail(userRequest.getEmail());
 		if (existUser != null) {
-			throw new ResourceConflictException(userRequest.getEmail(), "Email already exists");
-		}
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}else {
 
-		PersonUser user = this.userService.save(userRequest);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/api/auth/{userId}").buildAndExpand(user.getId()).toUri());
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
+			PersonUser user = this.userService.save(userRequest);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(ucBuilder.path("/api/auth/{userId}").buildAndExpand(user.getId()).toUri());
+			return new ResponseEntity<>(user, HttpStatus.CREATED);
+		}
 	}
 
+
+	@PostMapping("/signupDelivery")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<PersonUser> signupDelivery(@RequestBody PersonUserDTO userRequest, UriComponentsBuilder ucBuilder) {
+		System.out.println("fihfihfifhikfhfiuh");
+		System.out.println(userRequest);
+		PersonUser existUser = this.userService.findByEmail(userRequest.getEmail());
+		if (existUser != null) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}else {
+
+			PersonUser user = this.userService.saveDelivery(userRequest);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(ucBuilder.path("/api/auth/{userId}").buildAndExpand(user.getId()).toUri());
+			return new ResponseEntity<>(user, HttpStatus.CREATED);
+		}
+	}
 }

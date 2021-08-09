@@ -36,6 +36,11 @@ public class Authority implements GrantedAuthority, Serializable {
     public Authority() {
     }
 
+    public Authority(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Authority(String name) {
         this.name = name;
     }
@@ -58,4 +63,11 @@ public class Authority implements GrantedAuthority, Serializable {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Authority{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

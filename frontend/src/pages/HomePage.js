@@ -26,7 +26,7 @@ class HomePage extends React.Component {
 				<section id="hero" className="d-flex align-items-center">
 					<div className="container" >
 						<h1 >Welcome to Apeiron</h1>
-						<Link hidden={this.hasRole("*")} to="/registration" className="btn-get-started scrollto">
+						<Link hidden={!this.hasRole("ROLE_ADMIN") || !this.hasRole("ROLE_USER")} to="/registration" className="btn-get-started scrollto">
 							Register
 						</Link>
 					</div>

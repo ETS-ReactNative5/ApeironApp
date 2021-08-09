@@ -16,8 +16,12 @@ public class NewOrderDTO {
 
     private Integer registeredUserId;
 
+
+
     public NewOrderDTO() {
     }
+
+
 
     public Set<ItemInOrderDTO> getItems() {
         return items;

@@ -17,7 +17,9 @@ import UserProfilePage from "./pages/UserProfilePage";
 import AllOrders from "./pages/AllOrders";
 import Contact from "./pages/Contact";
 import Change from "./pages/Change";
-
+import RegisterDelivery from "./pages/RegisterDelivery";
+import Delivery from "./pages/Delivery";
+import QRCodes from "./pages/QRCodes";
 function App() {
   return (
     <Router>
@@ -36,8 +38,11 @@ function App() {
 				<Link exact to="/myReservations" path="/myReservations" component={MyOrders} />
 				<Link exact to="/userChangeProfile" path="/userChangeProfile" component={UserProfilePage} />
 				<Link exact to="/allOrders" path="/allOrders" component={AllOrders} />
+				<Link exact to="/registerDelivery" path="/registerDelivery" component={RegisterDelivery} />
 				<Link exact to="/contact" path="/contact" component={Contact} />
 				<Link exact to="/change" path="/change" component={Change} />
+				<Link exact to="/delivery" path="/delivery" component={Delivery} />
+				<Link exact to="/qrCodes" path="/qrCodes" component={QRCodes} />
         </Switch>
 		</Router>
  

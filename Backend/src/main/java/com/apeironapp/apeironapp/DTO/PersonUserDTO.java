@@ -16,6 +16,8 @@ public class PersonUserDTO {
 
     private AddressDTO address;
 
+    private String company;
+
     public PersonUserDTO() { }
 
     public PersonUserDTO(String email, String password, String firstname, String surname, String phonenumber, AddressDTO address) {
@@ -25,6 +27,14 @@ public class PersonUserDTO {
         this.surname = surname;
         this.phonenumber = phonenumber;
         this.address = address;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public Integer getId() {
@@ -86,12 +96,14 @@ public class PersonUserDTO {
     @Override
     public String toString() {
         return "PersonUserDTO{" +
-                "email='" + email + '\'' +
+                "id=" + id +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", surname='" + surname + '\'' +
                 ", phonenumber='" + phonenumber + '\'' +
                 ", address=" + address +
+                ", company='" + company + '\'' +
                 '}';
     }
 }

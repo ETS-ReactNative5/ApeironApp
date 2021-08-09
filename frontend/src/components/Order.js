@@ -8,6 +8,7 @@ import { BASE_URL } from "../constants.js";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 
+import ModalDialog from "../components/ModalDialog";
 
 class EndEntityCreateModal extends Component {
 	state = {
@@ -25,13 +26,23 @@ class EndEntityCreateModal extends Component {
 		list: [],
 		selectedItem: "",
 		orders: [],
+		orderError: "none",
+		quantityError: "none",
+		dueDateError: "none",
+		hiddenSuccessAlert: true,
+		successHeader: "",
+		successMessage: "",
+		openModal: false,
 
 
 	};
 	componentDidMount() {
 	}
 
-
+	handleModalClose = () => {
+		this.setState({ openModal: false, redirect: true });
+		window.location.reload();
+	};
 	handleQuantityChange = (event) => {
 		this.setState({ quantity: event.target.value });
 	};
@@ -111,45 +122,61 @@ class EndEntityCreateModal extends Component {
 		this.setState({ selectedKeyUsages: copy });
 	};
 
-	toggleKeyUsageVisibility = () => {
-		this.setState({ showedKeyUsages: !this.state.showedKeyUsages });
-	};
 
-	toggleCertificateExtensionVisibility = () => {
-		this.setState({ showedExtensions: !this.state.showedExtensions });
-	};
-
-	toggleCertificatePurposeVisibility = () => {
-		this.setState({ showedPurposes: !this.state.showedPurposes });
-	};
 
 	handleAddChange = () => {
 		let u = this.state.orders;
-		let reservation = {
-			color: this.props.selectedColor,
-			size: this.props.selectedSize,
-			date: this.state.selectedDate,
-			quantity: this.state.quantity,
-			itemId: this.props.shirt.id,
-		};
+		
 
-		u.push(reservation);
-		this.setState({ orders: u });
+		this.props.showedColors.forEach((item) =>{
+			if(this.props.selectedColor === item.color){
+				item.sizes.forEach((size) =>{
 
-		let t = [];
-		this.state.orders.forEach((a) => {
-			let reservation = {
-				color: a.color,
-				size: a.size,
-				date: this.state.selectedDate,
-				quantity: a.quantity,
-				itemId: a.itemId,
-			};
-			t.push(reservation)
-		});
-		this.state.orders = [];
-		this.setState({ orders: t });
+					if(this.props.selectedSize === size.size){
+						if(size.quantity >= this.state.quantity){
+							let reservation = {
+								color: this.props.selectedColor,
+								size: this.props.selectedSize,
+								date: this.state.selectedDate,
+								quantity: this.state.quantity,
+								itemId: this.props.shirt.id,
+							};
+					
+							u.push(reservation);
+							this.setState({ orders: u });
+					
+							let t = [];
+							this.state.orders.forEach((a) => {
+								let reservation = {
+									color: a.color,
+									size: a.size,
+									date: this.state.selectedDate,
+									quantity: a.quantity,
+									itemId: a.itemId,
+								};
+								t.push(reservation)
+							});
+							this.state.orders = [];
+							this.setState({ orders: t });
+					
 
+						}
+						else{
+							this.setState({ quantityError: "initial" });
+			return false;
+
+
+
+						}
+					}
+
+				})
+			}
+		}
+		)
+
+
+	
 
 	}
 
@@ -159,26 +186,31 @@ class EndEntityCreateModal extends Component {
 			dueDate: this.state.selectedDate
 
 		};
+		this.setState({
+			hiddenSuccessAlert: true,
+			successHeader: "",
+			successMessage: "",
+			hiddenFailAlert: true,
+			failHeader: "",
+			failMessage: "",
+		});
+		if (this.validateForm(newOrderDTO)) {
 
+			Axios.post(BASE_URL + "/api/reservations/add", newOrderDTO, { validateStatus: () => true, headers: { Authorization: getAuthHeader() } })
+				.then((res) => {
+					if (res.status === 500) {
+						this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
+					} else {
+						console.log("Success");
+						this.setState({ openModal: true });
+					
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 
-		Axios.post(BASE_URL + "/api/reservations/add", newOrderDTO, { validateStatus: () => true })
-			.then((res) => {
-				if (res.status === 409) {
-					this.setState({
-						errorHeader: "Resource conflict!",
-						errorMessage: "Email already exist.",
-						hiddenErrorAlert: false,
-					});
-				} else if (res.status === 500) {
-					this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
-				} else {
-					console.log("Success");
-					this.setState({ openModal: true });
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		}
 
 	}
 
@@ -188,6 +220,27 @@ class EndEntityCreateModal extends Component {
 		u.pop(c);
 		this.setState({ orders: u })
 	}
+
+
+	validateForm = (newOrderDTO) => {
+		this.setState({
+			orderError: "none",
+			dueDateError: "none",
+
+		});
+
+
+		if (newOrderDTO.items === "") {
+			this.setState({ orderError: "initial" });
+			return false;
+		} else if (newOrderDTO.dueDate === "") {
+			this.setState({ dueDateError: "initial" });
+			return false;
+		}
+
+		return true;
+	};
+
 	render() {
 
 		return (
@@ -302,6 +355,18 @@ class EndEntityCreateModal extends Component {
 						</table>
 
 					</div>
+					<div className="text-danger" style={{ display: this.state.orderError }}>
+						Orders must be filled correctly
+									</div>
+
+									<div className="text-danger" style={{ display: this.state.quantityError }}>
+						You must insert quantity that is available.
+									</div>			
+
+					<div className="text-danger" style={{ display: this.state.dueDateError }}>
+						Date must be selected
+									</div>
+
 
 					<div style={{ marginTop: "2rem", marginLeft: "10rem" }}>
 						<Button className="mt-3" onClick={this.handleReserveChange}>
@@ -309,7 +374,15 @@ class EndEntityCreateModal extends Component {
 						</Button>
 					</div>
 				</Modal.Body>
+				<ModalDialog
+					show={this.state.openModal}
+					onCloseModal={this.handleModalClose}
+					header="Success"
+					text="You have successfully sent an order."
+				/>
 			</Modal>
+			
+			
 		);
 	}
 }

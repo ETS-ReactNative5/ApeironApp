@@ -13,4 +13,5 @@ public interface IItemService {
     Item save(NewItemDTO newItemDTO);
     Item findById(Integer id);
     void delete(Integer id);
+    Item update(Item item);
 }

@@ -7,16 +7,30 @@ import PharmacyLogo from "../static/naslovna-duks.png";
 import "../App.js";
 import { Redirect } from "react-router-dom";
 import Order from "../components/Order";
-
+import ModalDialog from "../components/ModalDialog";
+import DeliveryInsert from "../components/DeliveryInsert";
 import getAuthHeader from "../GetHeader";
 class AllOrders extends Component {
     state = {
         reservations: [],
-
-
+        openModal: false,
+        openModal2: false,
+        openModal3: false,
+        couriers: [],
+        selectedCourier: "",
+        selectedOrder: "",
 
     };
+    handleColorChange = (e) => {
 
+		let u = [];
+		this.setState({ selectedCourier: e.target.value }, () => {
+			console.log(this.state);
+		});
+		
+	
+	};
+   
     hasRole = (reqRole) => {
         let roles = JSON.parse(localStorage.getItem("keyRole"));
       
@@ -34,7 +48,7 @@ class AllOrders extends Component {
         if (!this.hasRole("ROLE_USER")) {
             this.setState({ redirect: true });
         } else {
-        Axios.get(BASE_URL + "/api/reservations/allUser")
+        Axios.get(BASE_URL + "/api/reservations/allUser", { validateStatus: () => true, headers: { Authorization: getAuthHeader() }})
             .then((res) => {
                 this.setState({ reservations: res.data });
                 console.log(res.data);
@@ -58,24 +72,73 @@ class AllOrders extends Component {
         }
 
 
+        if (!this.hasRole("ROLE_ADMIN")) {
+            this.setState({ redirect: true });
+        } else {
+        Axios.get(BASE_URL + "/api/reservations/couriers", { validateStatus: () => true, headers: { Authorization: getAuthHeader() }})
+            .then((res) => {
+                this.setState({ couriers: res.data });
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+
     };
 
+
+    handleModalClose = () => {
+        this.setState({ openModal: false, redirect: false });
+    };
+    handleModalClose2 = () => {
+        this.setState({ openModal2: false, redirect: false });
+        window.location.reload();
+    };
     handleRemove = (e,reservation) => {
 
         Axios.get(BASE_URL + "/api/reservations/remove/" + reservation.reservationId)
         .then((res) => {
             this.setState({ reservations: res.data });
             console.log(res.data);
+            this.setState({ openModal: true });
         })
         .catch((err) => {
             console.log(err);
         });
-        window.location.reload(false);
 
     };
 
+    handleQR = (e,reservation) => {
+        this.setState({ selectedOrder: reservation });
+        this.setState({ openModal3: true });
 
-  
+        
+       
+    };
+
+    send = (e,courier, order) => {
+
+        let id = ""
+        this.state.couriers.forEach((cour) =>{
+            if(cour.company === courier){
+                id = cour.id
+            }
+        })
+       
+
+
+        Axios.get(BASE_URL + "/api/reservations/generateQR/" + order.reservationId + "/" + id)
+        .then((res) => {
+          
+            console.log(res.data);
+            this.setState({ openModal2: true });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+       
+    };
 
     render() {
         
@@ -99,14 +162,23 @@ class AllOrders extends Component {
 
                                 >
                                     <td width="130em">
-                                        <img className="img-fluid" src={PharmacyLogo} width="70em" />
+                                        <img className="img-fluid" src={reservation.files?.[0] ?? PharmacyLogo} width="70em" />
                                     </td>
                                     <td>
+                                    <div>
+                                            <b>STATUS: </b> {reservation.status}
+                                        </div>
                                         <div>
                                             <b>Date of reservation: </b> {new Date(reservation.dateOfReservation).toLocaleDateString()}
                                         </div>
                                         <div>
                                             <b>Due date: </b> {new Date(reservation.dueDate).toLocaleDateString()}
+                                        </div>
+                                        <div>
+                                            <b>User: </b> {reservation.user}
+                                        </div>
+                                        <div>
+                                            <b>Contact number: </b> {reservation.phone}
                                         </div>
                                         <div>  <b>Item type: </b>
                                             {reservation.itemType} </div>
@@ -147,7 +219,7 @@ class AllOrders extends Component {
                                             Remove
 									</button></div>
 
-                                    <div  hidden={!this.hasRole("ROLE_ADMIN")}>  <button
+                                    <div  hidden={!this.hasRole("ROLE_ADMIN") ||  reservation.status==="SENT"}>  <button
                                             style={{
                                                 background: "#1977cc",
                                                 marginTop: "15px",
@@ -162,20 +234,22 @@ class AllOrders extends Component {
                                             Decline
 									</button></div>
 
-                                    <div  hidden={!this.hasRole("ROLE_ADMIN")}>  <button
+                                    <div  hidden={!this.hasRole("ROLE_ADMIN") || reservation.status==="SENT"}>  <button
                                             style={{
                                                 background: "#1977cc",
                                                 marginTop: "15px",
                                                 marginLeft: "40%",
                                                 width: "20%",
                                             }}
-                                            onClick={(e) => this.handleRemove(e, reservation)}
+                                            onClick={(e) => this.handleQR(e, reservation)}
                                             className="btn btn-primary btn-xl"
                                             id="sendMessageButton"
                                             type="button"
                                         >
                                             Order sent
 									</button></div>
+
+                                   
 
                                     </td>
                                 </tr>
@@ -184,6 +258,31 @@ class AllOrders extends Component {
                     </table>
                 </div>
 
+                <ModalDialog
+                    show={this.state.openModal}
+                    onCloseModal={this.handleModalClose}
+                    header="Success"
+                    text="You have successfully removed this order."
+                />
+
+                <ModalDialog
+                    show={this.state.openModal2}
+                    onCloseModal={this.handleModalClose2}
+                    header="Success"
+                    text="You have successfully sent this order and made a QR code."
+                />      
+
+                <DeliveryInsert
+                    show={this.state.openModal3}
+                    onCloseModal={this.handleModalClose3}
+                    header="Insert a courier"
+                    text="Insert a courier: "
+                    couriers = {this.state.couriers}
+                    selectedCourier = {this.state.selectedCourier}
+                    handleColorChange = {this.handleColorChange}
+                    selectedOrder = {this.state.selectedOrder}
+                    send = {this.send}
+                />   
 
             </React.Fragment>
         );

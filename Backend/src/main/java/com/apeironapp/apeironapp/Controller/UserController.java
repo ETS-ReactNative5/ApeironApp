@@ -6,7 +6,9 @@ import com.apeironapp.apeironapp.DTO.MessageDTO;
 import com.apeironapp.apeironapp.DTO.PasswordChanger;
 import com.apeironapp.apeironapp.DTO.PersonUserDTO;
 import com.apeironapp.apeironapp.DTO.UserDTO;
+import com.apeironapp.apeironapp.Model.Courier;
 import com.apeironapp.apeironapp.Model.PersonUser;
+import com.apeironapp.apeironapp.Repository.CourirRepository;
 import com.apeironapp.apeironapp.Service.Implementations.RegisteredUserService;
 import com.apeironapp.apeironapp.Service.Implementations.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
 
 
 @RestController
@@ -34,6 +38,8 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
 
+
+
 	@Autowired
 	private RegisteredUserService registeredUserService;
 	
@@ -49,6 +55,24 @@ public class UserController {
 	                ResponseEntity.ok(users);
 	    }
 
+	@GetMapping("/delivery")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	ResponseEntity<List<Courier>> getAllDelivery()
+	{
+
+		List<Courier> users = userService.findAllDelivery();
+		return users == null ?
+				new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+				ResponseEntity.ok(users);
+	}
+	@GetMapping("/delete/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<String> delete(@PathVariable Integer id)
+	{
+
+		 userService.delete(id);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
 
 	@GetMapping("")
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -94,9 +118,9 @@ public class UserController {
 
 			System.out.println(messageDTO);
 			SimpleMailMessage mail = new SimpleMailMessage();
-			mail.setTo("apeiron830@gmail.com");
+			mail.setTo(environment.getProperty("spring.mail.username"));
 			mail.setSubject("Contact message!");
-			mail.setFrom(environment.getProperty(messageDTO.getEmail()));
+			mail.setFrom(messageDTO.getEmail());
 			//mail.setFrom("pharmacyisa@gmail.com");
 			mail.setText("You have a message from : "
 					+ messageDTO.getFirstName() + " " + messageDTO.getSurname() + " :" + messageDTO.getMessage() + "." +

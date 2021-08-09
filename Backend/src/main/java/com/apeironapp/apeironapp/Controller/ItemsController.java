@@ -100,9 +100,7 @@ public class ItemsController {
 
                 }
 
-                System.out.println("AAAAAAAAAAAAAAAAAAaa");
                 itemDTO.setFiles(list);
-                // System.out.println("BBBBBBBBBBBBBBBB" + itemDTO.getFiles());
 
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
@@ -149,8 +147,9 @@ public class ItemsController {
     // @PreAuthorize("hasRole('PHARMACIST')")
     public ResponseEntity<List<ItemDTO>> tshirtMen() {
 
+        BufferedImage img = null;
         List<Item> itemList = itemService.findAll();
-        List<ItemDTO> menTShirt = new ArrayList<ItemDTO>();
+        List<ItemDTO> womenTShirt = new ArrayList<ItemDTO>();
         for (Item item : itemList) {
             if (item.getGender().equals("Male") && item.getType().equals("T-Shirt")) {
                 ItemDTO itemDTO = new ItemDTO();
@@ -160,6 +159,26 @@ public class ItemsController {
                 itemDTO.setPrice(item.getPrice());
                 itemDTO.setType(item.getType());
 
+                Set<String> list = new HashSet<String>();
+                for (Pictures pictures : item.getPictures()) {
+                    File destination = new File("src/main/resources/images/" + pictures.getName());
+                    try {
+                        img = ImageIO.read(destination);
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        ImageIO.write(img, "PNG", out);
+                        byte[] bytes = out.toByteArray();
+                        String base64bytes = Base64.getEncoder().encodeToString(bytes);
+                        String src = "data:image/png;base64," + base64bytes;
+                        list.add(src);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                itemDTO.setFiles(list);
+
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
                 for (AvailableColors availableColors : item.getAvailableColors()) {
@@ -181,19 +200,20 @@ public class ItemsController {
                 }
                 itemDTO.setColors(newAvailableColorsDTOlist);
 
-                menTShirt.add(itemDTO);
+                womenTShirt.add(itemDTO);
             }
         }
 
-        return menTShirt == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(menTShirt);
+        return womenTShirt == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(womenTShirt);
     }
 
     @GetMapping("/hoodies-women")
     // @PreAuthorize("hasRole('PHARMACIST')")
     public ResponseEntity<List<ItemDTO>> hoodiesWomen() {
 
+        BufferedImage img = null;
         List<Item> itemList = itemService.findAll();
-        List<ItemDTO> womenHoodies = new ArrayList<ItemDTO>();
+        List<ItemDTO> womenTShirt = new ArrayList<ItemDTO>();
         for (Item item : itemList) {
             if (item.getGender().equals("Female") && item.getType().equals("Hoodie")) {
                 ItemDTO itemDTO = new ItemDTO();
@@ -203,6 +223,26 @@ public class ItemsController {
                 itemDTO.setPrice(item.getPrice());
                 itemDTO.setType(item.getType());
 
+                Set<String> list = new HashSet<String>();
+                for (Pictures pictures : item.getPictures()) {
+                    File destination = new File("src/main/resources/images/" + pictures.getName());
+                    try {
+                        img = ImageIO.read(destination);
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        ImageIO.write(img, "PNG", out);
+                        byte[] bytes = out.toByteArray();
+                        String base64bytes = Base64.getEncoder().encodeToString(bytes);
+                        String src = "data:image/png;base64," + base64bytes;
+                        list.add(src);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                itemDTO.setFiles(list);
+
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
                 for (AvailableColors availableColors : item.getAvailableColors()) {
@@ -224,19 +264,20 @@ public class ItemsController {
                 }
                 itemDTO.setColors(newAvailableColorsDTOlist);
 
-                womenHoodies.add(itemDTO);
+                womenTShirt.add(itemDTO);
             }
         }
 
-        return womenHoodies == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(womenHoodies);
+        return womenTShirt == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(womenTShirt);
     }
 
     @GetMapping("/hoodies-men")
     // @PreAuthorize("hasRole('PHARMACIST')")
     public ResponseEntity<List<ItemDTO>> hoodiesMen() {
 
+        BufferedImage img = null;
         List<Item> itemList = itemService.findAll();
-        List<ItemDTO> menHoodies = new ArrayList<ItemDTO>();
+        List<ItemDTO> womenTShirt = new ArrayList<ItemDTO>();
         for (Item item : itemList) {
             if (item.getGender().equals("Male") && item.getType().equals("Hoodie")) {
                 ItemDTO itemDTO = new ItemDTO();
@@ -246,6 +287,26 @@ public class ItemsController {
                 itemDTO.setPrice(item.getPrice());
                 itemDTO.setType(item.getType());
 
+                Set<String> list = new HashSet<String>();
+                for (Pictures pictures : item.getPictures()) {
+                    File destination = new File("src/main/resources/images/" + pictures.getName());
+                    try {
+                        img = ImageIO.read(destination);
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        ImageIO.write(img, "PNG", out);
+                        byte[] bytes = out.toByteArray();
+                        String base64bytes = Base64.getEncoder().encodeToString(bytes);
+                        String src = "data:image/png;base64," + base64bytes;
+                        list.add(src);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                itemDTO.setFiles(list);
+
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
                 for (AvailableColors availableColors : item.getAvailableColors()) {
@@ -267,19 +328,20 @@ public class ItemsController {
                 }
                 itemDTO.setColors(newAvailableColorsDTOlist);
 
-                menHoodies.add(itemDTO);
+                womenTShirt.add(itemDTO);
             }
         }
 
-        return menHoodies == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(menHoodies);
+        return womenTShirt == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(womenTShirt);
     }
 
     @GetMapping("/hats")
     // @PreAuthorize("hasRole('PHARMACIST')")
     public ResponseEntity<List<ItemDTO>> hats() {
 
+        BufferedImage img = null;
         List<Item> itemList = itemService.findAll();
-        List<ItemDTO> menHoodies = new ArrayList<ItemDTO>();
+        List<ItemDTO> womenTShirt = new ArrayList<ItemDTO>();
         for (Item item : itemList) {
             if (item.getGender().equals("Hat") && item.getType().equals("Hat")) {
                 ItemDTO itemDTO = new ItemDTO();
@@ -289,6 +351,26 @@ public class ItemsController {
                 itemDTO.setPrice(item.getPrice());
                 itemDTO.setType(item.getType());
 
+                Set<String> list = new HashSet<String>();
+                for (Pictures pictures : item.getPictures()) {
+                    File destination = new File("src/main/resources/images/" + pictures.getName());
+                    try {
+                        img = ImageIO.read(destination);
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        ImageIO.write(img, "PNG", out);
+                        byte[] bytes = out.toByteArray();
+                        String base64bytes = Base64.getEncoder().encodeToString(bytes);
+                        String src = "data:image/png;base64," + base64bytes;
+                        list.add(src);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                itemDTO.setFiles(list);
+
                 List<NewAvailableColorsDTO> newAvailableColorsDTOlist = new ArrayList<NewAvailableColorsDTO>();
 
                 for (AvailableColors availableColors : item.getAvailableColors()) {
@@ -310,11 +392,11 @@ public class ItemsController {
                 }
                 itemDTO.setColors(newAvailableColorsDTOlist);
 
-                menHoodies.add(itemDTO);
+                womenTShirt.add(itemDTO);
             }
         }
 
-        return menHoodies == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(menHoodies);
+        return womenTShirt == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(womenTShirt);
     }
 
 }

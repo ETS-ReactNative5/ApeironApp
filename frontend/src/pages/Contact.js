@@ -9,6 +9,7 @@ import { Redirect } from "react-router-dom";
 import HeadingSuccessAlert from "../components/HeadingSuccessAlert";
 import HeadingAlert from "../components/HeadingAlert";
 
+import ModalDialog from "../components/ModalDialog";
 const mapState = {
 	center: [44, 21],
 	zoom: 8,
@@ -33,6 +34,7 @@ class Contact extends Component {
 		phoneError: "none",
 		phoneValidateError: "none",
 		openModal: false,
+		openModal2: false,
 		hiddenEditInfo: true,
 		redirect: false,
 		hiddenSuccessAlert: true,
@@ -86,11 +88,9 @@ class Contact extends Component {
 	};
 
 	componentDidMount() {
-		if (!this.hasRole("ROLE_ADMIN")) {
-			this.setState({ redirect: true });
-		} else {
+	
 			this.addressInput = React.createRef();
-			Axios.get(BASE_URL + "/api/admin", { validateStatus: () => true, headers: { Authorization: getAuthHeader() } })
+			Axios.get(BASE_URL + "/api/admin", { validateStatus: () => true})
 				.then((res) => {
 					if (res.status !== 401) {
 						console.log(res.data)
@@ -110,7 +110,7 @@ class Contact extends Component {
 				.catch((err) => {
 					console.log(err);
 				});
-		}
+		
 	}
 
 	handleEmailChange = (event) => {
@@ -237,6 +237,7 @@ class Contact extends Component {
 									this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
 								} else if (res.status === 204) {
 									console.log("Success");
+								
 									this.setState({
 										hiddenSuccessAlert: false,
 										successHeader: "Success",
@@ -273,6 +274,7 @@ class Contact extends Component {
                 } else if (res.status === 500) {
                     this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
                 } else if (res.status === 204) {
+					this.setState({ openModal: true });
                     console.log("Success");
                    
                 }
@@ -448,7 +450,7 @@ class Contact extends Component {
 
 
 
-					<div className="row mt-5" >
+					<div className="row mt-5"  hidden={this.hasRole("ROLE_ADMIN")} >
 						<div className="col shadow p-3 bg-white rounded">
 							<h5 className=" text-center text-uppercase">Contact us</h5>
 							<form id="contactForm" name="sentMessage">
@@ -542,7 +544,12 @@ class Contact extends Component {
 
 					</div>
 				</div>
-
+				<ModalDialog
+                    show={this.state.openModal}
+                    onCloseModal={this.handleModalClose}
+                    header="Success"
+                    text="You have successfully sent an email."
+                />
 
 			</React.Fragment>
 		);

@@ -61,4 +61,24 @@ public class AddressDTO {
     public void setCountry(String country) {
         this.country = country;
     }
+
+
+    public AddressDTO(double latitude, double longitude, String city, String street, String country) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.city = city;
+        this.street = street;
+        this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressDTO{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", country='" + country + '\'' +
+                '}';
+    }
 }

@@ -36,7 +36,7 @@ public class AdminController {
     private ColorService colorService;
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Admin> getUser() {
 
         Admin userDTO = new Admin();

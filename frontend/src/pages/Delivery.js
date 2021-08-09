@@ -7,7 +7,7 @@ import PharmacyLogo from "../static/naslovna-duks.png";
 import "../App.js";
 import { Redirect } from "react-router-dom";
 import Order from "../components/Order";
-
+import getAuthHeader from "../GetHeader";
 import ModalDialog from "../components/ModalDialog";
 class TShirtsMen extends Component {
 	state = {
@@ -70,10 +70,22 @@ class TShirtsMen extends Component {
 			});
 		}
 	};
+	hasRole = (reqRole) => {
+		let roles = JSON.parse(localStorage.getItem("keyRole"));
+		if (roles === null) return false;
 
+		if (reqRole === "*") return true;
+
+		for (let role of roles) {
+			if (role === reqRole) return true;
+		}
+		return false;
+	};
 	componentDidMount() {
-		
-		Axios.get(BASE_URL + "/api/items/hoodies-women")
+		if (!this.hasRole("ROLE_ADMIN")) {
+			this.setState({ redirect: true });
+		}else{
+		Axios.get(BASE_URL + "/api/users/delivery", {headers: { Authorization: getAuthHeader() } })
 			.then((res) => {
 				this.setState({ tshirts: res.data });
 				console.log(res.data);
@@ -82,6 +94,7 @@ class TShirtsMen extends Component {
 				console.log(err);
 			});
 
+		}
 	}
 
 	hangleFormToogle = () => {
@@ -89,7 +102,7 @@ class TShirtsMen extends Component {
 	};
 
 	handleDelete = (e,id) => {
-		Axios.get(BASE_URL + "/api/items/delete/" + id)
+		Axios.get(BASE_URL + "/api/users/delete/" + id,{ headers: { Authorization: getAuthHeader() }  })
 			.then((res) => {
 				
 				this.setState({ openModal: true });
@@ -201,7 +214,7 @@ class TShirtsMen extends Component {
 				<Header />
 
 				<div className="container" style={{ marginTop: "10%" }}>
-					<h5 className=" text-center mb-0 mt-2 text-uppercase">Women T-shirts</h5>
+					<h5 className=" text-center mb-0 mt-2 text-uppercase">Delivery</h5>
 
 					
 					<table className="table table-hover" style={{ width: "100%", marginTop: "3rem" }}>
@@ -213,51 +226,18 @@ class TShirtsMen extends Component {
 									style={{ cursor: "pointer" }}
 								
 								>
-									<td width="130em">
-										<img className="img-fluid" src={pharmacy.files?.[0] ?? PharmacyLogo} width="70em" />
-									</td>
+								
 									<td>
 										<div>
-											<b>Name: </b> {pharmacy.name}
+											<b>Company name: </b> {pharmacy.company}
 										</div>
 										<div>
-											<b>Price: </b> {pharmacy.price}
+											<b>Phone: </b> {pharmacy.phoneNumber}
 										</div>
 										<div>
-											<b>Available colors: </b>
-											{pharmacy.colors.map((color) => (
-												<div> {color.color}
-
-													{color.sizes.map((size) => (
-														<td> {size.size} available: {size.quantity}</td>
-
-
-													))}
-												</div>
-
-
-											))}
-
+											<b>Address: </b> {pharmacy.address.city}, {pharmacy.address.country}, {pharmacy.address.street}
 										</div>
-
-
-
-
-
-										<div hidden={!this.hasRole("ROLE_USER")}>  <button
-											style={{
-												background: "#1977cc",
-												marginTop: "15px",
-												marginLeft: "40%",
-												width: "20%",
-											}}
-											onClick={() => this.handleClickOnPharmacy(pharmacy)}
-											className="btn btn-primary btn-xl"
-											id="sendMessageButton"
-											type="button"
-										>
-											Reserve
-									</button></div>
+										
 									<div hidden={!this.hasRole("ROLE_ADMIN")}>  <button
 											style={{
 												background: "#1977cc",

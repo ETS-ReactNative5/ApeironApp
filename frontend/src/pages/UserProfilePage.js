@@ -54,6 +54,7 @@ class UserProfilePage extends Component {
 		failAllergenHeader: "",
 		failAllergenMessage: "",
 		addressNotFoundError: "none",
+		
 	};
 
 	constructor(props) {
@@ -154,16 +155,16 @@ class UserProfilePage extends Component {
 
 		//const regexPhone = /^([+]?[0-9]{3,6}[-]?[\/]?[0-9]{3,5}[-]?[\/]?[0-9]*)$/;
 		//console.log(regexPhone.test(userDTO.phoneNumber));
-		if (userDTO.name === "") {
+		if (userDTO.firstname === "") {
 			this.setState({ nameError: "initial" });
 			return false;
 		} else if (userDTO.surname === "") {
 			this.setState({ surnameError: "initial" });
 			return false;
-		} else if (this.addressInput.current.value === "") {
+		} else if (userDTO.address === "") {
 			this.setState({ addressError: "initial" });
 			return false;
-		} else if (userDTO.phoneNumber === "") {
+		} else if (userDTO.phonenumber === "") {
 			this.setState({ phoneError: "initial" });
 			return false;
 	
@@ -355,7 +356,7 @@ class UserProfilePage extends Component {
 				<TopBar />
 				<Header />
 
-				<div className="container" style={{ marginTop: "8%" }}>
+				<div className="container" style={{ marginTop: "12%" }}>
 					<HeadingSuccessAlert
 						hidden={this.state.hiddenSuccessAlert}
 						header={this.state.successHeader}

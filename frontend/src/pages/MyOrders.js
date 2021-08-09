@@ -50,6 +50,7 @@ class MyOrders extends Component {
 
         return (
             <React.Fragment>
+        
                 <TopBar />
                 <Header />
 
@@ -67,7 +68,7 @@ class MyOrders extends Component {
 
                                 >
                                     <td width="130em">
-                                        <img className="img-fluid" src={PharmacyLogo} width="70em" />
+                                        <img className="img-fluid"  src={reservation.files?.[0] ?? PharmacyLogo} width="70em" />
                                     </td>
                                     <td>
                                         <div>

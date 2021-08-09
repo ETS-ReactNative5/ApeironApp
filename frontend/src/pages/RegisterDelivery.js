@@ -7,7 +7,7 @@ import ModalDialog from "../components/ModalDialog";
 import { YMaps, Map } from "react-yandex-maps";
 import { Redirect } from "react-router-dom";
 import HeadingAlert from "../components/HeadingAlert";
-
+import getAuthHeader from "../GetHeader";
 const mapState = {
 	center: [44, 21],
 	zoom: 8,
@@ -82,6 +82,18 @@ class RegisterPage extends Component {
 		this.setState({ phoneNumber: event.target.value });
 	};
 
+	hasRole = (reqRole) => {
+		let roles = JSON.parse(localStorage.getItem("keyRole"));
+		if (roles === null) return false;
+
+		if (reqRole === "*") return true;
+
+		for (let role of roles) {
+			if (role === reqRole) return true;
+		}
+		return false;
+	};
+
 	validateForm = (userDTO) => {
 		this.setState({
 			emailError: "none",
@@ -104,9 +116,6 @@ class RegisterPage extends Component {
 			return false;
 		} else if (userDTO.firstname === "") {
 			this.setState({ nameError: "initial" });
-			return false;
-		} else if (userDTO.surname === "") {
-			this.setState({ surnameError: "initial" });
 			return false;
 		} else if (this.addressInput.current.value === "") {
 			this.setState({ addressError: "initial" });
@@ -133,6 +142,9 @@ class RegisterPage extends Component {
 
 	
 	handleSignUp = () => {
+		if (!this.hasRole("ROLE_ADMIN")) {
+			this.setState({ redirect: true });
+		} else {
 		if (this.addressInput.current.value === "") {
 			this.setState({ addressError: "initial" });
 			return false;
@@ -166,8 +178,7 @@ class RegisterPage extends Component {
 
 				let userDTO = {
 					email: this.state.email,
-					firstname: this.state.name,
-					surname: this.state.surname,
+					company: this.state.name,
 					address: { street, country, city, latitude, longitude },
 					phonenumber: this.state.phoneNumber,
 					password: this.state.password,
@@ -178,7 +189,7 @@ class RegisterPage extends Component {
 						this.setState({ addressNotFoundError: "initial" });
 					} else {
 						
-						Axios.post(BASE_URL + "/api/auth/signup", userDTO, { validateStatus: () => true })
+						Axios.post(BASE_URL + "/api/auth/signupDelivery", userDTO, { validateStatus: () => true, headers: { Authorization: getAuthHeader() }  })
 							.then((res) => {
 								if (res.status === 409) {
 									this.setState({
@@ -202,6 +213,7 @@ class RegisterPage extends Component {
 					}
 				});
 			}
+		}
 		};
 	
 
@@ -210,7 +222,7 @@ class RegisterPage extends Component {
 	};
 
 	render() {
-		if (this.state.redirect) return <Redirect push to="/login" />;
+		if (this.state.redirect) return <Redirect push to="/delivery" />;
 
 		return (
 			<React.Fragment>
@@ -225,7 +237,7 @@ class RegisterPage extends Component {
 						handleCloseAlert={this.handleCloseAlert}
 					/>
 					<h5 className=" text-center  mb-0 text-uppercase" style={{ marginTop: "2rem" }}>
-						Registration
+						Register a delivery guy
 					</h5>
 
 					<div className="row section-design">
@@ -253,9 +265,9 @@ class RegisterPage extends Component {
 								</div>
 								<div className="control-group">
 									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-										<label>Name:</label>
+										<label>Company name:</label>
 										<input
-											placeholder="Name"
+											placeholder="Company name"
 											class="form-control"
 											type="text"
 											id="name"
@@ -264,25 +276,10 @@ class RegisterPage extends Component {
 										/>
 									</div>
 									<div className="text-danger" style={{ display: this.state.nameError }}>
-										Name must be entered.
+										Company name must be entered.
 									</div>
 								</div>
-								<div className="control-group">
-									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-										<label>Surname:</label>
-										<input
-											placeholder="Surname"
-											class="form-control"
-											type="text"
-											id="surname"
-											onChange={this.handleSurnameChange}
-											value={this.state.surname}
-										/>
-									</div>
-									<div className="text-danger" style={{ display: this.state.surnameError }}>
-										Surname must be entered.
-									</div>
-								</div>
+							
 								<div className="control-group">
 									<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 										<label>Address:</label>
@@ -373,7 +370,7 @@ class RegisterPage extends Component {
 										id="sendMessageButton"
 										type="button"
 									>
-										Sign Up
+										Register
 									</button>
 								</div>
 							</form>

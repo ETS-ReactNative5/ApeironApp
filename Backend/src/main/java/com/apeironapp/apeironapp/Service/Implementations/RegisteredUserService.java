@@ -3,8 +3,10 @@ package com.apeironapp.apeironapp.Service.Implementations;
 import com.apeironapp.apeironapp.DTO.AddressDTO;
 import com.apeironapp.apeironapp.DTO.PersonUserDTO;
 import com.apeironapp.apeironapp.Model.Address;
+import com.apeironapp.apeironapp.Model.Courier;
 import com.apeironapp.apeironapp.Model.PersonUser;
 import com.apeironapp.apeironapp.Model.RegisteredUser;
+import com.apeironapp.apeironapp.Repository.CourirRepository;
 import com.apeironapp.apeironapp.Repository.RegisteredUserRepository;
 import com.apeironapp.apeironapp.Repository.UserRepository;
 import com.apeironapp.apeironapp.Service.IServices.IRegisteredUserService;
@@ -25,6 +27,9 @@ public class RegisteredUserService implements IRegisteredUserService {
 
     @Autowired
     private RegisteredUserRepository registeredUserRepository;
+
+    @Autowired
+    private CourirRepository courirRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -112,6 +117,15 @@ public class RegisteredUserService implements IRegisteredUserService {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         String email = currentUser.getName();
         return registeredUserRepository.findByEmail(email);
+
+    }
+
+
+    public Courier getLoggedCourier() {
+
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        String email = currentUser.getName();
+        return courirRepository.findByEmail(email);
 
     }
 }

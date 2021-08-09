@@ -12,4 +12,5 @@ public interface IReservationService {
     Order save(NewOrderDTO newOrderDTO);
     Order findById(Integer id);
     void delete(Order order);
+    Order update(Order order);
 }

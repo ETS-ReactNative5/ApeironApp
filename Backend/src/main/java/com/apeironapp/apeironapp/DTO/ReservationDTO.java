@@ -5,7 +5,13 @@ import java.util.Set;
 
 public class ReservationDTO {
 
+    private Set<String> files;
+
     private Integer reservationId;
+
+    private String user;
+
+    private String phone;
 
     private Set<ItemInOrderDTO> itemInOrderDTOSet;
 
@@ -21,7 +27,51 @@ public class ReservationDTO {
 
     private String itemGender;
 
+    private String status;
+
+    private String courier;
+
     public ReservationDTO() {
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getCourier() {
+        return courier;
+    }
+
+    public void setCourier(String courier) {
+        this.courier = courier;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Set<String> getFiles() {
+        return files;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setFiles(Set<String> files) {
+        this.files = files;
     }
 
     public String getItemName() {

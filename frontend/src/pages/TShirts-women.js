@@ -8,6 +8,7 @@ import "../App.js";
 import { Redirect } from "react-router-dom";
 import Order from "../components/Order";
 
+import ModalDialog from "../components/ModalDialog";
 class TShirtsWomen extends Component {
 	state = {
 		tshirts: [],
@@ -34,7 +35,7 @@ class TShirtsWomen extends Component {
 		selectedSize: "",
 		showedSizes: [],
 		sizes: [],
-
+		openModal: false,
 
 	};
 
@@ -54,7 +55,10 @@ class TShirtsWomen extends Component {
 	handleNameChange = (event) => {
 		this.setState({ name: event.target.value });
 	};
-
+	handleModalClose = () => {
+		this.setState({ openModal: false });
+		window.location.reload();
+	};
 	getCurrentCoords = () => {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition((position) => {
@@ -86,8 +90,7 @@ class TShirtsWomen extends Component {
 	handleDelete = (e,id) => {
 		Axios.get(BASE_URL + "/api/items/delete/" + id)
 			.then((res) => {
-				window.location.reload();
-				console.log(res.data);
+				this.setState({ openModal: true });
 			})
 			.catch((err) => {
 				console.log(err);
@@ -205,7 +208,7 @@ class TShirtsWomen extends Component {
 									id={pharmacy.id}
 									key={pharmacy.id}
 									style={{ cursor: "pointer" }}
-									onClick={() => this.handleClickOnPharmacy(pharmacy)}
+							
 								>
 									<td width="130em">
 										<img className="img-fluid" src={pharmacy.files?.[0] ?? PharmacyLogo} width="70em" />
@@ -236,21 +239,18 @@ class TShirtsWomen extends Component {
 
 
 
-										<div>
-											<b>Grade: </b> {pharmacy.id}
-											<i className="icofont-star" style={{ color: "#1977cc" }}></i>
-										</div>
+									
 
 
 
-										<div hidden={!this.hasRole("ROLE_ADMIN")}>  <button
+										<div hidden={!this.hasRole("ROLE_USER")}>  <button
 											style={{
 												background: "#1977cc",
 												marginTop: "15px",
 												marginLeft: "40%",
 												width: "20%",
 											}}
-											onClick={this.handleSignUp}
+											onClick={() => this.handleClickOnPharmacy(pharmacy)}
 											className="btn btn-primary btn-xl"
 											id="sendMessageButton"
 											type="button"
@@ -278,7 +278,12 @@ class TShirtsWomen extends Component {
 						</tbody>
 					</table>
 				</div>
-
+				<ModalDialog
+                    show={this.state.openModal}
+                    onCloseModal={this.handleModalClose}
+                    header="Success"
+                    text="You have successfully removed the item."
+                />
 				<Order
 					buttonName="Send reservation"
 					header="Make new reservation"

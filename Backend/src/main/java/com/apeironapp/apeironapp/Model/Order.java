@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -39,8 +40,42 @@ public class Order {
     @Column(name = "itemId", nullable = true)
     private Integer itemId;
 
+    @Column(name = "qr", nullable = true)
+    private String qr;
+
+    @Column(name = "status", nullable = true)
+    private String status;
+
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "courier_id", referencedColumnName = "id", nullable = true, unique = false)
+    private Courier courier;
 
     public Order() {
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Courier getCourier() {
+        return courier;
+    }
+
+    public void setCourier(Courier courier) {
+        this.courier = courier;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getQr() {
+        return qr;
+    }
+
+    public void setQr(String qr) {
+        this.qr = qr;
     }
 
     public Integer getItemId() {

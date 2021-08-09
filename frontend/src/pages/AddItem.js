@@ -82,12 +82,35 @@ class RegisterPage extends Component {
         }
     }
     onDrop(picture) {
-        this.setState({
-            pictures: this.state.pictures.concat(picture),
-            //pictures: picture
-        });
 
-    }
+		this.setState({
+			pictures: [],
+		});
+		this.setState({
+			pictures: this.state.pictures.concat(picture),
+		});
+
+		let pomoc = picture.length;
+		if(pomoc===0) {
+			this.setState({
+				noPicture: true,
+			});
+			this.setState({
+				showImageModal: false,
+			});
+		}
+		else {
+			this.setState({
+				noPicture: false,
+			});
+			this.setState({
+				showImageModal: true,
+			});
+			
+		}
+
+
+	}
 
     test(pic) {
 
@@ -547,13 +570,7 @@ class RegisterPage extends Component {
                     text="You have successfully added new item."
                 />
 
-                <ModalDialog
-                    show={this.state.openModal}
-                    onCloseModal={this.handleModalClose}
-                    header="Success"
-                    text="You have successfully added new item."
-                />
-
+              
             </React.Fragment>
 
 

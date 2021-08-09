@@ -145,5 +145,12 @@ public class ItemService implements IItemService {
         itemRepository.delete(item);
     }
 
+    @Override
+    public Item update(Item item) {
+
+
+        return itemRepository.save(item);
+    }
+
 
 }
