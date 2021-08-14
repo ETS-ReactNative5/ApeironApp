@@ -46,6 +46,8 @@ public class AuthenticationController {
 	@PostMapping("/login")
 	public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
 																	HttpServletResponse response) {
+
+		System.out.println("EVO MEEEEEEEEEeee");
 		List<String> roles = new ArrayList<String>();
 		String jwt;
 		int expiresIn;
