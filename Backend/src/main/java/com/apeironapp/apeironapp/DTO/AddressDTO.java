@@ -2,33 +2,48 @@ package com.apeironapp.apeironapp.DTO;
 
 public class AddressDTO {
 
-    private String town;
+
+    private double latitude;
+
+
+    private double longitude;
+
+
+    private String city;
+
 
     private String street;
 
-    private int number;
-
-    private int postalCode;
 
     private String country;
 
-    public AddressDTO(String town, String street, int number, int postalCode, String country) {
-        this.town = town;
-        this.street = street;
-        this.number = number;
-        this.postalCode = postalCode;
-        this.country = country;
-    }
+
 
     public AddressDTO() {
     }
 
-    public String getTown() {
-        return town;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setTown(String town) {
-        this.town = town;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getStreet() {
@@ -39,27 +54,31 @@ public class AddressDTO {
         this.street = street;
     }
 
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public int getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(int postalCode) {
-        this.postalCode = postalCode;
-    }
-
     public String getCountry() {
         return country;
     }
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+
+    public AddressDTO(double latitude, double longitude, String city, String street, String country) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.city = city;
+        this.street = street;
+        this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressDTO{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }

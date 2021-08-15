@@ -35,9 +35,9 @@ public class PersonUser implements UserDetails, Serializable {
     @Column(name = "password", nullable = true)
     private String password;
 
+
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
-
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
     @JoinTable(name = "user_authority",
@@ -49,6 +49,28 @@ public class PersonUser implements UserDetails, Serializable {
 
     public PersonUser() {
     }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+
+    public String getUsername() {
+        return email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 
     public Integer getId() {
         return id;
@@ -66,17 +88,7 @@ public class PersonUser implements UserDetails, Serializable {
         this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
-    public Timestamp getLastPasswordResetDate() {
-        return lastPasswordResetDate;
-    }
-
-    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
-        this.lastPasswordResetDate = lastPasswordResetDate;
-    }
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
@@ -104,19 +116,21 @@ public class PersonUser implements UserDetails, Serializable {
         return this.authorities;
     }
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
 
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "PersonUser{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", lastPasswordResetDate=" + lastPasswordResetDate +
+                ", authorities=" + authorities +
+                '}';
     }
 }
 

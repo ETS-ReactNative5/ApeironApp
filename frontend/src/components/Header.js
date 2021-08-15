@@ -32,19 +32,41 @@ class Header extends Component {
                             <li className="active">
                                 <Link to="/">Home</Link>
                             </li>
-                            <li hidden={!this.hasRole("ROLE_PHARMACIST")}>
-                                <Link to="/myOrders">My orders</Link>
-                            </li>
-                            <li hidden={!this.hasRole("ROLE_DERMATHOLOGIST") && !this.hasRole("ROLE_PHARMACIST")}>
-                                <Link to="/deliveries">Deliveries</Link>
+                            <li hidden={!this.hasRole("ROLE_USER")}>
+                                <Link to="/myReservations">My orders</Link>
                             </li>
 
+                           
+                            <li hidden={!this.hasRole("ROLE_DELIVERY")}>
+                                <Link to="/deliveries">Deliveries</Link>
+                            </li>
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
+                                <Link to="/additem">Add a new item</Link>
+                            </li>
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
+                                <Link to="/registerDelivery">Register delivery guy</Link>
+                            </li>
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
+                                <Link to="/delivery">Delivery guys</Link>
+                            </li>
+                            <li hidden={!this.hasRole("ROLE_ADMIN") && !this.hasRole("ROLE_DELIVERY")} >
+                                <Link to="/qrCodes">QR codes</Link>
+                            </li>
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
+                                <Link to="/change">Change available colors</Link>
+                            </li>
+                            <li hidden={!this.hasRole("ROLE_ADMIN")}>
+                                <Link to="/allOrders">All orders</Link>
+                            </li >
+                            <li hidden={!this.hasRole("ROLE_USER")}>
+                                <Link to="/userChangeProfile">My profile</Link>
+                            </li>
                             <li className="drop-down">
                                 <a href="#">Our products</a>
                                 <ul>
 
                                     <li className="drop-down">
-                                        <a href="/tshirts">T-Shirts</a>
+                                        <Link to="/tshirts" >T-Shirts</Link>
                                         <ul>
                                             <li>
                                                 <Link to="/tshirts-women">Women</Link>
@@ -59,29 +81,29 @@ class Header extends Component {
 
                                     </li>
                                     <li>
-                                       
+
                                         <li className="drop-down">
-                                        <a href="/hoodies">Hoodies</a>
-                                        <ul>
-                                            <li>
-                                                <Link to="/hoodies-women">Women</Link>
+                                            <Link to="/hoodies">Hoodies</Link>
+                                            <ul>
+                                                <li>
+                                                    <Link to="/hoodies-women">Women</Link>
 
-                                            </li>
-                                            <li>
-                                                <Link to="/hoodies-men">Men</Link>
-                                            </li>
+                                                </li>
+                                                <li>
+                                                    <Link to="/hoodies-men">Men</Link>
+                                                </li>
 
 
-                                        </ul>
+                                            </ul>
 
-                                    </li>
+                                        </li>
                                     </li>
                                     <li>
-                                       
-                                      
-                                        <a href="/hats">Hats</a>
-                                        
-                                 
+
+
+                                        <Link to="/hats">Hats</Link>
+
+
                                     </li>
 
                                 </ul>

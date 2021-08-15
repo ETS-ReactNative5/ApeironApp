@@ -28,4 +28,39 @@ public class AvailableSize {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "availableColors_id", referencedColumnName = "id", nullable = false, unique = false)
     private AvailableColors availableColors;
+
+    public AvailableSize() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public AvailableColors getAvailableColors() {
+        return availableColors;
+    }
+
+    public void setAvailableColors(AvailableColors availableColors) {
+        this.availableColors = availableColors;
+    }
 }

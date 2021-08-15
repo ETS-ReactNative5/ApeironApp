@@ -1,14 +1,21 @@
 package com.apeironapp.apeironapp.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("Courier")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Courier extends PersonUser{
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Order> orders = new HashSet<Order>();
 
 
     @Column(name = "company", nullable = true)
@@ -27,6 +34,14 @@ public class Courier extends PersonUser{
     }
 
     public Courier() {
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     public String getCompany() {

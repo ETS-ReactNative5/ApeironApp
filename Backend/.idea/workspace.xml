@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +24,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1nA2Tc4h2cFsAUJbjSDL4wYXnYL" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -32,22 +34,24 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../ISA/ISA_project/Backend" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\DTO" />
+      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Authentification" />
       <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Service\Implementations" />
       <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Service\IServices" />
       <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Repository" />
-      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Controller" />
-      <recent name="C:\Users\Luna\Desktop\Diplomski\Projekat\ApeironApp\Backend\src\main\java\com\apeironapp\apeironapp\Config" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.apeironapp.apeironapp.DTO" />
-      <recent name="com.apeironapp.apeironapp.Model" />
+      <recent name="com.apeironapp.apeironapp.Repository" />
       <recent name="com.apeironapp.apeironapp.Service.Implementations" />
-      <recent name="com.isaproject.isaproject.Integration" />
+      <recent name="com.apeironapp.apeironapp.DTO" />
+      <recent name="com.apeironapp.apeironapp.Service.IServices" />
+      <recent name="com.apeironapp.apeironapp.Model" />
     </key>
   </component>
   <component name="RunManager" selected="Application.ApeironprojectApplication">
