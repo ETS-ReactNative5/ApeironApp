@@ -129,6 +129,7 @@ class RegisterPage extends Component {
             body: formData
 
         };
+        console.log("EVO ME" + options)
         fetch(BASE_URL + "/api/items/upload", options);
     }
 
@@ -322,6 +323,8 @@ class RegisterPage extends Component {
 
             console.log(this.state.pictures)
             this.state.pictures.forEach((pic) => {
+                console.log("PICTUREEEEEEEEEEEEEEEee")
+                console.log(pic)
                 this.test(pic);
             });
 
