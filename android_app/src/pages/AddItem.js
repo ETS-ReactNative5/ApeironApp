@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import { BASE_URL } from "../../constants.js";
 import Axios from "axios";
-import ModalDialog from "../components/ModalDialog";
 import { Redirect } from "react-router-dom";
 import getAuthHeader from "../../GetHeader";
 import SyncStorage from 'sync-storage';
 import { Modal } from "react-bootstrap";
 import { Picker } from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
-import ImagePicker from 'react-native-image-picker'
 import {
     StyleSheet,
     Text,
@@ -17,12 +15,20 @@ import {
     TouchableOpacity,
     Button,
     TextInput,
+    Image,
+    ScrollView
 } from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker'
+import { launchImageLibrary } from 'react-native-image-picker'
 class RegisterPage extends Component {
+
+
     constructor(props) {
         super(props);
         this.state = {
+            resourcePath: {},
+            filePath: "",
+            fileData: "",
+            fileUri: "",
             pictures: [],
             types: ["Hoodie", "T-Shirt", "Hat"],
             colors: [],
@@ -70,17 +76,55 @@ class RegisterPage extends Component {
     };
 
     handleChoosePhoto = () => {
+
         const options = {
             noData: true,
         }
         launchImageLibrary(options, response => {
-            if (response.uri) {
-                this.setState({ photo: response })
-            }
+
+
+
+            this.setState({ photo: response })
+
         })
+    }
+
+
+
+    imageGalleryLaunch = () => {
+        let options = {
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+
+        launchImageLibrary(options, (res) => {
+            console.log('Response = ', res);
+
+            if (res.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (res.error) {
+                console.log('ImagePicker Error: ', res.error);
+            } else if (res.customButton) {
+                console.log('User tapped custom button: ', res.customButton);
+                alert(res.customButton);
+            } else {
+                const source = { uri: res.uri };
+                console.log('response', res.assets[0].uri);
+                console.log('PICTUREEEEEEEEEEEE', res);
+                console.log('PICTUREEEEEEEEEEEE', res.data);
+                this.setState({
+                    filePath: res.assets[0].uri,
+                    fileData: res,
+                    fileUri: res.uri
+                });
+            }
+        });
     }
     componentDidMount() {
         if (!this.hasRole("ROLE_ADMIN")) {
+        
             this.setState({ redirect: true });
         } else {
             Axios.get(BASE_URL + "/api/admin/colors", { validateStatus: () => true, headers: { Authorization: getAuthHeader() } })
@@ -133,19 +177,18 @@ class RegisterPage extends Component {
 
     test(pic) {
 
-        this.setState({
-            fileUploadOngoing: true
-        });
-
-        const fileTextInput = document.querySelector("#fileTextInput");
-        const formData = new FormData();
-
-        formData.append("file", pic);
-        formData.append("test", "StringValueTest");
-
+        var photo = {
+            uri: this.state.filePath,
+            type: 'image/jpeg',
+            name: 'photo.jpg',
+          };
+          
+          var form = new FormData();
+          form.append("file", photo);
+          
         const options = {
             method: "POST",
-            body: formData
+            body: form
 
         };
         fetch(BASE_URL + "/api/items/upload", options);
@@ -283,6 +326,7 @@ class RegisterPage extends Component {
             this.state.types.forEach((chain) => {
                 if (chain === e) {
                     console.log(chain);
+                    console.log(chain);
                     this.changeTypeUsers(chain);
                     this.setState({ selectedType: chain }, () => {
                         console.log(this.state);
@@ -305,11 +349,10 @@ class RegisterPage extends Component {
     };
     handleSignUp = () => {
 
-        console.log("sdfgsssss" + this.state.orders);
 
         let itemDTO = "";
         let pics = []
-
+        pics.push(this.state.filePath)
 
         this.state.pictures.forEach((p) => {
             console.log(p.name)
@@ -343,7 +386,7 @@ class RegisterPage extends Component {
             this.state.pictures.forEach((pic) => {
                 this.test(pic);
             });
-
+            this.test(this.state.fileData);
             this.setState({
                 pictures: []
 
@@ -394,220 +437,217 @@ class RegisterPage extends Component {
         if (this.state.redirect) return <Redirect push to="/" />;
         const { photo } = this.state
         return (
+            <ScrollView>
+                <View className="container" style={{ marginTop: 8 }}>
 
-            <View className="container" style={{ marginTop: 8 }}>
+                    <Text h5 className=" text-center  mb-0 text-uppercase" style={{ marginTop: 2 }}>
+                        Add new item
+                    </Text>
 
-                <Text h5 className=" text-center  mb-0 text-uppercase" style={{ marginTop: 2 }}>
-                    Add new item
-                </Text>
+                    <View className="row section-design">
 
-                <View className="row section-design">
-                    <View className="col-lg-8 mx-auto">
-                        <View >
-                            {photo && (
-                                <Image
-                                    source={{ uri: photo.uri }}
-                                    style={{ width: 300, height: 300 }}
-                                />
-                            )}
-                            <Button title="Choose Photo" onPress={this.handleChoosePhoto} />
-                        </View>
 
-                        <View className="control-group">
+                        <View className="col-lg-8 mx-auto">
+                            <Image
+                                source={{ uri: this.state.filePath }}
+                                style={{ width: 200, height: 200 }}
+                            />
+                            <TouchableOpacity onPress={this.imageGalleryLaunch}  >
+                                <Text >Choose image</Text>
+                            </TouchableOpacity>
+
+                            <View className="control-group">
+
+                                <View>
+                                    <Picker
+                                        class="btn btn-secondary dropdown-toggle"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        onValueChange={(e) => this.handleTypeChange(e)}
+                                        selectedValue={this.state.selectedType}
+                                    >
+                                        <Picker.Item style={{ marginLeft: "12rem" }} label=" Choose an item type" value="Choose an item type">
+
+                                        </Picker.Item>
+                                        {this.state.showedTypes.map((chain) => (
+                                            <Picker.Item key={chain} label={chain} value={chain}>
+
+                                            </Picker.Item>
+                                        ))}
+                                    </Picker>
+                                </View>
+
+
+                            </View>
+                            <View className="control-group">
+                                <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+                                    <Text>Insert item name:</Text>
+                                    <TextInput
+                                        placeholder="Name"
+                                        class="form-control"
+                                        type="text"
+                                        id="name"
+                                        onChange={this.handleNameChange}
+                                        value={this.state.name}
+                                    />
+                                </View>
+                                <View className="text-danger" style={{ display: this.state.nameError }}>
+                                    <Text>Item name must be entered.</Text>
+                                </View>
+                            </View>
+
+
+
+
+
+                            <View >
+                                <RadioButton.Group
+                                    onValueChange={value => this.setState({ value })}
+                                    value={this.state.value}
+                                >
+                                    <View>
+                                        <RadioButton value='Male' label='Male' onPress={(e) => this.handleGenderChange('Male')} /><Text>Male</Text>
+                                    </View>
+                                    <View>
+                                        <RadioButton value='Female' label='Female' onPress={(e) => this.handleGenderChange('Female')} /><Text>Female</Text>
+                                    </View>
+                                </RadioButton.Group>
+
+                            </View>
+
+
+
+
+
+
+
+
+
+                            <View className="control-group">
+                                <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+                                    <Text>Insert item price:</Text>
+                                    <TextInput
+                                        placeholder="Price"
+                                        class="form-control"
+                                        type="text"
+                                        id="surname"
+                                        onChange={this.handlePriceChange}
+                                        value={this.state.price}
+                                    />
+                                </View>
+                                <View className="text-danger" style={{ display: this.state.priceError }}>
+                                    <Text>Price must be entered.</Text>
+                                </View>
+                            </View>
 
                             <View>
                                 <Picker
                                     class="btn btn-secondary dropdown-toggle"
                                     aria-haspopup="true"
                                     aria-expanded="false"
-                                    onValueChange={(e) => this.handleTypeChange(e)}
-                                    selectedValue={this.state.selectedType}
+                                    onValueChange={(e) => this.handleColorChange(e)}
+                                    selectedValue={this.state.selectedColor}
                                 >
-                                    <Picker.Item style={{ marginLeft: "12rem" }} label=" Choose an item type" value="Choose an item type">
+                                    <Picker.Item style={{ marginLeft: 2 }} label=" Choose the color">
 
                                     </Picker.Item>
-                                    {this.state.showedTypes.map((chain) => (
-                                        <Picker.Item key={chain} label={chain} value={chain}>
+                                    {this.state.colors.map((chain) => (
+
+                                        <Picker.Item key={chain.id} label={chain.color} value={chain.color}>
 
                                         </Picker.Item>
                                     ))}
                                 </Picker>
                             </View>
+                            <View>
+                                <Picker
+                                    class="btn btn-secondary dropdown-toggle"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    onValueChange={(e) => this.handleSizeChange(e)}
+                                    selectedValue={this.state.selectedSize}
 
 
-                        </View>
-                        <View className="control-group">
-                            <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-                                <Text>Insert item name:</Text>
-                                <TextInput
-                                    placeholder="Name"
-                                    class="form-control"
-                                    type="text"
-                                    id="name"
-                                    onChange={this.handleNameChange}
-                                    value={this.state.name}
-                                />
-                            </View>
-                            <View className="text-danger" style={{ display: this.state.nameError }}>
-                                <Text>Item name must be entered.</Text>
-                            </View>
-                        </View>
-
-
-
-
-
-                        <View >
-                            <RadioButton.Group
-                                onValueChange={value => this.setState({ value })}
-                                value={this.state.value}
-                            >
-                                <View>
-                                    <RadioButton value='Male' label='Male' onPress={(e) => this.handleGenderChange('Male')} /><Text>Male</Text>
-                                </View>
-                                <View>
-                                    <RadioButton value='Female' label='Female' onPress={(e) => this.handleGenderChange('Female')} /><Text>Female</Text>
-                                </View>
-                            </RadioButton.Group>
-
-                        </View>
-
-
-
-
-
-
-
-
-
-                        <View className="control-group">
-                            <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-                                <Text>Insert item price:</Text>
-                                <TextInput
-                                    placeholder="Price"
-                                    class="form-control"
-                                    type="text"
-                                    id="surname"
-                                    onChange={this.handlePriceChange}
-                                    value={this.state.price}
-                                />
-                            </View>
-                            <View className="text-danger" style={{ display: this.state.priceError }}>
-                                <Text>Price must be entered.</Text>
-                            </View>
-                        </View>
-
-                        <View>
-                            <Picker
-                                class="btn btn-secondary dropdown-toggle"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                onValueChange={(e) => this.handleColorChange(e)}
-                                selectedValue={this.state.selectedColor}
-                            >
-                                <Picker.Item style={{ marginLeft: 2 }} label=" Choose the color">
-
-                                </Picker.Item>
-                                {this.state.colors.map((chain) => (
-
-                                    <Picker.Item key={chain.id} label={chain.color} value={chain.color}>
+                                >
+                                    <Picker.Item style={{ marginLeft: "12rem" }} label="Choose the size">
 
                                     </Picker.Item>
-                                ))}
-                            </Picker>
-                        </View>
-                        <View>
-                            <Picker
-                                class="btn btn-secondary dropdown-toggle"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                onValueChange={(e) => this.handleSizeChange(e)}
-                                selectedValue={this.state.selectedSize}
+                                    {this.state.sizes.map((a) => (
 
+                                        <Picker.Item key={a} label={a} value={a}>
 
-                            >
-                                <Picker.Item style={{ marginLeft: "12rem" }} label="Choose the size">
+                                        </Picker.Item>
 
-                                </Picker.Item>
-                                {this.state.sizes.map((a) => (
-
-                                    <Picker.Item key={a} label={a} value={a}>
-
-                                    </Picker.Item>
-
-                                ))}
-                            </Picker>
-                        </View>
-
-                        <View className="control-group">
-                            <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-                                <Text>Insert quantity of item:</Text>
-                                <TextInput
-                                    placeholder="Quantity"
-                                    class="form-control"
-                                    type="text"
-                                    id="name"
-                                    onChange={this.handleQuantityChange}
-                                    value={this.state.quantity}
-                                />
+                                    ))}
+                                </Picker>
                             </View>
 
-                        </View>
-
-
-                        <View>
-                            <Button className="mt-3" onPress={this.handleAddChange} title="Add to chart">
-
-                            </Button>
-                        </View>
-
-                        <View style={{ marginTop: 2 }}>
-                            <Text>Color Size Quantity Remove </Text>
-                            {this.state.orders.map((c) => (
-                                <View>
-                                    <Text>{c.color} {c.size} {c.quantity}  <Button className="mt-3" onPress={(e) => this.handleRemoveChange(e, c)} title=" Remove">
-
-                                    </Button> </Text>
-
+                            <View className="control-group">
+                                <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+                                    <Text>Insert quantity of item:</Text>
+                                    <TextInput
+                                        placeholder="Quantity"
+                                        class="form-control"
+                                        type="text"
+                                        id="name"
+                                        onChange={this.handleQuantityChange}
+                                        value={this.state.quantity}
+                                    />
                                 </View>
-                            ))}
+
+                            </View>
+
+
+                            <View>
+                                <Button className="mt-3" onPress={this.handleAddChange} title="Add to chart">
+
+                                </Button>
+                            </View>
+
+                            <View style={{ marginTop: 2 }}>
+                                <Text>Color Size Quantity Remove </Text>
+                                {this.state.orders.map((c) => (
+                                    <View>
+                                        <Text>{c.color} {c.size} {c.quantity}  <Button className="mt-3" onPress={(e) => this.handleRemoveChange(e, c)} title=" Remove">
+
+                                        </Button> </Text>
+
+                                    </View>
+                                ))}
+
+                            </View>
+
+
+
+                            <View className="form-group">
+                                <Button
+                                    style={{
+                                        background: "#1977cc",
+                                        marginLeft: "40%",
+                                        width: 2,
+                                    }}
+                                    onPress={this.handleSignUp}
+                                    className="btn btn-primary btn-xl"
+                                    id="sendMessageButton"
+                                    type="button"
+                                    title="Add item"
+                                >
+
+                                </Button>
+                            </View>
+
+
 
                         </View>
-
-
-
-                        <View className="form-group">
-                            <Button
-                                style={{
-                                    background: "#1977cc",
-                                    marginLeft: "40%",
-                                    width: 2,
-                                }}
-                                onPress={this.handleSignUp}
-                                className="btn btn-primary btn-xl"
-                                id="sendMessageButton"
-                                type="button"
-                                title="Add item"
-                            >
-
-                            </Button>
-                        </View>
-
                     </View>
                 </View>
-                <ModalDialog
-                    show={this.state.openModal}
-                    onCloseModal={this.handleModalClose}
-                    header="Success"
-                    text="You have successfully added new item."
-                />
-            </View>
 
-
+            </ScrollView>
 
 
         );
     }
 }
 export default RegisterPage;
+
 

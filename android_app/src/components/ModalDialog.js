@@ -1,17 +1,31 @@
 import React, { Component } from "react";
-import { Button, Modal } from "react-bootstrap";
-
+import { } from "react-bootstrap";
+import Modal from 'react-native-modal';
+import {
+	StyleSheet,
+	Text,
+	View,
+	StatusBar,
+	TouchableOpacity,
+	TextInput,
+	Button,
+	FlatList,
+} from 'react-native';
 class ModalDialog extends Component {
+
+  constructor(){
+    super(); 
+  }    
+  
   render() {
+    const { show } = this.props;
+    
     return (
-      <Modal
-        show={this.props.show}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        onHide={this.props.onCloseModal}
-      >
-        <Modal.Header closeButton>
+      
+      show &&
+      <View>
+      <Modal  show={true}>
+      <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             {this.props.header}
           </Modal.Title>
@@ -21,11 +35,14 @@ class ModalDialog extends Component {
           <p>{this.props.text}</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.props.onCloseModal} href={this.props.href} title = "Close">
-           
+          <Button onClick={this.props.onCloseModal} href={this.props.href}>
+            Close
           </Button>
         </Modal.Footer>
-      </Modal>
+    </Modal >
+
+    </View>
+    
     );
   }
 }

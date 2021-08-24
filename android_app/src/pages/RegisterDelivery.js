@@ -1,3 +1,5 @@
+
+
 import React, { Component } from 'react';
 import ModalDialog from "../components/ModalDialog";
 import { BASE_URL } from "../../constants.js";
@@ -10,7 +12,6 @@ import {
 	TextInput,
 	Button,
 	FlatList,
-	TouchableHighlight,
 } from 'react-native';
 import Axios from "axios";
 import { Actions } from 'react-native-router-flux';
@@ -48,8 +49,8 @@ export default class Signup extends Component {
 		location: "",
 		longitude: "",
 		latitute: "",
-		street: "",
-		city: "",
+		street : "",
+		 city: "",
 		country: "",
 		latitude: "",
 		longitude: "",
@@ -168,6 +169,9 @@ export default class Signup extends Component {
 
 	}
 	handleSignUp = () => {
+		if (!this.hasRole("ROLE_ADMIN")) {
+			this.setState({ redirect: true });
+		} else {
 		if (this.searchKeyword === null) {
 			this.setState({ addressError: true });
 			return false;
@@ -180,43 +184,44 @@ export default class Signup extends Component {
 			let long = this.state.longitude
 			let lat = this.state.latitute
 
-			let userDTO = {
-				email: this.state.email,
-				firstname: this.state.name,
-				surname: this.state.surname,
-				address: { stree, countr, cit, lat, long },
-				phonenumber: this.state.phoneNumber,
-				password: this.state.password,
-			};
+					let userDTO = {
+						email: this.state.email,
+						firstname: this.state.name,
+						surname: this.state.surname,
+						address: { stree, countr, cit, lat, long },
+						phonenumber: this.state.phoneNumber,
+						password: this.state.password,
+					};
 
-			if (this.validateForm(userDTO)) {
+					if (this.validateForm(userDTO)) {
+					
+						
 
+						Axios.post(BASE_URL + "/api/auth/signupDelivery", userDTO, { validateStatus: () => true, headers: { Authorization: getAuthHeader() }  })
+								.then((res) => {
+									if (res.status === 409) {
+										this.setState({
+											errorHeader: "Resource conflict!",
+											errorMessyage: "Email already exist.",
+											hiddenErrorAlert: false,
+										});
+									} else if (res.status === 500) {
+										this.setState({ errorHeader: "Error", errorMessage: "User with that email already exists.", hiddenErrorAlert: false });
+									} else {
+										console.log("Success");
+										this.setState({ openModal2: true });
+									}
 
+								})
+								.catch((err) => {
+									console.log(err);
 
-				Axios.post(BASE_URL + "/api/auth/signup", userDTO, { validateStatus: () => true })
-					.then((res) => {
-						if (res.status === 409) {
-							this.setState({
-								errorHeader: "Resource conflict!",
-								errorMessyage: "Email already exist.",
-								hiddenErrorAlert: false,
-							});
-						} else if (res.status === 500) {
-							this.setState({ errorHeader: "Error", errorMessage: "User with that email already exists.", hiddenErrorAlert: false });
-						} else {
-							console.log("Success");
-							this.setState({ openModal2: true });
-						}
-
-					})
-					.catch((err) => {
-						console.log(err);
-
-					});
-
-			}
-
+								});
+						
+					}
+			
 		}
+	}
 	};
 
 
@@ -227,7 +232,7 @@ export default class Signup extends Component {
 	render() {
 		return (
 
-			<View style={styles.container}>
+			<View className="container" style={{ marginTop: 2 }}>
 
 
 
@@ -237,9 +242,8 @@ export default class Signup extends Component {
 
 						<View className="control-group">
 							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-								<Text style={styles.text}>Email address:</Text>
+								<Text>Email address:</Text>
 								<TextInput
-									style={styles.inputView}
 									placeholder="Email address"
 									className="form-control"
 									id="email"
@@ -257,10 +261,9 @@ export default class Signup extends Component {
 						</View>
 						<View className="control-group">
 							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-								<Text style={styles.text}>Name:</Text>
+								<Text>Company name:</Text>
 								<TextInput
-									style={styles.inputView}
-									placeholder="Name"
+									placeholder="Company name"
 									class="form-control"
 									type="text"
 									id="name"
@@ -269,48 +272,32 @@ export default class Signup extends Component {
 								/>
 							</View>
 							{this.state.nameError && <View className="text-danger" >
-								<Text>Name must be entered.</Text>
+								<Text>Company name must be entered.</Text>
 							</View>}
 						</View>
-						<View className="control-group">
-							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-								<Text style={styles.text}>Surname:</Text>
-								<TextInput
-									style={styles.inputView}
-									placeholder="Surname"
-									class="form-control"
-									type="text"
-									id="surname"
-									onChange={this.handleSurnameChange}
-									value={this.state.surname}
-								/>
-							</View>
-							{this.state.surnameError && <View className="text-danger" >
-								<Text>Surname must be entered.</Text>
-							</View>}
-						</View>
+					
 
 
-						<Text style={styles.text}>Address:</Text>
+						<Text>Address:</Text>
 						<View>
 
-							<TouchableHighlight
+						<View className="form-group">
+							<Button
 								style={{
-									borderRadius: 100,
-									marginTop: 10,
-									marginBottom: 10
+									background: "#1977cc",
+									marginTop: "15px",
 
-								}}>
-								<Button
-									onPress={this.hhh}
-									className="btn btn-primary btn-xl"
-									id="sendMessageButton"
-									type="button"
-									title="Click to add address"
-								>
+									width: "20%",
+								}}
+								onPress={this.hhh}
+								className="btn btn-primary btn-xl"
+								id="sendMessageButton"
+								type="button"
+								title="Click to add address"
+							>
 
-								</Button>
-							</TouchableHighlight>
+							</Button>
+						</View>
 
 						</View>
 						{this.state.addressError && <View className="text-danger" hidden={this.state.addressError}>
@@ -323,10 +310,10 @@ export default class Signup extends Component {
 
 						<View className="control-group">
 							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-								<Text style={styles.text}>Phone number:</Text>
+								<Text>Phone number:</Text>
 								<TextInput
 									placeholder="Phone number"
-									style={styles.inputView}
+
 									class="form-control"
 									id="phone"
 									type="text"
@@ -339,10 +326,9 @@ export default class Signup extends Component {
 							</View>}
 						</View>
 						<View className="control-group">
-							<Text style={styles.text}>Password:</Text>
+							<Text>Password:</Text>
 							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 								<TextInput
-									style={styles.inputView}
 									placeholder="Password"
 									class="form-control"
 									type="password"
@@ -355,10 +341,9 @@ export default class Signup extends Component {
 							</View>}
 						</View>
 						<View className="control-group">
-							<Text style={styles.text}>Repeat password:</Text>
+							<Text>Repeat password:</Text>
 							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 								<TextInput
-									style={styles.inputView}
 									placeholder="Repeat password"
 									class="form-control"
 									type="password"
@@ -373,100 +358,93 @@ export default class Signup extends Component {
 								<Text>Passwords are not the same.</Text>
 							</View>}
 						</View>
-						<Modal isVisible={this.state.openModal} transparent={false}>
-							
-								<View style={styles.google}>
-									<GooglePlacesAutocomplete
-										fetchDetails={true}
-										placeholder='Search'
-										onPress={(data, details = null) => {
-											console.log(details.formatted_address, details.getPlace, details.getCountry)
-											this.setState({
-												street: details.formatted_address,
-												city: details.getPlace,
-												country: details.getCountry,
-												latitute: details.geometry.location.lat,
-												longitude: details.geometry.location.lng
-											})
-										}}
-										query={{
-											key: 'AIzaSyAsno5WRMrrU_XX-ur8CBRtndECG-0kAfs',
-											language: 'en',
-										}}
-										styles={{
-											textInputContainer: {
-												backgroundColor: 'grey',
-											},
-											textInput: {
-												height: 38,
-												color: '#5d5d5d',
-												fontSize: 16,
-											}, predefinedPlacesDescription: {
-												color: '#1faadb',
-											},
-										}}
+						<Modal isVisible={this.state.openModal}>
+							<View style={{flex: 1}}>
+							<GooglePlacesAutocomplete
+								fetchDetails={true}
+								placeholder='Search'
+								onPress={(data, details = null) => {
+									console.log(details.formatted_address,details.getPlace, details.getCountry )
+									this.setState({	street: details.formatted_address,
+									 city: details.getPlace,
+										country: details.getCountry,
+										latitute :  details.geometry.location.lat,
+										longitude:  details.geometry.location.lng})
+								}}
+								query={{
+									key: 'AIzaSyAsno5WRMrrU_XX-ur8CBRtndECG-0kAfs',
+									language: 'en',
+								}}
+								styles={{
+									textInputContainer: {
+										backgroundColor: 'grey',
+									},
+									textInput: {
+										height: 38,
+										color: '#5d5d5d',
+										fontSize: 16,
+									}, predefinedPlacesDescription: {
+										color: '#1faadb',
+									},
+								}}
 
-									/></View>
-								<TouchableHighlight
-									style={{
-										borderRadius: 30,
-										marginBottom: 300
+							/>
+												<Button
+								style={{
+									background: "#1977cc",
+									marginTop: "15px",
 
-									}}>
-									<Button
+									width: "20%",
+								}}
+								onPress={this.handleModalClose}
+								className="btn btn-primary btn-xl"
+								id="sendMessageButton"
+								type="button"
+								title="Close"
+							>
 
-										onPress={this.handleModalClose}
-										className="btn btn-primary btn-xl"
-										id="sendMessageButton"
-										type="button"
-										title="Close"
-									>
-
-									</Button></TouchableHighlight>
-							
+							</Button>
+							</View>
 						</Modal >
 
 
 						<Modal isVisible={this.state.openModal2}>
 							<Text>You have successfuly registrated</Text>
 							<View >
+							
+												<Button
+								style={{
+									background: "#1977cc",
+									marginTop: "15px",
 
-								<Button
-									style={{
-										background: "#1977cc",
-										marginTop: "15px",
+									width: "20%",
+								}}
+								onPress={this.handleModalClose}
+								className="btn btn-primary btn-xl"
+								id="sendMessageButton"
+								type="button"
+								title="Close"
+							>
 
-										width: "20%",
-									}}
-									onPress={this.handleModalClose}
-									className="btn btn-primary btn-xl"
-									id="sendMessageButton"
-									type="button"
-									title="Close"
-								>
-
-								</Button>
+							</Button>
 							</View>
 						</Modal >
 						<View >
-							<TouchableHighlight
+							<Button
 								style={{
-									borderRadius: 30,
-									marginTop: 10,
-									marginBottom: 10
+									background: "#1977cc",
+									marginTop: "15px",
 
-								}}>
-								<Button
-									color="#ff0000"
-									onPress={this.handleSignUp}
-									className="btn btn-primary btn-xl"
-									id="sendMessageButton"
-									type="button"
-									title="Sign Up"
-								>
+									width: "20%",
+								}}
+								onPress={this.handleSignUp}
+								className="btn btn-primary btn-xl"
+								id="sendMessageButton"
+								type="button"
+								title="Register courier"
+							>
 
-								</Button>
-							</TouchableHighlight>
+							</Button>
 						</View>
 
 					</View>
@@ -482,12 +460,17 @@ export default class Signup extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		marginLeft: 30,
-		marginRight: 30,
-		marginTop: 50
+		backgroundColor: '#455a64',
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
-	text: {
-		fontSize: 16
+	signupTextCont: {
+		flexGrow: 1,
+		alignItems: 'flex-end',
+		justifyContent: 'center',
+		paddingVertical: 16,
+		flexDirection: 'row'
 	},
 	signupText: {
 		color: 'rgba(255,255,255,0.6)',
@@ -497,17 +480,6 @@ const styles = StyleSheet.create({
 		color: '#ffffff',
 		fontSize: 16,
 		fontWeight: '500'
-	},
-	inputView: {
-		backgroundColor: "#D3D3D3",
-		borderRadius: 30,
-		height: 45,
-		marginTop: 10,
-		marginBottom: 10,
-		alignItems: "center",
-	},
-	google: {
-		borderRadius: 30,
-		marginBottom: 50
 	}
 });
+
