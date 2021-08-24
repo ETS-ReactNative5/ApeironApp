@@ -7,6 +7,9 @@ import {
 	TouchableOpacity,
 	Button,
 	TextInput,
+	Image,
+	Link,
+	TouchableHighlight
 } from 'react-native';
 import { BASE_URL } from "../../constants.js";
 import Logo from '../components/Logo';
@@ -25,13 +28,13 @@ class Login extends Component {
 		email: "",
 		password: "",
 		redirect: false,
-		emailError: "none",
-		passwordError: "none",
+		emailError: false,
+		passwordError: false,
 		openPasswordModal: false,
-		oldPasswordEmptyError: "none",
-		newPasswordEmptyError: "none",
-		newPasswordRetypeEmptyError: "none",
-		newPasswordRetypeNotSameError: "none",
+		oldPasswordEmptyError: false,
+		newPasswordEmptyError: false,
+		newPasswordRetypeEmptyError: false,
+		newPasswordRetypeNotSameError: false,
 		errorPasswordHeader: "",
 		errorPasswordMessage: "",
 		hiddenPasswordErrorAlert: true
@@ -44,7 +47,7 @@ class Login extends Component {
 	};
 
 	handleLogin = () => {
-		this.setState({ hiddenErrorAlert: true, emailError: "none", passwordError: "none" });
+		this.setState({ hiddenErrorAlert: true, emailError: false, passwordError: false });
 
 		if (this.validateForm()) {
 			let loginDTO = { email: this.state.email, password: this.state.password };
@@ -68,7 +71,7 @@ class Login extends Component {
 
 
 
-						this.props.navigation.navigate('AddItem')
+						this.props.navigation.navigate('HomePage')
 					}
 				})
 				.catch((err) => {
@@ -79,10 +82,10 @@ class Login extends Component {
 
 	validateForm = () => {
 		if (this.state.email === "") {
-			this.setState({ emailError: "inline" });
+			this.setState({ emailError: true });
 			return false;
 		} else if (this.state.password === "") {
-			this.setState({ passwordError: "inline" });
+			this.setState({ passwordError: true });
 			return false;
 		}
 
@@ -109,66 +112,75 @@ class Login extends Component {
 
 	render() {
 		const { navigate } = this.props.navigation;
-		if (this.state.redirect) return <Redirect push to="/HomePage" />;
+		if (this.state.redirect) return <Redirect push to="/TShirtsWomen" />;
 		return (
 
-			<View className="container" style={{ marginTop: 10 }}>
-
-				<Text h5 className=" text-center  mb-0 text-uppercase" style={{ marginTop: 2 }}>
-					Login
-				</Text>
-
-				<View className="row section-design">
-					<View className="col-lg-8 mx-auto">
+			<View  style={styles.container}>
 
 
-						<View className="control-group">
-							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+
+					<Image style={styles.image} source={require("../images/01-APEIRON-LOGO-new.png")} />
+							<View style={styles.inputView} >
 								<TextInput
 									placeholder="Email address"
 									className="form-control"
 									id="name"
 									type="text"
+									style={styles.TextInput}
 									onChange={this.handleEmailChange}
 									value={this.state.email}
 								/>
 							</View>
-							<View className="text-danger" style={{ display: this.state.emailError }}>
+							{this.state.emailError && <View className="text-danger" >
 								<Text>Email must be entered.</Text>
-							</View>
-						</View>
+							</View>}
+					
 
-						<View className="control-group">
-							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+							<View style={styles.inputView}>
 								<TextInput
 									placeholder="Password"
 									className="form-control"
 									id="password"
-									type="password"
+									secureTextEntry={true}
+									style={styles.TextInput}
 									onChange={this.handlePasswordChange}
 									value={this.state.password}
 								/>
 							</View>
-							<View className="text-danger" style={{ display: this.state.passwordError }}>
+							{this.state.passwordError && <View className="text-danger" >
 								<Text>	Password must be entered.</Text>
-							</View>
-						</View>
+							</View>}
+						
 
-						<View className="form-group">
+							<TouchableHighlight 
+                style ={{
+                    height: 40,
+                    width:300,
+                    borderRadius:80,
+                    marginLeft :50,
+                    marginRight:50,
+                    marginTop :20
+                }}>
 							<Button
-								style={{ background: "#1977cc", marginTop: "15px", marginLeft: "40%", width: "20%" }}
+							
 								onPress={this.handleLogin}
-								className="btn btn-primary btn-xl"
+								color="#ff0000"
 								id="sendMessageButton"
 								type="button"
-								title="	Login"
+								title="	LOGIN"
 							>
-
 							</Button>
-						</View>
+						</TouchableHighlight>
 
-					</View>
-				</View>
+
+
+						<Text>Don't have an account? </Text>
+						<Text style={{color: 'blue'}}
+      onPress={() => {
+		this.props.navigation.navigate('Signup')}}>
+  Sign up
+</Text>
+
 			</View>
 
 
@@ -182,11 +194,11 @@ class Login extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: '#455a64',
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
+		backgroundColor: "#fff",
+		alignItems: "center",
+		justifyContent: "center",
+	  },
 	signupTextCont: {
 		flexGrow: 1,
 		alignItems: 'flex-end',
@@ -202,8 +214,43 @@ const styles = StyleSheet.create({
 		color: '#ffffff',
 		fontSize: 16,
 		fontWeight: '500'
-	}
+	},
+	image: {
+		marginBottom: 40,
+	  },
+	  inputView: {
+		backgroundColor: "#D3D3D3",
+		borderRadius: 30,
+		width: "70%",
+		height: 45,
+		marginBottom: 20,
+	
+		alignItems: "center",
+	  },
+	  TextInput: {
+		height: 50,
+		flex: 1,
+		padding: 10,
+		marginLeft: 20,
+	  }, 
+	  loginText: {
+		height: 50,
+		flex: 1,
+		padding: 10,
+		marginLeft: 20,
+	  }, 
+	  loginBtn: {
+		width: "80%",
+		borderRadius: 25,
+		height: 50,
+		alignItems: "center",
+		justifyContent: "center",
+		marginTop: 40,
+		backgroundColor: "#FF0000",
+	  },
+	
 });
+
 
 
 export default Login;
