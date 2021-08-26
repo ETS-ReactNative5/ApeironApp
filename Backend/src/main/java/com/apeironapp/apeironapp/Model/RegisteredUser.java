@@ -28,6 +28,9 @@ public class RegisteredUser extends PersonUser{
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Address address;
 
+    @Column(name = "aboutUs", nullable = true)
+    private String aboutUs;
+
 
     @JsonManagedReference
     @OneToMany(mappedBy = "registeredUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -74,5 +77,13 @@ public class RegisteredUser extends PersonUser{
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getAboutUs() {
+        return aboutUs;
+    }
+
+    public void setAboutUs(String aboutUs) {
+        this.aboutUs = aboutUs;
     }
 }

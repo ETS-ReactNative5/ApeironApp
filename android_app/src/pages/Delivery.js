@@ -54,39 +54,39 @@ class Delivery extends Component {
 	};
 
 	hasRole = (reqRole) => {
-        let roles = JSON.parse(SyncStorage.get("keyRole"));
+		let roles = JSON.parse(SyncStorage.get("keyRole"));
 
-        if (roles === null) return false;
+		if (roles === null) return false;
 
-        if (reqRole === "*") return true;
+		if (reqRole === "*") return true;
 
-        for (let role of roles) {
-            if (role === reqRole) return true;
-        }
-        return false;
-    };
+		for (let role of roles) {
+			if (role === reqRole) return true;
+		}
+		return false;
+	};
 
 	handleNameChange = (event) => {
-		this.setState({ name: event.nativeEvent.text});
+		this.setState({ name: event.nativeEvent.text });
 	};
 	handleModalClose = () => {
 		this.setState({ openModal: false });
-	
+
 	};
 
-	
+
 	componentDidMount() {
 		if (!this.hasRole("ROLE_ADMIN")) {
 			this.setState({ redirect: true });
-		}else{
-		Axios.get(BASE_URL + "/api/users/delivery", {headers: { Authorization: getAuthHeader() } })
-			.then((res) => {
-				this.setState({ tshirts: res.data });
-				console.log(res.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		} else {
+			Axios.get(BASE_URL + "/api/users/delivery", { headers: { Authorization: getAuthHeader() } })
+				.then((res) => {
+					this.setState({ tshirts: res.data });
+					console.log(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 
 		}
 	}
@@ -99,7 +99,7 @@ class Delivery extends Component {
 		Axios.get(BASE_URL + "/api/users/delete/" + id,{ headers: { Authorization: getAuthHeader() }  })
 			.then((res) => {
 				
-				this.setState({ openModal: true });
+				alert("You have successfuly removed courier")
 		
 			})
 			.catch((err) => {
@@ -108,26 +108,27 @@ class Delivery extends Component {
 
 	};
 
+
 	handleGradeFromChange = (event) => {
-		if (event.nativeEvent.text< 0) this.setState({ gradeFrom: 0 });
-		else this.setState({ gradeFrom: event.nativeEvent.text});
+		if (event.nativeEvent.text < 0) this.setState({ gradeFrom: 0 });
+		else this.setState({ gradeFrom: event.nativeEvent.text });
 	};
 
 	handleGradeToChange = (event) => {
-		if (event.nativeEvent.text> 5) this.setState({ gradeTo: 5 });
-		else this.setState({ gradeTo: event.nativeEvent.text});
+		if (event.nativeEvent.text > 5) this.setState({ gradeTo: 5 });
+		else this.setState({ gradeTo: event.nativeEvent.text });
 	};
 
 	handleDistanceFromChange = (event) => {
-		this.setState({ distanceFrom: event.nativeEvent.text});
+		this.setState({ distanceFrom: event.nativeEvent.text });
 	};
 
 	handleDistanceToChange = (event) => {
-		this.setState({ distanceTo: event.nativeEvent.text});
+		this.setState({ distanceTo: event.nativeEvent.text });
 	};
 
 	handleCityChange = (event) => {
-		this.setState({ city: event.nativeEvent.text});
+		this.setState({ city: event.nativeEvent.text });
 	};
 
 
@@ -146,7 +147,7 @@ class Delivery extends Component {
 	handleColorChange = (e) => {
 
 		let u = [];
-		this.setState({ selectedColor:event.nativeEvent.text}, () => {
+		this.setState({ selectedColor: event.nativeEvent.text }, () => {
 			console.log(this.state);
 		});
 		this.state.colors.forEach((chain) => {
@@ -178,7 +179,7 @@ class Delivery extends Component {
 	};
 
 	handleSizeChange = (e) => {
-		this.setState({ selectedSize:event.nativeEvent.text}, () => {
+		this.setState({ selectedSize: event.nativeEvent.text }, () => {
 			console.log(this.state);
 		});
 		this.changeEndEntitySizeChain(e.target.value);
@@ -199,64 +200,99 @@ class Delivery extends Component {
 		}
 	};
 
+
 	render() {
 
 		return (
-			<View>
+			<ScrollView>
+			<View  style={styles.container}>
 
-				<View className="container">
-					<Text className=" text-center mb-0 mt-2 text-uppercase">Delivery</Text>
+				<View>
 
-					
-						<DataTable  >
-							{this.state.tshirts.map((pharmacy) => (
-							
+
+					<DataTable  >
+						{this.state.tshirts.map((pharmacy) => (
+
+							<View key={pharmacy.company}>
 								<View>
-										<View>
-											<Text>Company name: </Text>
-											<Text>{pharmacy.company}</Text> 
-										</View>
-										<View>
-											<Text>Phone: </Text>
-											<Text> {pharmacy.phoneNumber}</Text>
-										</View>
-										<View>
-											<Text>Address: </Text>
-											<Text> {pharmacy.address.city}, {pharmacy.address.country}, {pharmacy.address.street}</Text>
-										</View>
+									<Text  style={{ fontWeight: 'bold' }}>Company name: </Text>
+									<Text 	style={styles.inputView}>{pharmacy.company}</Text>
+								</View>
+								<View>
+									<Text  style={{ fontWeight: 'bold' }}>Phone: </Text>
+									<Text 	style={styles.inputView}> {pharmacy.phoneNumber}</Text>
+								</View>
+								<View>
+									<Text  style={{ fontWeight: 'bold' }}>Address: </Text>
+									<Text 	style={styles.inputView}> {pharmacy.address.city}, {pharmacy.address.country}, {pharmacy.address.street}</Text>
+								</View>
+
+								{this.hasRole("ROLE_ADMIN") && <View >
+								<TouchableHighlight
+										style={{
+											height: 40,
+											borderRadius: 80,
+											marginTop: 10,
+											marginBottom: 30
+										}}>
+									<Button
 										
-									<View hidden={!this.hasRole("ROLE_ADMIN")}>
-										  <Button
-											style={{
-												background: "#1977cc",
-												marginTop: "15px",
-												marginLeft: "40%",
-												width: "20%",
-											}}
-											onPress={(e)=>this.handleDelete(e,pharmacy.id)}
-											className="btn btn-primary btn-xl"
-											id="sendMessageButton"
-											type="button"
-											title="Delete"
-										>
-									</Button></View>
-									</View>
-								
-							))}
+										onPress={(e) => this.handleDelete(e, pharmacy.id)}
+										className="btn btn-primary btn-xl"
+										id="sendMessageButton"
+										type="button"
+										title="Delete"
+									>
+									</Button>
+									</TouchableHighlight>
+									</View>}
+							</View>
+
+						))}
 					</	DataTable >
 				</View>
-				<ModalDialog
-                    show={this.state.openModal}
-                    onCloseModal={this.handleModalClose}
-                    header="Success"
-                    text="You have successfully removed the item."
-                />
-
 			
-				</View>
+
+
+			</View>
+			
+</ScrollView>
 		);
 	}
 }
 
 export default Delivery;
+
+const styles = StyleSheet.create({
+	container: {
+		marginLeft: 30,
+		marginRight: 30,
+		marginTop: 50
+	},
+	text: {
+		fontSize: 16
+	},
+	signupText: {
+		color: 'rgba(255,255,255,0.6)',
+		fontSize: 16
+	},
+	signupButton: {
+		color: '#ffffff',
+		fontSize: 16,
+		fontWeight: '500'
+	},
+	inputView: {
+		backgroundColor: "#D3D3D3",
+		borderRadius: 5,
+		height: 45,
+		marginTop: 10,
+		marginBottom: 10,
+		alignItems: "center",
+		color: "black"
+	},
+	google: {
+		borderRadius: 30,
+		marginBottom: 50
+	}
+});
 

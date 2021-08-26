@@ -81,11 +81,13 @@ class Contact extends Component {
 
 		Axios.get(BASE_URL + "/api/admin", { validateStatus: () => true })
 			.then((res) => {
+				console.log(res.data)
+				console.log("AAAAAAAAAAAAAAAAAA")
 				if (res.status !== 401) {
 					console.log(res.data)
 					this.setState({
 						id: res.data.Id,
-						email: res.data.contactEmail,
+						email: res.data.email,
 						phonenumber: res.data.phoneNumber,
 						address: res.data.address,
 						aboutUs: res.data.aboutUs,
@@ -147,9 +149,10 @@ class Contact extends Component {
 
 		//const regexPhone = /^([+]?[0-9]{3,6}[-]?[\/]?[0-9]{3,5}[-]?[\/]?[0-9]*)$/;
 		//console.log(regexPhone.test(userDTO.phoneNumber));
-		if (this.addressInput.current.value === "") {
+		if (this.searchKeyword === null) {
 			this.setState({ addressError: true });
 			return false;
+
 		} else if (userDTO.phoneNumber === "") {
 			this.setState({ phoneError: true });
 			return false;
@@ -185,16 +188,16 @@ class Contact extends Component {
 		}
 
 
-		let stree = this.state.street
-		let countr = this.state.country
-		let cit = this.state.city
-		let long = this.state.longitude
-		let lat = this.state.latitute
+		let street = this.state.street
+		let country = this.state.country
+		let city = this.state.city
+		let longitude = this.state.longitude
+		let latitude = this.state.latitute
 
 
 		let userDTO = {
-			address: { stree, countr, cit, lat, long },
-			phoneNumber: this.state.phonenumber,
+			address: { street, country, city, longitude, latitude },
+			phonenumber: this.state.phonenumber,
 			contactEmail: this.state.email,
 			aboutUs: this.state.aboutUs,
 
@@ -202,34 +205,27 @@ class Contact extends Component {
 		console.log(userDTO);
 
 		if (this.validateForm(userDTO)) {
-			if (found === false) {
-				this.setState({ addressNotFoundError: true });
-			} else {
-				console.log(userDTO);
-				Axios.put(BASE_URL + "/api/admin/update", userDTO, {
-					validateStatus: () => true,
-					headers: { Authorization: getAuthHeader() },
-				})
-					.then((res) => {
-						if (res.status === 400) {
-							this.setState({ hiddenFailAlert: false, failHeader: "Bad request", failMessage: "Invalid argument." });
-						} else if (res.status === 500) {
-							this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
-						} else if (res.status === 204) {
-							console.log("Success");
 
-							this.setState({
-								hiddenSuccessAlert: false,
-								successHeader: "Success",
-								successMessage: "You successfully updated your information.",
-								hiddenEditInfo: true,
-							});
-						}
-					})
-					.catch((err) => {
-						console.log(err);
-					});
-			}
+			console.log(userDTO);
+			Axios.put(BASE_URL + "/api/admin/update", userDTO, {
+				validateStatus: () => true,
+				headers: { Authorization: getAuthHeader() },
+			})
+				.then((res) => {
+					if (res.status === 400) {
+						this.setState({ hiddenFailAlert: false, failHeader: "Bad request", failMessage: "Invalid argument." });
+					} else if (res.status === 500) {
+						this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
+					} else if (res.status === 204) {
+						alert("Success");
+						this.setState({ hiddenEditInfo: true, });
+
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+
 		}
 	};
 
@@ -294,18 +290,17 @@ class Contact extends Component {
 			<View>
 				<View >
 
-					<Text >
-						User information
-					</Text>
-					<View className="row mt-5">
+
+				<ScrollView>
+					<View style={styles.container}>
 						<View className="col shadow p-3 bg-white rounded">
-							<Text className=" text-center text-uppercase">Contact Information</Text>
 
 							<View className="control-group">
 								<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 
 									<TextInput
-										readOnly={this.state.hiddenEditInfo}
+										style={styles.inputView}
+										editable={!this.state.hiddenEditInfo}
 										className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
 										placeholder="Contact email"
 										type="text"
@@ -316,7 +311,22 @@ class Contact extends Component {
 
 							</View>
 
-							<View className="control-group">
+							{this.state.hiddenEditInfo && <View className="control-group">
+								<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+
+									<TextInput
+										style={styles.inputView}
+										editable={!this.state.hiddenEditInfo}
+										className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
+										placeholder={this.state.aStreet}
+										type="text"
+									/>
+								</View>
+
+							</View>}
+
+
+							{!this.state.hiddenEditInfo && <View className="control-group">
 								<View className="form-group">
 									<Button
 										style={{
@@ -336,17 +346,18 @@ class Contact extends Component {
 								</View>
 								{this.state.addressError && <View className="text-danger" >
 									<Text>Address must be entered.</Text>
-									</View>}
-									{this.state.addressNotFoundError && <View className="text-danger" >
+								</View>}
+								{this.state.addressNotFoundError && <View className="text-danger" >
 									<Text>Sorry. Address not found. Try different one.</Text>
-						
-									</View>}
-							</View>
+
+								</View>}
+							</View>}
 							<View className="control-group">
 								<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 
 									<TextInput
-										readOnly={this.state.hiddenEditInfo}
+										style={styles.inputView}
+										editable={!this.state.hiddenEditInfo}
 										className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
 										placeholder="Phone number"
 										type="text"
@@ -356,14 +367,15 @@ class Contact extends Component {
 								</View>
 								{this.state.phoneError && <View className="text-danger" >
 									<Text>Phone number must be entered.</Text>
-									</View>}
+								</View>}
 							</View>
 
 							<View className="control-group">
 								<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 
 									<TextInput
-										readOnly={this.state.hiddenEditInfo}
+										style={styles.inputView}
+										editable={!this.state.hiddenEditInfo}
 										className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
 										placeholder="About us"
 										type="text"
@@ -374,22 +386,33 @@ class Contact extends Component {
 
 							</View>
 
-							<View className="form-group text-center" hidden={this.state.hiddenEditInfo}>
-								<Button
-									style={{ background: "#1977cc", marginTop: "15px" }}
-									onPress={this.handleChangeInfo}
-									className="btn btn-primary btn-xl"
-									id="sendMessageButton"
-									type="button"
-									title="Change information"
-								>
-								</Button>
-							</View>
+							{this.hasRole("ROLE_ADMIN") && !this.state.hiddenEditInfo && <View className="form-group text-center" >
+								<TouchableHighlight
+									style={{
+										height: 40,
+										borderRadius: 80,
+										marginTop: 20
+									}}>
+									<Button
 
-							<View className="form-group" hidden={!this.hasRole("ROLE_ADMIN")}>
+
+										color="#ff0000"
+										onPress={this.handleChangeInfo}
+										className="btn btn-primary btn-xl"
+										id="sendMessageButton"
+										type="button"
+										title="Change information"
+									>
+									</Button>
+								</TouchableHighlight>
+
+
+							</View>}
+
+							{this.hasRole("ROLE_ADMIN") && <View className="form-group" >
 								<View className="form-group controls mb-0 pb-2">
 									<View className="form-row justify-content-center">
-										<View className="form-col" hidden={!this.state.hiddenEditInfo}>
+										{this.state.hiddenEditInfo && <View className="form-col" >
 											<Button
 												onPress={this.handleEditInfoClick}
 												className="btn btn-outline-primary btn-xl"
@@ -398,12 +421,12 @@ class Contact extends Component {
 												title="Edit info"
 											>
 											</Button>
-										</View>
+										</View>}
 
 
 									</View>
 								</View>
-							</View>
+							</View>}
 
 						</View>
 
@@ -412,15 +435,15 @@ class Contact extends Component {
 
 
 
+						{!this.hasRole("ROLE_ADMIN") && <View style={styles.container}>
+							<View className="col shadow p-3 bg-white rounded">
+								<Text style={styles.text}>Contact us</Text>
 
-					<View className="row mt-5" hidden={this.hasRole("ROLE_ADMIN")} >
-						<View className="col shadow p-3 bg-white rounded">
-							<Text className=" text-center text-uppercase">Contact us</Text>
-							
 								<View className="control-group">
 									<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 
 										<TextInput
+											style={{ backgroundColor: "#E8E8E8" }}
 											className="form-control"
 											placeholder="First name"
 											type="text"
@@ -440,6 +463,7 @@ class Contact extends Component {
 											type="text"
 											onChange={this.handleSurnameChange}
 											value={this.state.surname}
+											style={{ backgroundColor: "#E8E8E8" }}
 										/>
 									</View>
 
@@ -454,6 +478,7 @@ class Contact extends Component {
 											type="text"
 											onChange={this.handleEmaillChange}
 											value={this.state.emaill}
+											style={{ backgroundColor: "#E8E8E8" }}
 										/>
 									</View>
 
@@ -468,6 +493,7 @@ class Contact extends Component {
 											type="text"
 											onChange={this.handlePhoneChange}
 											value={this.state.phone}
+											style={{ backgroundColor: "#E8E8E8" }}
 										/>
 									</View>
 
@@ -482,6 +508,7 @@ class Contact extends Component {
 											type="text"
 											onChange={this.handleMessageChange}
 											value={this.state.message}
+											style={{ backgroundColor: "#E8E8E8" }}
 										/>
 									</View>
 
@@ -497,28 +524,32 @@ class Contact extends Component {
 										type="button"
 										title="Send"
 									>
-									
+
 									</Button>
 								</View>
 
 
-						
-						</View>
 
-					</View>
-				</View>
-				<Modal isVisible={this.state.openModal}>
-							<View style={{flex: 1}}>
+							</View>
+
+						</View>}
+					</ScrollView>
+					<Modal isVisible={this.state.openModal}>
+						<View style={{ flex: 1 }}>
 							<GooglePlacesAutocomplete
 								fetchDetails={true}
-								placeholder={this.state.aStreet +', '+ this.state.aCity +', '+ this.state.aCountry } 
+								placeholder={this.state.aStreet}
 								onPress={(data, details = null) => {
-									console.log(details.formatted_address,details.getPlace, details.getCountry )
-									this.setState({	street: details.formatted_address,
-									 city: details.getPlace,
+
+									console.log("sfjfnskjdfjsdfkjdsbmjsbdsbhdmh")
+									console.log(details.formatted_address, details.getPlace, details.getCountry)
+									this.setState({
+										street: details.formatted_address,
+										city: details.getPlace,
 										country: details.getCountry,
-										latitute :  details.geometry.location.lat,
-										longitude:  details.geometry.location.lng})
+										latitute: details.geometry.location.lat,
+										longitude: details.geometry.location.lng
+									})
 								}}
 								query={{
 									key: 'AIzaSyAsno5WRMrrU_XX-ur8CBRtndECG-0kAfs',
@@ -538,7 +569,7 @@ class Contact extends Component {
 								}}
 
 							/>
-												<Button
+							<Button
 								style={{
 									background: "#1977cc",
 									marginTop: "15px",
@@ -553,15 +584,15 @@ class Contact extends Component {
 							>
 
 							</Button>
-							</View>
-						</Modal >
+						</View>
+					</Modal >
 
 
-						<Modal isVisible={this.state.openModal2}>
-							<Text>You have successfuly registrated</Text>
-							<View >
-							
-												<Button
+					<Modal isVisible={this.state.openModal2}>
+						<Text>You have successfuly registrated</Text>
+						<View >
+
+							<Button
 								style={{
 									background: "#1977cc",
 									marginTop: "15px",
@@ -576,8 +607,9 @@ class Contact extends Component {
 							>
 
 							</Button>
-							</View>
-						</Modal >
+						</View>
+					</Modal >
+				</View>
 			</View>
 
 		);
@@ -585,3 +617,36 @@ class Contact extends Component {
 }
 
 export default Contact;
+
+const styles = StyleSheet.create({
+	container: {
+		marginLeft: 30,
+		marginRight: 30,
+		marginTop: 50
+	},
+	text: {
+		fontSize: 16
+	},
+	signupText: {
+		color: 'rgba(255,255,255,0.6)',
+		fontSize: 16
+	},
+	signupButton: {
+		color: '#ffffff',
+		fontSize: 16,
+		fontWeight: '500'
+	},
+	inputView: {
+		backgroundColor: "#D3D3D3",
+		borderRadius: 5,
+		height: 45,
+		marginTop: 10,
+		marginBottom: 10,
+		alignItems: "center",
+		color: "black"
+	},
+	google: {
+		borderRadius: 30,
+		marginBottom: 50
+	}
+});

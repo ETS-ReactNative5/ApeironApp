@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Axios from "axios";
 import { BASE_URL } from "../../constants.js";
-import PharmacyLogo from "../static/naslovna-duks.png";
+import PharmacyLogo from "./../static/naslovna-duks.png";
 
 import { Redirect } from "react-router-dom";
 import Order from "../components/Order";
@@ -68,8 +68,7 @@ class TShirtsMen extends Component {
 		this.setState({ name: event.nativeEvent.text });
 	};
 	handleModalClose = () => {
-		this.setState({ openModal: false });
-		window.location.reload();
+		this.setState({ showOrderModal: false });
 	};
 
 
@@ -78,7 +77,7 @@ class TShirtsMen extends Component {
 		Axios.get(BASE_URL + "/api/items/tshirt-men")
 			.then((res) => {
 				this.setState({ tshirts: res.data });
-		
+console.log(res.data)
 			})
 			.catch((err) => {
 				console.log(err);
@@ -138,16 +137,16 @@ class TShirtsMen extends Component {
 	};
 
 	handleColorChange = (e) => {
-		
+
 		this.setState({ selectedColor: e }, () => {
 		});
 		this.state.colors.forEach((chain) => {
 			if (chain.color == e) {
 				chain.sizes.forEach((s) => {
-				console.log(s);
-			
-				this.state.sizes.push(s)
-				this.state.showedSizes.push(s)
+					console.log(s);
+
+					this.state.sizes.push(s)
+					this.state.showedSizes.push(s)
 				});
 			}
 		});
@@ -200,52 +199,54 @@ class TShirtsMen extends Component {
 
 			<View className="container" style={{ marginTop: 10 }}>
 				<ScrollView>
-				<Order isVisible={this.state.showOrderModal}
-					buttonName="Send reservation"
-					header="Make new reservation"
-					onCloseModal={this.handleOrderModalClose}
-					handleColorChange={this.handleColorChange}
-					handleSizeChange={this.handleSizeChange}
-					shirt={this.state.shirt}
-					showedColors={this.state.colors}
-					selectedColor={this.state.selectedColor}
-					showedSizes={this.state.sizes}
-					selectedSize={this.state.selectedSize}
-				/> 
-				
-			
+					<Order isVisible={this.state.showOrderModal}
 
-				<DataTable >
+						handleModalClose={this.handleModalClose}
+						buttonName="Send reservation"
+						header="Make new reservation"
+						onCloseModal={this.handleOrderModalClose}
+						handleColorChange={this.handleColorChange}
+						handleSizeChange={this.handleSizeChange}
+						shirt={this.state.shirt}
+						showedColors={this.state.colors}
+						selectedColor={this.state.selectedColor}
+						showedSizes={this.state.sizes}
+						selectedSize={this.state.selectedSize}
+					/>
 
-					{this.state.tshirts.map((pharmacy) => (
-					
-						
-						<View key={pharmacy.id}>
-							<Image style={styles.image} source={{uri: pharmacy.files[0]}}  />
-							 <View style={styles.loginText}>
-									<Text style={{ fontWeight: 'bold' }} >Name: </Text><Text>{pharmacy.name} </Text>
-									</View>
-									<View style={styles.loginText}>
-									<Text style={{ fontWeight: 'bold' }}>Price:  </Text><Text> {pharmacy.price}</Text>
-									</View>
-								<View  key={pharmacy.id}>
+
+
+					<DataTable >
+
+						{this.state.tshirts.map((pharmacy) => (
+
+
+							<View key={pharmacy.id}>
+								<Image style={styles.image} source={{ uri: pharmacy.files[0] }} />
 								<View style={styles.loginText}>
-									<Text style={{ fontWeight: 'bold' }}>Available colors: </Text>
-									{pharmacy.colors.map((color) => (
-										<View key={color.color}><Text key={color.color}> {color.color}</Text>
-									
-											{color.sizes.map((size) => (
-														<View key={size.size}>
-												<DataTable.Cell key={size.size}> <Text>{size.size} </Text><Text style={{ fontWeight: 'bold' }}>available: </Text><Text>{size.quantity}</Text></DataTable.Cell>
-												</View>
+									<Text style={{ fontWeight: 'bold' }} >Name: </Text><Text>{pharmacy.name} </Text>
+								</View>
+								<View style={styles.loginText}>
+									<Text style={{ fontWeight: 'bold' }}>Price:  </Text><Text> {pharmacy.price}</Text>
+								</View>
+								<View key={pharmacy.id}>
+									<View style={styles.loginText}>
+										<Text style={{ fontWeight: 'bold' }}>Available colors: </Text>
+										{pharmacy.colors.map((color) => (
+											<View key={color.color}><Text key={color.color}> {color.color}</Text>
 
-											))}
-											
-										</View>
+												{color.sizes.map((size) => (
+													<View key={size.size}>
+														<DataTable.Cell key={size.size}> <Text>{size.size} </Text><Text style={{ fontWeight: 'bold' }}>available: </Text><Text>{size.quantity}</Text></DataTable.Cell>
+													</View>
+
+												))}
+
+											</View>
 
 
-									))}
-</View>
+										))}
+									</View>
 								</View>
 
 
@@ -254,56 +255,61 @@ class TShirtsMen extends Component {
 
 
 
-								<View style={styles.loginBtn} hidden={!this.hasRole("ROLE_USER")}>
-								<TouchableHighlight 
-                style ={{
-                    height: 40,
-                    width:300,
-                    borderRadius:80,
-                    marginLeft :50,
-                    marginRight:50,
-                    marginTop :10
-                }}>
-									<Button
-									
-										color= "#88c7dc"
-										onPress={() => this.handleClickOnPharmacy(pharmacy)}
-										className="btn btn-primary btn-xl"
-										id="sendMessageButton"
-										type="Button"
-										title="Reserve"
-									>
-									</Button>
-									</TouchableHighlight></View>
-								<View hidden={!this.hasRole("ROLE_ADMIN")}>
-								<TouchableHighlight 
-                style ={{
-                    height: 40,
-                    width:300,
-                    borderRadius:80,
-                    marginLeft :50,
-                    marginRight:50,
-                    marginTop : 10
-                }}>
-									<Button
-										color= "#88c7dc"
-										onPress={(e) => this.handleDelete(e, pharmacy.id)}
-										className="btn btn-primary btn-xl"
-										id="sendMessageButton"
-										type="Button"
-										title="Delete"
-									>
-									</Button></TouchableHighlight></View>
-									</View>
-					))}
-					
-				</DataTable>
+								{this.hasRole("ROLE_USER") &&
+
+								<View style={styles.loginBtn} >
+									<TouchableHighlight
+										style={{
+											height: 40,
+											width: 300,
+											borderRadius: 80,
+											marginLeft: 50,
+											marginRight: 50,
+											marginTop: 10
+										}}>
+										<Button
+
+											color="#88c7dc"
+											onPress={() => this.handleClickOnPharmacy(pharmacy)}
+											className="btn btn-primary btn-xl"
+											id="sendMessageButton"
+											type="Button"
+											title="Reserve"
+										>
+										</Button>
+									</TouchableHighlight></View>}
+
+
+									{this.hasRole("ROLE_ADMIN") &&
+								<View >
+									<TouchableHighlight
+										style={{
+											height: 40,
+											width: 300,
+											borderRadius: 80,
+											marginLeft: 50,
+											marginRight: 50,
+											marginTop: 10
+										}}>
+										<Button
+											color="#88c7dc"
+											onPress={(e) => this.handleDelete(e, pharmacy.id)}
+											className="btn btn-primary btn-xl"
+											id="sendMessageButton"
+											type="Button"
+											title="Delete"
+										>
+										</Button></TouchableHighlight></View>}
+							</View>
+						))}
+
+					</DataTable>
 				</ScrollView>
 			</View>
-			
+
 
 		);
-		
+
 	}
 }
 
@@ -322,17 +328,17 @@ const styles = StyleSheet.create({
 		marginLeft: 50,
 		fontWeight: "bold"
 	},
-		image: {
+	image: {
 		marginTop: 20,
 		marginLeft: 50,
 		width: 300,
 		height: 200,
-	  },
-	  loginBtn: {
-		
+	},
+	loginBtn: {
+
 		borderRadius: 25,
-	
-	  },
+
+	},
 
 });
 

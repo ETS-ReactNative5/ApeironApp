@@ -7,7 +7,7 @@ import Order from "../components/Order";
 import ModalDialog from "../components/ModalDialog";
 import DeliveryInsert from "../components/DeliveryInsert";
 import getAuthHeader from "../../GetHeader";
-
+import Moment from 'moment';
 import { DataTable } from 'react-native-paper';
 import {
     StyleSheet,
@@ -37,7 +37,7 @@ class AllOrders extends Component {
     handleColorChange = (e) => {
 
         let u = [];
-        this.setState({ selectedCourier: event.nativeEvent.text }, () => {
+        this.setState({ selectedCourier: e }, () => {
             console.log(this.state);
         });
 
@@ -90,6 +90,7 @@ class AllOrders extends Component {
         } else {
             Axios.get(BASE_URL + "/api/reservations/couriers", { validateStatus: () => true, headers: { Authorization: getAuthHeader() } })
                 .then((res) => {
+                    console.log("EEEEEE")
                     this.setState({ couriers: res.data });
                     console.log(res.data);
                 })
@@ -112,9 +113,8 @@ class AllOrders extends Component {
 
         Axios.get(BASE_URL + "/api/reservations/remove/" + reservation.reservationId)
             .then((res) => {
-                this.setState({ reservations: res.data });
-                console.log(res.data);
-                this.setState({ openModal: true });
+                console.log("USPELOOOOOOOOO")
+                alert("You have succesfully removed order.")
             })
             .catch((err) => {
                 console.log(err);
@@ -132,6 +132,7 @@ class AllOrders extends Component {
 
     send = (e, courier, order) => {
 
+        console.log("flskfksehhke")
         let id = ""
         this.state.couriers.forEach((cour) => {
             if (cour.company === courier) {
@@ -145,7 +146,7 @@ class AllOrders extends Component {
             .then((res) => {
 
                 console.log(res.data);
-                this.setState({ openModal2: true });
+               alert("You have successfully sent an order.")
             })
             .catch((err) => {
                 console.log(err);
@@ -155,66 +156,66 @@ class AllOrders extends Component {
 
     render() {
 
-
+        Moment.locale('en');
+        var dt = '2016-05-02';
         return (
 
-            <View>
+            <View style={styles.container}>
                 <ScrollView>
-                    <Text className=" text-center mb-0 mt-2 text-uppercase">My orders</Text>
 
 
                     <DataTable >
 
                         {this.state.reservations.map((reservation) => (
-                            <View>
-                                <Image className="img-fluid" source={reservation.files?.[0] ?? PharmacyLogo} />
+                            <View key={reservation.user}>
+                                <Image style={styles.image} source={{ uri: reservation.files[0] }} />
 
 
+                                {!this.hasRole("ROLE_USER") &&  <View>
+                                    <Text style={{ fontWeight: 'bold' }}>STATUS: </Text>
+                                    <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}> {reservation.status}</Text>
+                                </View>}
                                 <View>
-                                    <Text>STATUS: </Text>
-                                    <Text> {reservation.status}</Text>
+                                    <Text style={{ fontWeight: 'bold' }}>Date of reservation: </Text>
+                                    <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}> {Moment(reservation.dateOfReservation, "YYYYMMDD").format('MMMM Do YYYY')} </Text>
                                 </View>
                                 <View>
-                                    <Text>Date of reservation: </Text>
-                                    <Text> {new Date(reservation.dateOfReservation).toLocaleDateString()}</Text>
+                                    <Text style={{ fontWeight: 'bold' }}>Due date: </Text>
+                                    <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}>{Moment(reservation.dueDate, "YYYYMMDD").format('MMMM Do YYYY')} </Text>
                                 </View>
-                                <View>
-                                    <Text>Due date: </Text>
-                                    <Text> {new Date(reservation.dueDate).toLocaleDateString()}</Text>
-                                </View>
-                                <View>
-                                    <Text>User: </Text>
-                                     <Text>{reservation.user}</Text>
-                                </View>
-                                <View>
-                                    <Text>Contact number: </Text>
-                                    <Text> {reservation.phone}</Text>
-                                </View>
+                                {!this.hasRole("ROLE_USER") && <View>
+                                    <Text style={{ fontWeight: 'bold' }}>User: </Text>
+                                     <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}>{reservation.user}</Text>
+                                </View>}
+                                {!this.hasRole("ROLE_USER") &&  <View>
+                                    <Text style={{ fontWeight: 'bold' }}>Contact number: </Text>
+                                    <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}> {reservation.phone}</Text>
+                                </View>}
                                 <View>  
-                                    <Text>Item type: </Text>
-                                    <Text>{reservation.itemType} </Text>
+                                    <Text style={{ fontWeight: 'bold' }}>Item type: </Text>
+                                    <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}>{reservation.itemType} </Text>
                                     </View>
                                 <View>  
-                                    <Text>Item gender: </Text>
-                                    <Text>{reservation.itemGender}</Text>
+                                    <Text style={{ fontWeight: 'bold' }}>Item gender: </Text>
+                                    <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}>{reservation.itemGender}</Text>
                                     </View>
                                 <View> 
-                                     <Text>Item name: </Text>
-                                    <Text>{reservation.itemName}</Text>
+                                     <Text style={{ fontWeight: 'bold' }}>Item name: </Text>
+                                    <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}>{reservation.itemName}</Text>
                                     </View>
 
 
                                 <View>
-                                    <Text>Reserved color and size: </Text>
+                                    <Text style={{ fontWeight: 'bold', marginBottom: 25 }}>Reserved color and size: </Text>
                                     {reservation.itemInOrderDTOSet.map((item) => (
-                                        <View>  
-                                            <Text>Item color: </Text>
-                                            <Text>{item.color}    </Text>
-                                            <Text>Item size: </Text>
-                                            <Text>  {item.size}</Text>
+                                        <View key={item.color}>  
+                                            <Text style={{ fontWeight: 'bold' }}>Item color: </Text>
+                                            <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}>{item.color}    </Text>
+                                            <Text style={{ fontWeight: 'bold' }}>Item size: </Text>
+                                            <Text style={{ backgroundColor: "#E8E8E8", height: 25 }}>  {item.size}</Text>
 
-                                            <Text>Item quantity: </Text>
-                                            <Text>{item.quantity}</Text>
+                                            <Text style={{ fontWeight: 'bold' }}>Item quantity: </Text>
+                                            <Text style={{ backgroundColor: "#E8E8E8", height: 25 , marginBottom: 30}}>{item.quantity}</Text>
                                             </View>
 
 
@@ -222,18 +223,31 @@ class AllOrders extends Component {
 
                                 </View>
 
-                                <View hidden={!this.hasRole("ROLE_USER")}> 
+                                {this.hasRole("ROLE_USER") && <View > 
+                                <TouchableHighlight
+										style={{
+											height: 40,
+											borderRadius: 80,
+											marginTop: 10
+										}}>
                                  <Button
 
                                     onPress={(e) => this.handleRemove(e, reservation)}
-                                    className="btn btn-primary btn-xl"
                                     id="sendMessageButton"
                                     type="button"
                                     title="Remove"
                                 >
-                                </Button></View>
+                                </Button>
+                                </TouchableHighlight>
+                                </View>}
 
-                                <View hidden={!this.hasRole("ROLE_ADMIN") || reservation.status === "SENT"}> 
+                                {this.hasRole("ROLE_ADMIN") && reservation.status != "SENT" && <View > 
+                                <TouchableHighlight
+										style={{
+											height: 40,
+											borderRadius: 80,
+											marginTop: 10
+										}}>
                                  <Button
 
                                     onPress={(e) => this.handleRemove(e, reservation)}
@@ -242,9 +256,17 @@ class AllOrders extends Component {
                                     type="button"
                                     title="Decline"
                                 >
-                                </Button></View>
+                                </Button>
+                                </TouchableHighlight>
+                                </View>}
 
-                                <View hidden={!this.hasRole("ROLE_ADMIN") || reservation.status === "SENT"}>  
+                                {this.hasRole("ROLE_ADMIN") && reservation.status != "SENT" && <View >  
+                                <TouchableHighlight
+										style={{
+											height: 40,
+											borderRadius: 80,
+											marginTop: 10
+										}}>
                                 <Button
                                     onPress={(e) => this.handleQR(e, reservation)}
                                     className="btn btn-primary btn-xl"
@@ -252,7 +274,9 @@ class AllOrders extends Component {
                                     type="button"
                                     title="Order sent"
                                 >
-                                </Button></View>
+                                </Button>
+                                </TouchableHighlight>
+                                </View>}
                             </View>
 
                         ))}
@@ -291,4 +315,30 @@ class AllOrders extends Component {
 }
 
 export default AllOrders;
+
+const styles = StyleSheet.create({
+    container: {
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 50
+    },
+	loginText: {
+		flex: 1,
+		padding: 3,
+		marginLeft: 50,
+		fontWeight: "bold"
+	},
+	image: {
+		marginTop: 20,
+		marginLeft: 50,
+		width: 300,
+		height: 200,
+	},
+	loginBtn: {
+
+		borderRadius: 25,
+
+	},
+
+});
 

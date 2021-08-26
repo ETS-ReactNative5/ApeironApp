@@ -222,20 +222,19 @@ class QRCodes extends Component {
 		return (
 
 			<View>
-				<View className="container" style={{ marginTop: "10%" }}>
-					<Text className=" text-center mb-0 mt-2 text-uppercase">QR codes</Text>
+				<View >
 
 					
 					<DataTable  >
 						
 							{this.state.tshirts.map((pharmacy) => (
-								<View>
+								<View key={pharmacy.user}>
 								
 										<View>
 											<Text>User: </Text><Text> {pharmacy.user}</Text>
 										</View>
 										
-										<Image className="img-fluid" source={pharmacy.files?.[0] ?? PharmacyLogo} width="300em" />
+										<Image  style={styles.image}  source={{uri: pharmacy.files[0]} } />
 									
 								
 								
@@ -259,3 +258,29 @@ class QRCodes extends Component {
 
 export default QRCodes;
 
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "#fff",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	loginText: {
+		flex: 1,
+		padding: 3,
+		marginLeft: 50,
+		fontWeight: "bold"
+	},
+	image: {
+		marginTop: 20,
+		marginLeft: 50,
+		width: 300,
+		height: 300,
+	},
+	loginBtn: {
+
+		borderRadius: 25,
+
+	},
+
+});

@@ -59,4 +59,14 @@ public class Admin extends PersonUser{
     public void setContactEmail(String contactEmail) {
         this.contactEmail = contactEmail;
     }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "phoneNumber='" + phoneNumber + '\'' +
+                ", address=" + address +
+                ", aboutUs='" + aboutUs + '\'' +
+                ", contactEmail='" + contactEmail + '\'' +
+                '}';
+    }
 }

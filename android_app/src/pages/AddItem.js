@@ -7,6 +7,9 @@ import SyncStorage from 'sync-storage';
 import { Modal } from "react-bootstrap";
 import { Picker } from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
+
+import ModalDialog from "../components/ModalDialog";
+import { DataTable } from 'react-native-paper';
 import {
     StyleSheet,
     Text,
@@ -16,7 +19,8 @@ import {
     Button,
     TextInput,
     Image,
-    ScrollView
+    ScrollView,
+    TouchableHighlight
 } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker'
 class RegisterPage extends Component {
@@ -39,9 +43,9 @@ class RegisterPage extends Component {
             hiddenErrorAlert: true,
             name: "",
             price: "",
-            nameError: "none",
-            typeError: "none",
-            priceError: "none",
+            nameError: false,
+            typeError: false,
+            priceError: false,
             selectedType: "",
             openModal: false,
             quantity: [],
@@ -124,7 +128,7 @@ class RegisterPage extends Component {
     }
     componentDidMount() {
         if (!this.hasRole("ROLE_ADMIN")) {
-        
+
             this.setState({ redirect: true });
         } else {
             Axios.get(BASE_URL + "/api/admin/colors", { validateStatus: () => true, headers: { Authorization: getAuthHeader() } })
@@ -181,11 +185,11 @@ class RegisterPage extends Component {
             uri: this.state.filePath,
             type: 'image/jpeg',
             name: 'photo.jpg',
-          };
-          
-          var form = new FormData();
-          form.append("file", photo);
-          
+        };
+
+        var form = new FormData();
+        form.append("file", photo);
+
         const options = {
             method: "POST",
             body: form
@@ -296,19 +300,19 @@ class RegisterPage extends Component {
 
     validateForm = (itemDTO) => {
         this.setState({
-            nameError: "none",
-            priceError: "none",
-            typeError: "none"
+            nameError: false,
+            priceError: false,
+            typeError: false
         });
 
         if (itemDTO.name === "") {
-            this.setState({ nameError: "initial" });
+            this.setState({ nameError: true });
             return false;
         } else if (itemDTO.price === "") {
-            this.setState({ priceError: "initial" });
+            this.setState({ priceError: true });
             return false;
         } else if (itemDTO.type === "") {
-            this.setState({ typeError: "initial" });
+            this.setState({ typeError: true });
             return false;
         }
         return true;
@@ -429,32 +433,45 @@ class RegisterPage extends Component {
     };
 
     handleGenderChange(event) {
-
-        this.setState({ gender: event });
+        alert(this.state.gender)
     }
 
     render() {
-        if (this.state.redirect) return <Redirect push to="/" />;
         const { photo } = this.state
         return (
             <ScrollView>
                 <View className="container" style={{ marginTop: 8 }}>
 
-                    <Text h5 className=" text-center  mb-0 text-uppercase" style={{ marginTop: 2 }}>
-                        Add new item
-                    </Text>
 
                     <View className="row section-design">
 
 
                         <View className="col-lg-8 mx-auto">
-                            <Image
-                                source={{ uri: this.state.filePath }}
-                                style={{ width: 200, height: 200 }}
-                            />
-                            <TouchableOpacity onPress={this.imageGalleryLaunch}  >
-                                <Text >Choose image</Text>
-                            </TouchableOpacity>
+                            {this.state.filePath != "" &&
+                                <Image
+                                    source={{ uri: this.state.filePath }}
+                                    style={{ width: 200, height: 200 }}
+                                />}
+
+
+                            <TouchableHighlight
+                                style={{
+                                    height: 40,
+                                    width: 300,
+                                    borderRadius: 80,
+                                    marginLeft: 50,
+                                    marginRight: 50,
+                                    marginTop: 20
+                                }}>
+                                <Button
+
+onPress={this.imageGalleryLaunch}
+                                    id="sendMessageButton"
+                                    type="button"
+                                    title="	Choose image"
+                                >
+                                </Button>
+                            </TouchableHighlight>
 
                             <View className="control-group">
 
@@ -481,8 +498,9 @@ class RegisterPage extends Component {
                             </View>
                             <View className="control-group">
                                 <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-                                    <Text>Insert item name:</Text>
+                                    <Text style={styles.loginText}>Insert item name:</Text>
                                     <TextInput
+                                        style={styles.loginBtn}
                                         placeholder="Name"
                                         class="form-control"
                                         type="text"
@@ -491,26 +509,28 @@ class RegisterPage extends Component {
                                         value={this.state.name}
                                     />
                                 </View>
-                                <View className="text-danger" style={{ display: this.state.nameError }}>
+                                { this.state.nameError && <View className="text-danger">
                                     <Text>Item name must be entered.</Text>
-                                </View>
+                                </View>}
                             </View>
 
 
 
 
 
-                            <View >
+                            <View style={styles.text}>
                                 <RadioButton.Group
-                                    onValueChange={value => this.setState({ value })}
-                                    value={this.state.value}
+                                    onValueChange={value => this.setState({ gender: value })}
+                                    value={this.state.gender}
                                 >
+                                   
                                     <View>
-                                        <RadioButton value='Male' label='Male' onPress={(e) => this.handleGenderChange('Male')} /><Text>Male</Text>
+                                        <RadioButton value='Male' label='Male' onPress={(e) => this.handleGenderChange('Male')}/><Text>Male</Text>
                                     </View>
                                     <View>
                                         <RadioButton value='Female' label='Female' onPress={(e) => this.handleGenderChange('Female')} /><Text>Female</Text>
                                     </View>
+
                                 </RadioButton.Group>
 
                             </View>
@@ -525,8 +545,9 @@ class RegisterPage extends Component {
 
                             <View className="control-group">
                                 <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-                                    <Text>Insert item price:</Text>
+                                    <Text style={styles.loginText}>Insert item price:</Text>
                                     <TextInput
+                                        style={styles.loginBtn}
                                         placeholder="Price"
                                         class="form-control"
                                         type="text"
@@ -535,9 +556,9 @@ class RegisterPage extends Component {
                                         value={this.state.price}
                                     />
                                 </View>
-                                <View className="text-danger" style={{ display: this.state.priceError }}>
+                                { this.state.priceError && <View className="text-danger" >
                                     <Text>Price must be entered.</Text>
-                                </View>
+                                </View>}
                             </View>
 
                             <View>
@@ -584,8 +605,9 @@ class RegisterPage extends Component {
 
                             <View className="control-group">
                                 <View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-                                    <Text>Insert quantity of item:</Text>
+                                    <Text style={styles.loginText}>Insert quantity of item:</Text>
                                     <TextInput
+                                        style={styles.loginBtn}
                                         placeholder="Quantity"
                                         class="form-control"
                                         type="text"
@@ -598,34 +620,61 @@ class RegisterPage extends Component {
                             </View>
 
 
-                            <View>
-                                <Button className="mt-3" onPress={this.handleAddChange} title="Add to chart">
+                            <TouchableHighlight
+                                style={{
+                                    height: 55,
+                                    width: 300,
+                                    borderRadius: 80,
+                                    marginLeft: 50,
+                                    marginRight: 50,
+                                    marginTop: 20
+                                }}>
+                                <Button className="mt-3" onPress={this.handleAddChange} title="Add to table">
 
                                 </Button>
+                            </TouchableHighlight>
+
+                            <View style={styles.loginText}>
+                                <DataTable>
+                                    <DataTable.Header>
+                                        <DataTable.Title>Color</DataTable.Title>
+                                        <DataTable.Title >Size</DataTable.Title>
+                                        <DataTable.Title >Quantity</DataTable.Title>
+                                        <DataTable.Title >Remove</DataTable.Title>
+                                    </DataTable.Header>
+
+
+                                    {this.state.orders.map((c) => (
+
+                                        <DataTable.Row>
+                                            <DataTable.Cell>{c.color}</DataTable.Cell>
+                                            <DataTable.Cell >{c.size}</DataTable.Cell>
+                                            <DataTable.Cell >{c.quantity}</DataTable.Cell>
+                                            <DataTable.Cell ><Button className="mt-3" onPress={(e) => this.handleRemoveChange(e, c)} title="Remove">
+
+                                            </Button></DataTable.Cell>
+                                        </DataTable.Row>
+
+
+
+                                    ))}
+                                </DataTable>
                             </View>
 
-                            <View style={{ marginTop: 2 }}>
-                                <Text>Color Size Quantity Remove </Text>
-                                {this.state.orders.map((c) => (
-                                    <View>
-                                        <Text>{c.color} {c.size} {c.quantity}  <Button className="mt-3" onPress={(e) => this.handleRemoveChange(e, c)} title=" Remove">
-
-                                        </Button> </Text>
-
-                                    </View>
-                                ))}
-
-                            </View>
 
 
 
-                            <View className="form-group">
+                            <TouchableHighlight
+                                style={{
+                                    height: 100,
+                                    borderRadius: 80,
+                                    marginLeft: 50,
+                                    marginRight: 50,
+                                    marginTop: 20
+                                }}>
                                 <Button
-                                    style={{
-                                        background: "#1977cc",
-                                        marginLeft: "40%",
-                                        width: 2,
-                                    }}
+                                   
+                                   color="#ff0000"
                                     onPress={this.handleSignUp}
                                     className="btn btn-primary btn-xl"
                                     id="sendMessageButton"
@@ -634,12 +683,18 @@ class RegisterPage extends Component {
                                 >
 
                                 </Button>
-                            </View>
+                            </TouchableHighlight>
 
-
+                            <ModalDialog
+							show={this.state.openModal}
+							onCloseModal={this.handleModalClose}
+							header="Success"
+							text="You have successfully added new item."
+						/>
 
                         </View>
                     </View>
+                  
                 </View>
 
             </ScrollView>
@@ -650,4 +705,36 @@ class RegisterPage extends Component {
 }
 export default RegisterPage;
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    loginText: {
+        padding: 3,
+        marginLeft: 15,
+        fontSize: 16,
+        marginTop: 10,
+        marginRight: 15
+    },
+    image: {
+        marginLeft: 20,
+        marginTop: 30,
+        width: 300,
+        height: 200,
+    },
+    loginBtn: {
+        marginLeft: 15,
+        backgroundColor: "#D3D3D3",
+        marginRight: 15,
+        borderRadius: 20
+    },
+    text: {
 
+        marginLeft: 15,
+
+    },
+
+});

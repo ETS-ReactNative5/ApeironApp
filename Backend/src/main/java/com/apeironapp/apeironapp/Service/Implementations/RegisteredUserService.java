@@ -61,6 +61,7 @@ public class RegisteredUserService implements IRegisteredUserService {
         user.setName(personUserDTO.getFirstname());
         user.setSurname(personUserDTO.getSurname());
         user.setPhoneNumber(personUserDTO.getPhonenumber());
+        user.setAboutUs(personUserDTO.getAboutUs());
         com.apeironapp.apeironapp.Model.Address address = new Address();
         address.setCity(personUserDTO.getAddress().getCity());
         address.setCountry(personUserDTO.getAddress().getCountry());

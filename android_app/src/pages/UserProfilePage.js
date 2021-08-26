@@ -13,6 +13,7 @@ import {
 	View,
 	StatusBar,
 	TouchableOpacity,
+	TouchableHighlight,
 	Button,
 	TextInput,
 	Image,
@@ -150,7 +151,7 @@ class UserProfilePage extends Component {
 	};
 
 	handleNameChange = (event) => {
-		this.setState({ name: event.nativeEvent.text });
+		this.setState({ firstname: event.nativeEvent.text });
 	};
 
 	handleSurnameChange = (event) => {
@@ -280,7 +281,7 @@ class UserProfilePage extends Component {
 
 
 	handlePasswordModal = () => {
-		this.setState({ hiddenEditInfo: true, openPasswordModal: true });
+		this.setState({ openPasswordModal: true });
 	};
 
 
@@ -376,20 +377,20 @@ class UserProfilePage extends Component {
 
 		return (
 
-				<View>
+			<View>
+			<Text style = {{marginLeft: 100, fontSize:18, marginTop: 15}}>Personal Information</Text>
+				<View style={styles.container}>
 		
-					<Text className=" text-center  mb-0 text-uppercase">
-						User information
-					</Text>
+				
 					<View className="row mt-5">
 						<View className="col shadow p-3 bg-white rounded">
-							<Text className=" text-center text-uppercase">Personal Information</Text>
 						
 								<View className="control-group">
 									<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 										
 										<TextInput
-											readOnly
+										style={styles.inputView}
+											editable = {false}
 											placeholder="Email address"
 											className="form-control-plaintext"
 											id="name"
@@ -403,7 +404,8 @@ class UserProfilePage extends Component {
 									<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 									
 										<TextInput
-											readOnly={this.state.hiddenEditInfo}
+											style={styles.inputView}
+											editable={!this.state.hiddenEditInfo}
 											className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
 											placeholder="Name"
 											type="text"
@@ -419,7 +421,8 @@ class UserProfilePage extends Component {
 									<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 										
 										<TextInput
-											readOnly={this.state.hiddenEditInfo}
+											style={styles.inputView}
+											editable={!this.state.hiddenEditInfo}
 											className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
 											placeholder="Surname"
 											type="text"
@@ -433,23 +436,47 @@ class UserProfilePage extends Component {
 								</View>
 								<View className="control-group">
 									
-						<View className="form-group">
-							<Button
-								style={{
-									background: "#1977cc",
-									marginTop: "15px",
+								{this.state.hiddenEditInfo && <View className="control-group">
+								<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 
-									width: "20%",
-								}}
-								onPress={this.hhh}
-								className="btn btn-primary btn-xl"
-								id="sendMessageButton"
-								type="button"
-								title="Click to change address"
-							>
+									<TextInput
+										style={styles.inputView}
+										editable={!this.state.hiddenEditInfo}
+										className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
+										placeholder={this.state.aStreet}
+										type="text"
+									/>
+								</View>
 
-							</Button>
-						</View>
+							</View>}
+							
+						
+							{!this.state.hiddenEditInfo && <View className="control-group">
+								<View className="form-group">
+									<Button
+										style={{
+											background: "#1977cc",
+											marginTop: "15px",
+
+											width: "20%",
+										}}
+										onPress={this.hhh}
+										className="btn btn-primary btn-xl"
+										id="sendMessageButton"
+										type="button"
+										title="Click to change address"
+									>
+
+									</Button>
+								</View>
+								{this.state.addressError && <View className="text-danger" >
+									<Text>Address must be entered.</Text>
+								</View>}
+								{this.state.addressNotFoundError && <View className="text-danger" >
+									<Text>Sorry. Address not found. Try different one.</Text>
+
+								</View>}
+							</View>}
 									
 									{this.state.addressError && <View className="text-danger" >
 									<Text>Address must be entered.</Text>
@@ -463,7 +490,8 @@ class UserProfilePage extends Component {
 									<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 									
 										<TextInput
-											readOnly={this.state.hiddenEditInfo}
+											style={styles.inputView}
+											editable={!this.state.hiddenEditInfo}
 											className={!this.state.hiddenEditInfo === false ? "form-control-plaintext" : "form-control"}
 											placeholder="Phone number"
 											type="text"
@@ -476,7 +504,13 @@ class UserProfilePage extends Component {
 									</View>}
 								</View>
 								
-								<View className="form-group text-center" hidden={this.state.hiddenEditInfo}>
+								{!this.state.hiddenEditInfo && <View className="form-group text-center" >
+								<TouchableHighlight
+									style={{
+										height: 40,
+										borderRadius: 80,
+										marginTop: 20
+									}}>
 									<Button
 										style={{ background: "#1977cc", marginTop: "15px" }}
 										onPress={this.handleChangeInfo}
@@ -486,12 +520,19 @@ class UserProfilePage extends Component {
 										title="Change information"
 									>
 									</Button>
-								</View>
+									</TouchableHighlight>
+								</View>}
 
 								<View className="form-group">
 									<View className="form-group controls mb-0 pb-2">
 										<View className="form-row justify-content-center">
-											<View className="form-col" hidden={!this.state.hiddenEditInfo}>
+										{this.state.hiddenEditInfo && <View className="form-col">
+										<TouchableHighlight
+									style={{
+										height: 40,
+										borderRadius: 80,
+										marginTop: 20
+									}}>
 												<Button
 													onPress={this.handleEditInfoClick}
 													className="btn btn-outline-primary btn-xl"
@@ -500,9 +541,16 @@ class UserProfilePage extends Component {
 													title= "Edit Info"
 												>
 												</Button>
-											</View>
+												</TouchableHighlight>
+											</View>}
 
 											<View className="form-col ml-3">
+											<TouchableHighlight
+									style={{
+										height: 40,
+										borderRadius: 80,
+										marginTop: 20
+									}}>
 												<Button
 													onPress={this.handlePasswordModal}
 													className="btn btn-outline-primary btn-xl"
@@ -511,6 +559,7 @@ class UserProfilePage extends Component {
 													title="Change Password"
 												>
 												</Button>
+												</TouchableHighlight>
 											</View>
 										</View>
 									</View>
@@ -590,7 +639,9 @@ class UserProfilePage extends Component {
 							</Button>
 							</View>
 						</Modal >
-					<PasswordChangeModal
+				
+				</View>
+				<PasswordChangeModal
 					show={this.state.openPasswordModal}
 					handleCloseAlertPassword={this.handleCloseAlertPassword}
 					hiddenPasswordErrorAlert={this.state.hiddenPasswordErrorAlert}
@@ -612,3 +663,36 @@ class UserProfilePage extends Component {
 }
 
 export default UserProfilePage;
+
+const styles = StyleSheet.create({
+	container: {
+		marginLeft: 30,
+		marginRight: 30,
+		marginTop: 50
+	},
+	text: {
+		fontSize: 16
+	},
+	signupText: {
+		color: 'rgba(255,255,255,0.6)',
+		fontSize: 16
+	},
+	signupButton: {
+		color: '#ffffff',
+		fontSize: 16,
+		fontWeight: '500'
+	},
+	inputView: {
+		backgroundColor: "#D3D3D3",
+		borderRadius: 5,
+		height: 45,
+		marginTop: 10,
+		marginBottom: 10,
+		alignItems: "center",
+		color: "black"
+	},
+	google: {
+		borderRadius: 30,
+		marginBottom: 50
+	}
+});

@@ -18,6 +18,9 @@ public class PersonUserDTO {
 
     private String company;
 
+
+    private String aboutUs;
+
     public PersonUserDTO() { }
 
     public PersonUserDTO(String email, String password, String firstname, String surname, String phonenumber, AddressDTO address) {
@@ -91,6 +94,14 @@ public class PersonUserDTO {
 
     public void setAddress(AddressDTO address) {
         this.address = address;
+    }
+
+    public String getAboutUs() {
+        return aboutUs;
+    }
+
+    public void setAboutUs(String aboutUs) {
+        this.aboutUs = aboutUs;
     }
 
     @Override

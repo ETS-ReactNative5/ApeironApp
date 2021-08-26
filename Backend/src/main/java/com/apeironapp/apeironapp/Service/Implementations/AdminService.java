@@ -34,6 +34,10 @@ public class AdminService implements IAdminService {
     @Autowired
     private AdminRepository adminRepository;
 
+
+    @Autowired
+    private RegisteredUserRepository registeredUserRepository;
+
     @Autowired
     private AuthorityRepository authorityRepository;
 
@@ -78,6 +82,7 @@ public class AdminService implements IAdminService {
     @Override
     public Admin findByEmail(String email) {
         Admin u = adminRepository.findByEmail(email);
+        System.out.println(u);
         return u;
     }
 

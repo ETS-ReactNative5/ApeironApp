@@ -17,6 +17,7 @@
     "@unimodules/core": "^7.1.1",
     "axios": "^0.21.1",
     "install": "^0.13.0",
+    "moment": "^2.29.1",
     "npm": "^7.20.6",
     "react": "17.0.1",
     "react-bootstrap": "^1.6.1",

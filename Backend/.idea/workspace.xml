@@ -6,6 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/PersonUserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/PersonUserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/UserRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/UserRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/RegisteredUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/RegisteredUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/AdminService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/RegisteredUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/RegisteredUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/photo.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/photo.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android_app/src/pages/Signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/../android_app/src/pages/Signup.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

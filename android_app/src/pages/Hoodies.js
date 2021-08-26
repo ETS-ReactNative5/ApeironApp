@@ -50,7 +50,7 @@ class Hoodies extends Component {
 
 
 					<View style={styles.loginText}>
-						<Text>Women T-Shirts</Text>
+						<Text>Women Hoodies</Text>
 					</View>
 				</View>
 				<View>
@@ -60,7 +60,7 @@ class Hoodies extends Component {
 				</View>
 
 				<View style={styles.loginText}>
-					<Text>Men T-Shirts</Text>
+					<Text>Men Hoodies</Text>
 				</View>
 				</ScrollView>
 			</View>

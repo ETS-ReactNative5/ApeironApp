@@ -1,14 +1,8 @@
 package com.apeironapp.apeironapp.Controller;
 
-import com.apeironapp.apeironapp.DTO.AdminDTO;
-import com.apeironapp.apeironapp.DTO.ColorDTO;
-import com.apeironapp.apeironapp.DTO.NewItemDTO;
-import com.apeironapp.apeironapp.DTO.PersonUserDTO;
+import com.apeironapp.apeironapp.DTO.*;
 import com.apeironapp.apeironapp.Exception.ResourceConflictException;
-import com.apeironapp.apeironapp.Model.Admin;
-import com.apeironapp.apeironapp.Model.Colors;
-import com.apeironapp.apeironapp.Model.Item;
-import com.apeironapp.apeironapp.Model.PersonUser;
+import com.apeironapp.apeironapp.Model.*;
 import com.apeironapp.apeironapp.Service.Implementations.AdminService;
 import com.apeironapp.apeironapp.Service.Implementations.ColorService;
 import com.apeironapp.apeironapp.Service.Implementations.RegisteredUserService;
@@ -32,15 +26,19 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+
+    @Autowired
+    private RegisteredUserService registeredUserService;
+
     @Autowired
     private ColorService colorService;
 
     @GetMapping("")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Admin> getUser() {
+    public ResponseEntity<RegisteredUser> getUser() {
 
-        Admin userDTO = new Admin();
-        userDTO = adminService.findByEmail("admin@example.com");
+        RegisteredUser userDTO = new RegisteredUser();
+        userDTO = registeredUserService.findByEmail("admin@a.com");
         return  ResponseEntity.ok(userDTO);
     }
 
@@ -87,9 +85,9 @@ public class AdminController {
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateAdmin(@RequestBody AdminDTO userDTO) {
+    public ResponseEntity<?> updateAdmin(@RequestBody PersonUserDTO userDTO) {
         try {
-            adminService.update(userDTO);
+            registeredUserService.update(userDTO);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

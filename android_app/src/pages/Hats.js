@@ -68,8 +68,7 @@ class TShirtsWomen extends Component {
 		this.setState({ name: event.nativeEvent.text });
 	};
 	handleModalClose = () => {
-		this.setState({ openModal: false });
-		window.location.reload();
+		this.setState({ showOrderModal: false });
 	};
 
 
@@ -78,14 +77,7 @@ class TShirtsWomen extends Component {
 		Axios.get(BASE_URL + "/api/items/hats")
 			.then((res) => {
 				this.setState({ tshirts: res.data });
-				res.data.forEach((rr) => {
-					console.log(rr.colors)
-					rr.colors.forEach((r) => {
-						r.sizes.forEach((s) => {
-							console.log("sfsdfsdfsf" + s.size)
-						})
-					})
-				})
+
 			})
 			.catch((err) => {
 				console.log(err);
@@ -208,6 +200,8 @@ class TShirtsWomen extends Component {
 			<View className="container" style={{ marginTop: 10 }}>
 				<ScrollView>
 					<Order isVisible={this.state.showOrderModal}
+
+						handleModalClose={this.handleModalClose}
 						buttonName="Send reservation"
 						header="Make new reservation"
 						onCloseModal={this.handleOrderModalClose}
@@ -241,7 +235,13 @@ class TShirtsWomen extends Component {
 										{pharmacy.colors.map((color) => (
 											<View key={color.color}><Text key={color.color}> {color.color}</Text>
 
-												
+												{color.sizes.map((size) => (
+													<View key={size.size}>
+														<DataTable.Cell key={size.size}> <Text>{size.size} </Text><Text style={{ fontWeight: 'bold' }}>available: </Text><Text>{size.quantity}</Text></DataTable.Cell>
+													</View>
+
+												))}
+
 											</View>
 
 
@@ -255,7 +255,9 @@ class TShirtsWomen extends Component {
 
 
 
-								<View style={styles.loginBtn} hidden={!this.hasRole("ROLE_USER")}>
+								{this.hasRole("ROLE_USER") &&
+
+								<View style={styles.loginBtn} >
 									<TouchableHighlight
 										style={{
 											height: 40,
@@ -275,8 +277,11 @@ class TShirtsWomen extends Component {
 											title="Reserve"
 										>
 										</Button>
-									</TouchableHighlight></View>
-								<View hidden={!this.hasRole("ROLE_ADMIN")}>
+									</TouchableHighlight></View>}
+
+
+									{this.hasRole("ROLE_ADMIN") &&
+								<View >
 									<TouchableHighlight
 										style={{
 											height: 40,
@@ -294,7 +299,7 @@ class TShirtsWomen extends Component {
 											type="Button"
 											title="Delete"
 										>
-										</Button></TouchableHighlight></View>
+										</Button></TouchableHighlight></View>}
 							</View>
 						))}
 

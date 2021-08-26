@@ -16,7 +16,6 @@ import AllOrders from './src/pages/AllOrders';
 import Delivery from './src/pages/Delivery';
 import QRCodes from './src/pages/QRCodes';
 import RegisterDelivery from './src/pages/RegisterDelivery';
-
 import HoodiesWomen from './src/pages/Hoodies-women';
 import HoodiesMen from './src/pages/Hoodies-men';
 import React from 'react';
@@ -38,7 +37,7 @@ const MyStack = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Home"
+          name="Login"
           component={Login}
           options={{ title: 'Log in' }}
         />

@@ -5,9 +5,11 @@ import {
 	View,
 	StatusBar,
 	TouchableOpacity,
+	TouchableHighlight,
 	Button,
 	TextInput,
 	Image,
+	ScrollView,
 	Table
 } from 'react-native';
 import Modal from 'react-native-modal';
@@ -31,24 +33,23 @@ class PasswordChangeModal extends Component {
 	};
 
 	render() {
-		const {show} = this.props;
+		const { show } = this.props;
 		return (
-			show && 
+			show &&
 			<Modal
-		 		transparent={false}
-				show={true}
-				size="lg"
-				dialogClassName="modal-80w-80h"
-				aria-labelledby="contained-modal-title-vcenter"
-				centered
-				onHide={this.props.onCloseModal}
+			style={{backgroundColor: "white"}}
+				transparent={false}
+				isVisible={true}
+
 			>
-				
-					
-					<View className="control-group">
+				<ScrollView >
+<View  style={styles.container}>
+					<View>
+
 						<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 							<Text>Old password:</Text>
 							<TextInput
+							style = {styles.inputView}
 								placeholder="Old password"
 								class="form-control"
 								type="password"
@@ -56,17 +57,16 @@ class PasswordChangeModal extends Component {
 								value={this.state.oldPassword}
 							/>
 						</View>
-						<View className="text-danger" style={{ display: this.props.oldPasswordEmptyError }}>
+						{this.props.oldPasswordEmptyError && <View className="text-danger" >
 							<Text>Old password must be entered.</Text>
-						</View>
-						<View className="text-danger" style={{ display: "none" }}>
-						<Text>Old password is not valid.</Text>
-						</View>
+						</View>}
+
 					</View>
 					<View className="control-group">
 						<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 							<Text>New password:</Text>
 							<TextInput
+								style = {styles.inputView}
 								placeholder="New password"
 								class="form-control"
 								type="password"
@@ -74,14 +74,15 @@ class PasswordChangeModal extends Component {
 								value={this.state.newPassword}
 							/>
 						</View>
-						<View className="text-danger" style={{ display: this.props.newPasswordEmptyError }}>
+						{this.props.newPasswordEmptyError && <View className="text-danger" >
 							<Text>New password must be entered.</Text>
-						</View>
+						</View>}
 					</View>
 					<View className="control-group">
 						<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 							<Text>Type again new password:</Text>
 							<TextInput
+								style = {styles.inputView}
 								placeholder="Type again new password"
 								class="form-control"
 								type="password"
@@ -89,29 +90,72 @@ class PasswordChangeModal extends Component {
 								value={this.state.newPasswordRetype}
 							/>
 						</View>
-						<View className="text-danger" style={{ display: this.props.newPasswordRetypeEmptyError }}>
+						{this.props.newPasswordRetypeEmptyError && <View className="text-danger">
 							<Text>You need to enter again new password.</Text>
-						</View>
-						<View className="text-danger" style={{ display: this.props.newPasswordRetypeNotSameError }}>
-						<Text>Passwords are not the same.</Text>
-						</View>
+						</View>}
+						{this.props.newPasswordRetypeNotSameError && <View className="text-danger">
+							<Text>Passwords are not the same.</Text>
+						</View>}
 					</View>
 					<View className="form-group text-center">
+					<TouchableHighlight
+									style={{
+										height: 40,
+										borderRadius: 80,
+										marginTop: 20
+									}}>
 						<Button
-							style={{ background: "#1977cc", marginTop: "15px" }}
 							onPress={() => this.props.changePassword(this.state.oldPassword, this.state.newPassword, this.state.newPasswordRetype)}
 							className="btn btn-primary btn-xl"
 							id="sendMessageButton"
 							type="button"
 							title="Change password"
 						>
-							
+
 						</Button>
+						</TouchableHighlight>
 					</View>
-				
+					</View>
+				</ScrollView>
 			</Modal>
 		);
 	}
 }
 
 export default PasswordChangeModal;
+
+const styles = StyleSheet.create({
+	container: {
+		marginLeft: 30,
+		marginRight: 30,
+		marginTop: 50
+	},
+	loginText: {
+		padding: 3,
+		marginLeft: 15,
+
+		marginTop: 15,
+		marginRight: 15
+	},
+	image: {
+		marginLeft: 20,
+		marginTop: 30,
+		width: 300,
+		height: 200,
+	},
+	inputView: {
+		backgroundColor: "#D3D3D3",
+		borderRadius: 5,
+		height: 45,
+		marginTop: 10,
+		marginBottom: 10,
+		alignItems: "center",
+		color: "black"
+	},
+	text: {
+
+		fontSize: 16,
+
+	},
+
+});

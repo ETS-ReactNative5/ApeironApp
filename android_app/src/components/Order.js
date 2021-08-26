@@ -6,6 +6,8 @@ import { BASE_URL } from "../../constants.js";
 import Carousel from 'react-native-snap-carousel';
 import { Picker } from '@react-native-picker/picker';
 import Modal from 'react-native-modal';
+import { Button as Button1 } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {
 	StyleSheet,
 	Text,
@@ -40,9 +42,9 @@ class Order extends Component {
 		list: [],
 		selectedItem: "",
 		orders: [],
-		orderError: "none",
-		quantityError: "none",
-		dueDateError: "none",
+		orderError: false,
+		quantityError: false,
+		dueDateError: false,
 		hiddenSuccessAlert: true,
 		successHeader: "",
 		successMessage: "",
@@ -54,6 +56,8 @@ class Order extends Component {
 	handleModalClose = () => {
 		this.setState({ openModal: false, redirect: true });
 	};
+
+
 	handleQuantityChange = (event) => {
 		this.setState({ quantity: event.nativeEvent.text });
 	};
@@ -171,7 +175,7 @@ class Order extends Component {
 
 						}
 						else {
-							this.setState({ quantityError: "initial" });
+							this.setState({ quantityError: true });
 							return false;
 
 
@@ -232,17 +236,17 @@ class Order extends Component {
 
 	validateForm = (newOrderDTO) => {
 		this.setState({
-			orderError: "none",
-			dueDateError: "none",
+			orderError: false,
+			dueDateError: false,
 
 		});
 
 
 		if (newOrderDTO.items === "") {
-			this.setState({ orderError: "initial" });
+			this.setState({ orderError: true });
 			return false;
 		} else if (newOrderDTO.dueDate === "") {
-			this.setState({ dueDateError: "initial" });
+			this.setState({ dueDateError: true });
 			return false;
 		}
 
@@ -263,14 +267,15 @@ class Order extends Component {
 
 
 	render() {
-		const { isVisible, buttonName, header, onCloseModal, handleColorChange, handleSizeChange, shirt, showedColors, selectedColor, showedSizes, selectedSize } = this.props;
+		const { isVisible, handleModalClose, buttonName, header, onCloseModal, handleColorChange, handleSizeChange, shirt, showedColors, selectedColor, showedSizes, selectedSize } = this.props;
 		return (
 			isVisible &&
-				<ScrollView >
-				<Modal isVisible={true} transparent={false} style={backgroundColor = "white"} 	>
 
-					
-<View style={backgroundColor = "white"}>
+			<Modal isVisible={true} transparent={false} 	>
+				<ScrollView >
+
+					<View style={{ backgroundColor: "white" }}>
+						<Button1 onPress={(e)=>this.props.handleModalClose(e)} style={{ marginLeft: 230, marginTop: 15 }}> <Icon name="close" color="black" size={20} /></Button1>
 						<Carousel sliderWidth={800} itemWidth={800} renderItem={this._renderItem} data={shirt.files}>
 
 
@@ -293,27 +298,27 @@ class Order extends Component {
 								</Picker.Item>
 							))}
 						</Picker>
-					
-							<Picker
-								class="btn btn-secondary dropdown-toggle"
-								aria-haspopup="true"
-								aria-expanded="false"
-								selectedValue={this.props.selectedSize}
-								onValueChange={(e) => this.props.handleSizeChange(e)}
+
+						<Picker
+							class="btn btn-secondary dropdown-toggle"
+							aria-haspopup="true"
+							aria-expanded="false"
+							selectedValue={this.props.selectedSize}
+							onValueChange={(e) => this.props.handleSizeChange(e)}
 
 
-							>
-								<Picker.Item key={"2"} value="Choose the size" label="Choose the size">
+						>
+							<Picker.Item key={"2"} value="Choose the size" label="Choose the size">
+
+							</Picker.Item>
+							{showedSizes.map((a) => (
+								<Picker.Item key={a.size} value={a.size} label={a.size}>
 
 								</Picker.Item>
-								{showedSizes.map((a) => (
-									<Picker.Item key={a.size} value={a.size} label={a.size}>
 
-									</Picker.Item>
+							))}
+						</Picker>
 
-								))}
-							</Picker>
-					
 
 
 						<View style={styles.loginText}>
@@ -340,9 +345,9 @@ class Order extends Component {
 								minDate={new Date()}
 								onDateChange={(date) => { this.setState({ selectedDate: date }) }}
 							/>
-					</View>
+						</View>
 
-					<View style={styles.loginText}>
+						<View style={styles.loginText}>
 							<Button className="mt-3" onPress={this.handleAddChange} title="Add to chart">
 
 							</Button>
@@ -377,17 +382,17 @@ class Order extends Component {
 							</DataTable>
 
 						</View>
-						<View style={styles.loginText} style={{ display: this.state.orderError }}>
+						{ this.state.orderError && <View style={styles.loginText} >
 							<Text>Orders must be filled correctly</Text>
-						</View>
+						</View>}
 
-						<View style={styles.loginText} style={{ display: this.state.quantityError }}>
+						{ this.state.quantityError && <View style={styles.loginText}>
 							<Text>You must insert quantity that is available.</Text>
-						</View>
+						</View>}
 
-						<View style={styles.loginText} style={{ display: this.state.dueDateError }}>
+						{ this.state.dueDateError && <View style={styles.loginText} >
 							<Text>Date must be selected</Text>
-						</View>
+						</View>}
 
 
 						<View style={styles.loginText}>
@@ -396,15 +401,17 @@ class Order extends Component {
 							</Button>
 						</View>
 
+						<View style={{ marginTop: 30 }}></View>
+
 						<ModalDialog
 							show={this.state.openModal}
 							onCloseModal={this.handleModalClose}
 							header="Success"
 							text="You have successfully sent an order."
 						/>
-</View>
-				</Modal>
+					</View>
 				</ScrollView>
+			</Modal>
 
 		);
 	}
@@ -424,6 +431,7 @@ const styles = StyleSheet.create({
 		marginLeft: 15,
 
 		marginTop: 15,
+		marginRight: 15
 	},
 	image: {
 		marginLeft: 20,

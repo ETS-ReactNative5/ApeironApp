@@ -16,6 +16,9 @@ public class UserRequestDTO {
 	
 	private String phoneNumber;
 
+
+	private String aboutUs;
+
 	public UserRequestDTO(String email, String password, String name, String surname, Address address,
 			String phoneNumber) {
 		super();
@@ -77,5 +80,13 @@ public class UserRequestDTO {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public String getAboutUs() {
+		return aboutUs;
+	}
+
+	public void setAboutUs(String aboutUs) {
+		this.aboutUs = aboutUs;
 	}
 }

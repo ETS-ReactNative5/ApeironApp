@@ -16,6 +16,7 @@ import Axios from "axios";
 import { Actions } from 'react-native-router-flux';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Modal from 'react-native-modal';
+import { ScrollView } from 'react-native-gesture-handler';
 const API_KEY = 'AIzaSyAsno5WRMrrU_XX-ur8CBRtndECG-0kAfs';
 export default class Signup extends Component {
 	state = {
@@ -162,7 +163,10 @@ export default class Signup extends Component {
 	handleModalClose = () => {
 		this.setState({ openModal: false, redirect: true });
 	};
-
+	handleModalClose2 = () => {
+		this.setState({ openModal2: false, redirect: true });
+		this.props.navigation.navigate('Login')
+	};
 	hhh = (event) => {
 		this.setState({ openModal: true });
 
@@ -174,17 +178,17 @@ export default class Signup extends Component {
 		}
 		else {
 
-			let stree = this.state.street
-			let countr = this.state.country
-			let cit = this.state.city
-			let long = this.state.longitude
-			let lat = this.state.latitute
+			let street = this.state.street
+			let country = this.state.country
+			let city = this.state.city
+			let longitude = this.state.longitude
+			let latitude = this.state.latitute
 
 			let userDTO = {
 				email: this.state.email,
 				firstname: this.state.name,
 				surname: this.state.surname,
-				address: { stree, countr, cit, lat, long },
+				address: { street, country, city, latitude, longitude },
 				phonenumber: this.state.phoneNumber,
 				password: this.state.password,
 			};
@@ -226,13 +230,12 @@ export default class Signup extends Component {
 
 	render() {
 		return (
-
+		
+<View>
+	<ScrollView>
 			<View style={styles.container}>
 
 
-
-				<View className="row section-design">
-					<View className="col-lg-8 mx-auto">
 
 
 						<View className="control-group">
@@ -342,6 +345,7 @@ export default class Signup extends Component {
 							<Text style={styles.text}>Password:</Text>
 							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 								<TextInput
+								secureTextEntry={true}
 									style={styles.inputView}
 									placeholder="Password"
 									class="form-control"
@@ -358,6 +362,7 @@ export default class Signup extends Component {
 							<Text style={styles.text}>Repeat password:</Text>
 							<View className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 								<TextInput
+								secureTextEntry={true}
 									style={styles.inputView}
 									placeholder="Repeat password"
 									class="form-control"
@@ -373,81 +378,15 @@ export default class Signup extends Component {
 								<Text>Passwords are not the same.</Text>
 							</View>}
 						</View>
-						<Modal isVisible={this.state.openModal} transparent={false}>
-							
-								<View style={styles.google}>
-									<GooglePlacesAutocomplete
-										fetchDetails={true}
-										placeholder='Search'
-										onPress={(data, details = null) => {
-											console.log(details.formatted_address, details.getPlace, details.getCountry)
-											this.setState({
-												street: details.formatted_address,
-												city: details.getPlace,
-												country: details.getCountry,
-												latitute: details.geometry.location.lat,
-												longitude: details.geometry.location.lng
-											})
-										}}
-										query={{
-											key: 'AIzaSyAsno5WRMrrU_XX-ur8CBRtndECG-0kAfs',
-											language: 'en',
-										}}
-										styles={{
-											textInputContainer: {
-												backgroundColor: 'grey',
-											},
-											textInput: {
-												height: 38,
-												color: '#5d5d5d',
-												fontSize: 16,
-											}, predefinedPlacesDescription: {
-												color: '#1faadb',
-											},
-										}}
-
-									/></View>
-								<TouchableHighlight
-									style={{
-										borderRadius: 30,
-										marginBottom: 300
-
-									}}>
-									<Button
-
-										onPress={this.handleModalClose}
-										className="btn btn-primary btn-xl"
-										id="sendMessageButton"
-										type="button"
-										title="Close"
-									>
-
-									</Button></TouchableHighlight>
-							
-						</Modal >
+					
 
 
-						<Modal isVisible={this.state.openModal2}>
-							<Text>You have successfuly registrated</Text>
-							<View >
-
-								<Button
-									style={{
-										background: "#1977cc",
-										marginTop: "15px",
-
-										width: "20%",
-									}}
-									onPress={this.handleModalClose}
-									className="btn btn-primary btn-xl"
-									id="sendMessageButton"
-									type="button"
-									title="Close"
-								>
-
-								</Button>
-							</View>
-						</Modal >
+						<ModalDialog
+							show={this.state.openModal2}
+							onCloseModal={this.handleModalClose2}
+							header="Success"
+							text="You have successfully registrated."
+						/>
 						<View >
 							<TouchableHighlight
 								style={{
@@ -467,10 +406,59 @@ export default class Signup extends Component {
 
 								</Button>
 							</TouchableHighlight>
-						</View>
-
-					</View>
+				
 				</View>
+				</View>
+				</ScrollView>
+				<Modal isVisible={this.state.openModal}>
+							<View style={{flex: 1}}>
+							<GooglePlacesAutocomplete
+								fetchDetails={true}
+								placeholder="Search the address"
+								onPress={(data, details = null) => {
+									console.log("sfjfnskjdfjsdfkjdsbmjsbdsbhdmh")
+									console.log(details.formatted_address,details.getPlace, details.getCountry )
+									this.setState({	street: details.formatted_address,
+									 city: details.getPlace,
+										country: details.getCountry,
+										latitute :  details.geometry.location.lat,
+										longitude:  details.geometry.location.lng})
+								}}
+								query={{
+									key: 'AIzaSyAsno5WRMrrU_XX-ur8CBRtndECG-0kAfs',
+									language: 'en',
+								}}
+								styles={{
+									textInputContainer: {
+										backgroundColor: 'grey',
+									},
+									textInput: {
+										height: 38,
+										color: '#5d5d5d',
+										fontSize: 16,
+									}, predefinedPlacesDescription: {
+										color: '#1faadb',
+									},
+								}}
+
+							/>
+												<Button
+								style={{
+									background: "#1977cc",
+									marginTop: "15px",
+
+									width: "20%",
+								}}
+								onPress={this.handleModalClose}
+								className="btn btn-primary btn-xl"
+								id="sendMessageButton"
+								type="button"
+								title="Close"
+							>
+
+							</Button>
+							</View>
+						</Modal >
 
 			</View>
 
