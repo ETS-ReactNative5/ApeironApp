@@ -29,12 +29,9 @@ const Menuu = () => {
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
- const  handleLogin = () => {
-    navigation.navigate('AddItem')
- 
-   };
 
-   handleLogout = () => {
+
+  handleLogout = () => {
 		SyncStorage.remove("keyToken");
 		SyncStorage.remove("keyRole");
 		SyncStorage.remove("expireTime");
@@ -75,10 +72,17 @@ const Menuu = () => {
           <Menu.Item onPress={()=>{navigation.navigate('Change')}} title="Colors" /></View>}
           <Divider />
           
-          {!this.hasRole("ROLE_ADMIN") && <View>
+          {this.hasRole("ROLE_USER") && <View>
           <Menu.Item onPress={()=>{navigation.navigate('UserProfilePage')}} title="My profile" /></View>}
           <Divider />
+          
+          {this.hasRole("ROLE_USER") && <View>
+          <Menu.Item onPress={()=>{navigation.navigate('Logout')}} title="Scan QR code" /></View>}
+          
+          <Divider />
+          <View>
           <Menu.Item onPress={()=>{handleLogout()}} title="Logout" />
+          </View>
         </Menu>
       </View>
   );

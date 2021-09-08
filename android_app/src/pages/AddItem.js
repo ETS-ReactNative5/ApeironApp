@@ -412,7 +412,7 @@ class RegisterPage extends Component {
                             this.setState({ errorHeader: "Internal server error!", errorMessage: "Server error.", hiddenErrorAlert: false });
                         } else {
                             console.log("Success");
-                            this.setState({ openModal: true });
+                           alert("You have succesfully added new item.")
                         }
                     })
                     .catch((err) => {

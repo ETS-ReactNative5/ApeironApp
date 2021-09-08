@@ -1,4 +1,7 @@
 {
   "name": "android_app",
-  "displayName": "android_app"
+  "displayName": "android_app",
+  "expo": {
+    "name": "android_app"
+  }
 }

@@ -90,6 +90,7 @@ class AllOrders extends Component {
 
     handleModalClose = () => {
         this.setState({ openModal: false, redirect: false });
+        window.location.reload();
     };
     handleModalClose2 = () => {
         this.setState({ openModal2: false, redirect: false });
@@ -99,8 +100,7 @@ class AllOrders extends Component {
 
         Axios.get(BASE_URL + "/api/reservations/remove/" + reservation.reservationId)
         .then((res) => {
-            this.setState({ reservations: res.data });
-            console.log(res.data);
+
             this.setState({ openModal: true });
         })
         .catch((err) => {

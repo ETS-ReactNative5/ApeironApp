@@ -249,8 +249,8 @@ class Contact extends Component {
 				} else if (res.status === 500) {
 					this.setState({ hiddenFailAlert: false, failHeader: "Internal server error", failMessage: "Server error." });
 				} else if (res.status === 204) {
-					this.setState({ openModal: true });
 					console.log("Success");
+					alert("You have successfully sent a message.")
 
 				}
 			})

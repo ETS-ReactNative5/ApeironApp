@@ -7,14 +7,17 @@
     <list default="true" id="82decfea-46e4-4ed3-9be0-5f723ede24ee" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/PersonUserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/PersonUserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/UserRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/DTO/UserRequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Admin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/RegisteredUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/RegisteredUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/AdminService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/RegisteredUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Service/Implementations/RegisteredUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ReservationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Controller/ReservationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apeironapp/apeironapp/Model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/80.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/9.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/images/photo.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/photo.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../android_app/src/pages/Signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/../android_app/src/pages/Signup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/AddItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/AddItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/AllOrders.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/AllOrders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/Contact.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/Contact.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +47,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../ISA/ISA_project/Backend" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../travelApp/travel-app-serbia/TravelApp" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">

@@ -37,9 +37,7 @@ class Header extends Component {
                             </li>
 
                            
-                            <li hidden={!this.hasRole("ROLE_DELIVERY")}>
-                                <Link to="/deliveries">Deliveries</Link>
-                            </li>
+                         
                             <li hidden={!this.hasRole("ROLE_ADMIN")}>
                                 <Link to="/additem">Add a new item</Link>
                             </li>

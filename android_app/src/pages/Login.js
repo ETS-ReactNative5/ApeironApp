@@ -15,7 +15,6 @@ import { BASE_URL } from "../../constants.js";
 import Logo from '../components/Logo';
 import Form from '../components/Form';
 import Axios from "axios";
-import AsyncStorage from '@react-native-community/async-storage'
 import { Actions } from 'react-native-router-flux';
 import { Redirect } from "react-router-dom";
 import SyncStorage from 'sync-storage';

@@ -103,7 +103,7 @@ class Delivery extends Component {
 		
 			})
 			.catch((err) => {
-				console.log(err);
+				alert("You have successfuly removed courier")
 			});
 
 	};

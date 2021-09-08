@@ -527,7 +527,7 @@ class RegisterPage extends Component {
                                 
                                 <div>
                                     <Button className="mt-3" onClick={this.handleAddChange}>
-                                        Add to chart
+                                        Add
 						            </Button>
                                 </div>
 

@@ -221,6 +221,7 @@ class QRCodes extends Component {
 
 		return (
 
+			<ScrollView>
 			<View>
 				<View >
 
@@ -252,6 +253,7 @@ class QRCodes extends Component {
 
 				
 				</View>
+				</ScrollView>
 		);
 	}
 }

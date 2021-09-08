@@ -25,21 +25,24 @@ import {
   Text,
   TouchableOpacity,
   View,
+  LogBox
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
 const Stack = createStackNavigator();
-
+LogBox.ignoreLogs(['Warning: ...']); 
+LogBox.ignoreAllLogs()
 const MyStack = () => {
   return (
+ 
     <Provider>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{ title: 'Log in' }}
+          options={{ title: 'Login' }}
         />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="HomePage"  options={{ headerTitle: (props) =>  <Menuu/>  }} component={HomePage} />
@@ -58,7 +61,6 @@ const MyStack = () => {
         <Stack.Screen name="RegisterDelivery" options={{ headerTitle:  (props) =>  <Menuu {...props} />  }} component={RegisterDelivery} />
         <Stack.Screen name="HoodiesWomen" options={{ headerTitle:  (props) =>  <Menuu {...props} />  }} component={HoodiesWomen} />
         <Stack.Screen name="HoodiesMen" options={{ headerTitle:  (props) =>  <Menuu {...props} />  }} component={HoodiesMen} />
-
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

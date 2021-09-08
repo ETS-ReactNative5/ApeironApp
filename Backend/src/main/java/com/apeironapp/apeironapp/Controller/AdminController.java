@@ -38,7 +38,7 @@ public class AdminController {
     public ResponseEntity<RegisteredUser> getUser() {
 
         RegisteredUser userDTO = new RegisteredUser();
-        userDTO = registeredUserService.findByEmail("admin@a.com");
+        userDTO = registeredUserService.findByEmail("admin@example.com");
         return  ResponseEntity.ok(userDTO);
     }
 

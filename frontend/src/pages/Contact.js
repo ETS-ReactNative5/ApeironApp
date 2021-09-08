@@ -96,8 +96,8 @@ class Contact extends Component {
 						console.log(res.data)
 						this.setState({
 							id: res.data.Id,
-							email: res.data.contactEmail,
-							phonenumber: res.data.phoneNumber,
+							email: res.data.email,
+							phoneNumber: res.data.phoneNumber,
 							address: res.data.address,
 							aboutUs: res.data.aboutUs,
 
@@ -138,7 +138,7 @@ class Contact extends Component {
 	};
 
 	handlePhoneNumberChange = (event) => {
-		this.setState({ phonenumber: event.target.value });
+		this.setState({ phoneNumber: event.target.value });
 	};
 
 	handleAboutUsChange = (event) => {
@@ -214,7 +214,7 @@ class Contact extends Component {
 			.then((res) => {
 				let userDTO = {
 					address: { street, country, city, latitude, longitude },
-					phoneNumber: this.state.phonenumber,
+					phonenumber: this.state.phoneNumber,
 					contactEmail: this.state.email,
 					aboutUs: this.state.aboutUs,
 
@@ -387,7 +387,7 @@ class Contact extends Component {
 											placeholder="Phone number"
 											type="text"
 											onChange={this.handlePhoneNumberChange}
-											value={this.state.phonenumber}
+											value={this.state.phoneNumber}
 										/>
 									</div>
 									<div className="text-danger" style={{ display: this.state.phoneError }}>

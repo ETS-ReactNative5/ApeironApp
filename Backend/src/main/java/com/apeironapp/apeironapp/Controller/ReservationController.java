@@ -254,8 +254,9 @@ public class ReservationController {
         Map<EncodeHintType, ErrorCorrectionLevel> hashMap = new HashMap<EncodeHintType, ErrorCorrectionLevel>();
         hashMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 
+        String message = "You have successfully received your order number "+order.getItemId();
 
-        BitMatrix matrix = new MultiFormatWriter().encode(order.toString(), BarcodeFormat.QR_CODE, 200, 200);
+        BitMatrix matrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, 200, 200);
         MatrixToImageWriter.writeToFile(matrix, path.substring(path.lastIndexOf('.') + 1), new File(path));
     }
 
@@ -271,21 +272,23 @@ public class ReservationController {
         Set<String> list = new HashSet<String>();
         for (Order order: orders) {
             QRDTO qrdto = new QRDTO();
-            File destination = new File(order.getQr());
-            try {
-                img = ImageIO.read(destination);
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                ImageIO.write(img, "PNG", out);
-                byte[] bytes = out.toByteArray();
-                String base64bytes = Base64.getEncoder().encodeToString(bytes);
-                String src = "data:image/png;base64," + base64bytes;
-                list.add(src);
-                qrdto.setFiles(list);
-                qrdto.setUser(order.getRegisteredUser().getEmail());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(order.getQr()!=null) {
+                File destination = new File(order.getQr());
+                try {
+                    img = ImageIO.read(destination);
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    ImageIO.write(img, "PNG", out);
+                    byte[] bytes = out.toByteArray();
+                    String base64bytes = Base64.getEncoder().encodeToString(bytes);
+                    String src = "data:image/png;base64," + base64bytes;
+                    list.add(src);
+                    qrdto.setFiles(list);
+                    qrdto.setUser(order.getRegisteredUser().getEmail());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                qrdtoList.add(qrdto);
             }
-            qrdtoList.add(qrdto);
         }
 
 

@@ -205,7 +205,7 @@ export default class RegisterDelivery extends Component {
 							this.setState({ errorHeader: "Error", errorMessage: "User with that email already exists.", hiddenErrorAlert: false });
 						} else {
 							console.log("Success");
-							this.setState({ openModal: true });
+							alert("You have successfully registered a courier.")
 						}
 
 					})
