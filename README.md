@@ -2,7 +2,7 @@
 
 ## About
 
-Mobile and web shop application.
+Mobile and web application for selling tshirts, hoodies and caps.
 
 Roles:
 
